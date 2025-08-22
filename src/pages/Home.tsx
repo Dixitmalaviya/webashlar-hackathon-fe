@@ -222,7 +222,7 @@ const Home = () => {
     container: {
       maxWidth: '100%',
       margin: '0 auto',
-      padding: '0 1rem'
+      // padding: '0 1rem'
     },
     sectionHeader: {
       textAlign: 'center',
@@ -448,20 +448,36 @@ const Home = () => {
               </button>
             </li>
           </ul>
-          <button
-            onClick={() => scrollToSection('demo')}
-            style={styles.ctaBtn}
-            onMouseOver={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = 'none';
-            }}
-          >
-            Get Started
-          </button>
+          <div>
+            <button
+              onClick={() => scrollToSection('demo')}
+              style={styles.ctaBtn}
+              onMouseOver={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
+              }}
+            >
+              Get Started
+            </button>
+            <button
+              onClick={() => scrollToSection('demo')}
+              style={{ ...styles.ctaBtn, marginLeft: "10px" }}
+              onMouseOver={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
+              }}
+            >
+              Login
+            </button>
+          </div>
         </nav>
       </header>
       <div style={styles.container}>
@@ -511,7 +527,7 @@ const Home = () => {
         </section>
 
         {/* Features Section */}
-        <section id="features" style={{ ...styles.section, background: '#f8faff' }}>
+        <section id="features" style={{ ...styles.section, background: '#f8faff', padding: "2rem" }}>
           <div style={styles.container}>
             <div style={styles.sectionHeader}>
               <h2 style={styles.sectionTitle}>Powerful Features</h2>
@@ -544,7 +560,7 @@ const Home = () => {
         </section>
 
         {/* Target Audience Section */}
-        <section id="audience" style={{ ...styles.section, background: 'white' }}>
+        <section id="audience" style={{ ...styles.section, background: 'white', padding: "2rem" }}>
           <div style={styles.container}>
             <div style={styles.sectionHeader}>
               <h2 style={styles.sectionTitle}>Who Benefits</h2>
@@ -582,7 +598,7 @@ const Home = () => {
         </section>
 
         {/* Problem Solution Section */}
-        <section id="solution" style={{ ...styles.section, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+        <section id="solution" style={{ ...styles.section, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: "2rem" }}>
           <div style={styles.container}>
             <div style={styles.sectionHeader}>
               <h2 style={{ ...styles.sectionTitle, color: 'white' }}>The Healthcare Revolution</h2>
@@ -651,7 +667,7 @@ const Home = () => {
 
         {/* Footer */}
       </div>
-      <footer id="contact" style={styles.footer}>
+      <footer id="contact" style={{ ...styles.footer, padding: "2rem" }}>
         <div style={styles.container}>
           <div style={styles.footerGrid}>
             <div>
