@@ -12,7 +12,7 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId: string): void => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -101,10 +101,12 @@ const Home = () => {
       lineHeight: '1.6',
       color: '#333',
       //   0,
-      padding: 0
+      padding: 0,
+      maxWidth: '100%',
+      margin: '0 auto',
     },
     header: {
-      position: 'fixed',
+      position: 'fixed' as 'fixed',
       top: 0,
       width: '100%',
       zIndex: 1000,
@@ -219,11 +221,11 @@ const Home = () => {
     section: {
       padding: '100px 0'
     },
-    container: {
-      maxWidth: '100%',
-      margin: '0 auto',
-      // padding: '0 1rem'
-    },
+    // container: {
+    //   maxWidth: '100%',
+    //   margin: '0 auto',
+    //   // padding: '0 1rem'
+    // },
     sectionHeader: {
       textAlign: 'center',
       marginBottom: '80px'
@@ -333,7 +335,7 @@ const Home = () => {
     },
     problemSolutionItem: {
       padding: '0.75rem 0',
-      position: 'relative',
+      position: 'relative' as 'relative',
       paddingLeft: '2rem'
     },
     ctaSection: {
@@ -411,8 +413,8 @@ const Home = () => {
               <button
                 onClick={() => scrollToSection('features')}
                 style={styles.navLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#333'}
+                onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#333'}
               >
                 Features
               </button>
@@ -421,8 +423,8 @@ const Home = () => {
               <button
                 onClick={() => scrollToSection('audience')}
                 style={styles.navLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#333'}
+                onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#333'}
               >
                 Who Uses It
               </button>
@@ -431,8 +433,8 @@ const Home = () => {
               <button
                 onClick={() => scrollToSection('solution')}
                 style={styles.navLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#333'}
+                onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#333'}
               >
                 Solution
               </button>
@@ -441,8 +443,8 @@ const Home = () => {
               <button
                 onClick={() => scrollToSection('contact')}
                 style={styles.navLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#333'}
+                onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#333'}
               >
                 Contact
               </button>
@@ -453,12 +455,12 @@ const Home = () => {
               onClick={() => scrollToSection('demo')}
               style={styles.ctaBtn}
               onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
+                (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)';
+                (e.target as HTMLButtonElement).style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
               }}
               onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = 'none';
+                (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
+                (e.target as HTMLButtonElement).style.boxShadow = 'none';
               }}
             >
               Get Started
@@ -467,12 +469,12 @@ const Home = () => {
               onClick={() => scrollToSection('demo')}
               style={{ ...styles.ctaBtn, marginLeft: "10px" }}
               onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
+                (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)';
+                (e.target as HTMLButtonElement).style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
               }}
               onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = 'none';
+                (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
+                (e.target as HTMLButtonElement).style.boxShadow = 'none';
               }}
             >
               Login
@@ -484,8 +486,8 @@ const Home = () => {
         {/* Header */}
 
         {/* Hero Section */}
-        <section style={styles.hero}>
-          <div style={styles.heroContent}>
+        <section style={styles.hero as React.CSSProperties}>
+          <div style={styles.heroContent as React.CSSProperties}>
             <h1 style={styles.heroTitle}>
               Revolutionary AI-Powered<br />
               Healthcare Identity
@@ -493,17 +495,17 @@ const Home = () => {
             <p style={styles.heroSubtitle}>
               Transform your healthcare experience with a unified, secure, and intelligent health management system powered by blockchain and AI.
             </p>
-            <div style={styles.heroButtons}>
+            <div style={styles.heroButtons as React.CSSProperties}>
               <button
                 onClick={() => scrollToSection('demo')}
                 style={styles.btnPrimary}
                 onMouseOver={(e) => {
-                  e.target.style.transform = 'translateY(-3px)';
-                  e.target.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.2)';
+                  (e.target as HTMLButtonElement).style.transform = 'translateY(-3px)';
+                  (e.target as HTMLButtonElement).style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.2)';
                 }}
                 onMouseOut={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                  (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
+                  (e.target as HTMLButtonElement).style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
                 }}
               >
                 Experience the Future
@@ -512,12 +514,12 @@ const Home = () => {
                 onClick={() => scrollToSection('features')}
                 style={styles.btnSecondary}
                 onMouseOver={(e) => {
-                  e.target.style.background = 'white';
-                  e.target.style.color = '#667eea';
+                  (e.target as HTMLButtonElement).style.background = 'white';
+                  (e.target as HTMLButtonElement).style.color = '#667eea';
                 }}
                 onMouseOut={(e) => {
-                  e.target.style.background = 'transparent';
-                  e.target.style.color = 'white';
+                  (e.target as HTMLButtonElement).style.background = 'transparent';
+                  (e.target as HTMLButtonElement).style.color = 'white';
                 }}
               >
                 Learn More
@@ -529,7 +531,7 @@ const Home = () => {
         {/* Features Section */}
         <section id="features" style={{ ...styles.section, background: '#f8faff', padding: "2rem" }}>
           <div style={styles.container}>
-            <div style={styles.sectionHeader}>
+            <div style={styles.sectionHeader as React.CSSProperties}>
               <h2 style={styles.sectionTitle}>Powerful Features</h2>
               <p style={styles.sectionSubtitle}>
                 Discover how our Smart Health Card revolutionizes healthcare with cutting-edge AI and blockchain technology
@@ -540,7 +542,7 @@ const Home = () => {
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  style={styles.featureCard}
+                  style={styles.featureCard as React.CSSProperties}
                   onMouseOver={(e) => {
                     e.currentTarget.style.transform = 'translateY(-10px)';
                     e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1)';
@@ -562,7 +564,7 @@ const Home = () => {
         {/* Target Audience Section */}
         <section id="audience" style={{ ...styles.section, background: 'white', padding: "2rem" }}>
           <div style={styles.container}>
-            <div style={styles.sectionHeader}>
+            <div style={styles.sectionHeader as React.CSSProperties}>
               <h2 style={styles.sectionTitle}>Who Benefits</h2>
               <p style={styles.sectionSubtitle}>
                 Our Smart Health Card serves the entire healthcare ecosystem with tailored solutions
@@ -573,7 +575,7 @@ const Home = () => {
               {audiences.map((audience, index) => (
                 <div
                   key={index}
-                  style={styles.audienceCard}
+                  style={styles.audienceCard as React.CSSProperties}
                   onMouseOver={(e) => {
                     e.currentTarget.style.transform = 'translateY(-5px)';
                   }}
@@ -583,10 +585,10 @@ const Home = () => {
                 >
                   <span style={styles.audienceIcon}>{audience.icon}</span>
                   <h3 style={styles.audienceTitle}>{audience.title}</h3>
-                  <ul style={styles.benefitsList}>
+                  <ul style={styles.benefitsList as React.CSSProperties}>
                     {audience.benefits.map((benefit, benefitIndex) => (
-                      <li key={benefitIndex} style={styles.benefitItem}>
-                        <span style={styles.checkIcon}>✓</span>
+                      <li key={benefitIndex} style={styles.benefitItem as React.CSSProperties}>
+                        <span style={styles.checkIcon as React.CSSProperties}>✓</span>
                         {benefit}
                       </li>
                     ))}
@@ -600,7 +602,7 @@ const Home = () => {
         {/* Problem Solution Section */}
         <section id="solution" style={{ ...styles.section, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: "2rem" }}>
           <div style={styles.container}>
-            <div style={styles.sectionHeader}>
+            <div style={styles.sectionHeader as React.CSSProperties}>
               <h2 style={{ ...styles.sectionTitle, color: 'white' }}>The Healthcare Revolution</h2>
               <p style={{ ...styles.sectionSubtitle, color: 'rgba(255, 255, 255, 0.9)' }}>
                 Addressing critical challenges in India's digital healthcare transformation
@@ -636,7 +638,7 @@ const Home = () => {
         </section>
 
         {/* CTA Section */}
-        <section id="demo" style={styles.ctaSection}>
+        <section id="demo" style={styles.ctaSection as React.CSSProperties}>
           <div style={styles.container}>
             <div style={styles.ctaContent}>
               <h2 style={styles.ctaTitle}>Ready to Transform Your Healthcare?</h2>
@@ -651,12 +653,12 @@ const Home = () => {
                   padding: '1rem 2.5rem'
                 }}
                 onMouseOver={(e) => {
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
+                  (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)';
+                  (e.target as HTMLButtonElement).style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.3)';
                 }}
                 onMouseOut={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = 'none';
+                  (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
+                  (e.target as HTMLButtonElement).style.boxShadow = 'none';
                 }}
               >
                 Start Your Health Journey
@@ -667,9 +669,9 @@ const Home = () => {
 
         {/* Footer */}
       </div>
-      <footer id="contact" style={{ ...styles.footer, padding: "2rem" }}>
+      <footer id="contact" style={{ ...styles.footer, padding: "2rem" } as React.CSSProperties}>
         <div style={styles.container}>
-          <div style={styles.footerGrid}>
+          <div style={styles.footerGrid as React.CSSProperties}>
             <div>
               <h3 style={styles.footerTitle}>Smart Health Card</h3>
               <p style={{ color: '#ccc', marginTop: '1rem' }}>
@@ -682,32 +684,32 @@ const Home = () => {
               <button
                 onClick={() => scrollToSection('features')}
                 style={styles.footerLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#ccc'}
+                onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#ccc'}
               >
                 Features
               </button>
               <button
                 onClick={() => scrollToSection('audience')}
                 style={styles.footerLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#ccc'}
+                onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#ccc'}
               >
                 Who Uses It
               </button>
               <button
                 onClick={() => scrollToSection('solution')}
                 style={styles.footerLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#ccc'}
+                onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#ccc'}
               >
                 Solution
               </button>
               <button
                 onClick={() => scrollToSection('demo')}
                 style={styles.footerLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#ccc'}
+                onMouseOver={(e) => (e.target as HTMLButtonElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLButtonElement).style.color = '#ccc'}
               >
                 Demo
               </button>
@@ -721,8 +723,8 @@ const Home = () => {
               <a
                 href="mailto:info@smarthealthcard.com"
                 style={styles.footerLink}
-                onMouseOver={(e) => e.target.style.color = '#667eea'}
-                onMouseOut={(e) => e.target.style.color = '#ccc'}
+                onMouseOver={(e) => (e.target as HTMLAnchorElement).style.color = '#667eea'}
+                onMouseOut={(e) => (e.target as HTMLAnchorElement).style.color = '#ccc'}
               >
                 info@smarthealthcard.com
               </a>

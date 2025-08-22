@@ -1,13 +1,13 @@
 interface InputProps {
-    label: string;
-    type: string;
-    value: string;
-    onChange: (value: string) => void;
-    error?: string;
-    placeholder: string;
-    icon: React.ReactNode;
-    showPasswordToggle?: boolean;
-    onTogglePassword?: () => void;
+  label: string;
+  type: string;
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+  placeholder: string;
+  icon: React.ReactNode;
+  showPasswordToggle?: boolean;
+  onTogglePassword?: () => void;
 }
 
 interface ButtonProps {
@@ -42,4 +42,20 @@ interface FormErrors {
   firstName?: string;
   lastName?: string;
   phoneNumber?: string;
+}
+
+interface Feature {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+interface Audience {
+  icon: string;
+  title: string;
+  benefits: string[];
+}
+
+interface Styles {
+  [key: string]: React.CSSProperties;
 }
