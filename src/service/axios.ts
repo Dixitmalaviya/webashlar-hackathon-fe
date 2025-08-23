@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios";
 const instance = axios.create();
-const baseUrl = "http://192.168.1.48:90/api";
+const baseUrl = "http://192.168.1.32:3333/api";
 
 instance.interceptors.request.use(
     async (config) => {
@@ -21,8 +21,7 @@ instance.interceptors.response.use((response) => {
     if (error?.response?.status === 401) {
         // history.push("/login")
     }
-    debugger
-    return error.response;
+    throw error.response;
     // throw error;
 })
 

@@ -56,7 +56,7 @@ const Profile = () => {
           bloodGroup: "O+",
           dob: "01/01/2000"  }
 
-  const handleTabClick = (tab) => {
+  const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
 

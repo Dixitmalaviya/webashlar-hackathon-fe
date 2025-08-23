@@ -1,5 +1,5 @@
 const PATIENT_API_ENDPOINTS = {
-    GET_PATIENT: "/patients/",
+    GET_PATIENT: "/identity/patient",
     CREATE_PATIENT: "/patients",
     UPDATE_PATIENT: "/patients/",
     DELETE_PATIENT: "/patients/"

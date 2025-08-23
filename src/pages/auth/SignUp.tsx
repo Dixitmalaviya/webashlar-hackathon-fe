@@ -3,6 +3,7 @@ import Button from "../../component/Button";
 import Input from "../../component/Input";
 import { useCallback, useState } from "react";
 import useFormValidation from "../../hooks/validation";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const SignupForm: React.FC = () => {
     const [errors, setErrors] = useState<FormErrors>({});
     const [showPassword, setShowPassword] = useState(false);
     const { validateEmail, validatePassword, validatePhoneNumber, validateName } = useFormValidation();
+    const navigate = useNavigate();
 
     const handleSubmit = useCallback(async () => {
         const newErrors: FormErrors = {
@@ -108,7 +110,7 @@ const SignupForm: React.FC = () => {
             <p className="text-center text-gray-600 text-sm">
                 Already have an account?{' '}
                 <button
-                    onClick={() => {}}
+                    onClick={() => navigate('/login')}
                     className="text-blue-600 hover:text-blue-700 font-medium"
                 >
                     Sign in

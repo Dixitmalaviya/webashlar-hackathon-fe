@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -466,7 +468,7 @@ const Home = () => {
               Get Started
             </button>
             <button
-              onClick={() => scrollToSection('demo')}
+              onClick={() => navigate('/login')}
               style={{ ...styles.ctaBtn, marginLeft: "10px" }}
               onMouseOver={(e) => {
                 (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)';
