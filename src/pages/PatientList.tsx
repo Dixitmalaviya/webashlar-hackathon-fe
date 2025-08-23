@@ -159,6 +159,7 @@ const PatientList: React.FC = () => {
         <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-8">
             <div className={`w-full transition-all duration-300 bg-white rounded-xl p-6`} style={{ position: 'relative' }}>
                 <div className="flex justify-between items-center mb-4">
+                    <div></div>
                     <h2 className="text-2xl font-bold text-center flex-1 text-primary">Patient List</h2>
                     <CommonButton
                         className="w-auto px-6 py-2 ml-4"

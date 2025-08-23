@@ -93,7 +93,7 @@ const CommonTable: React.FC<CommonTableProps> = ({
             overflow: hidden;
         }
       `}</style>
-            <div className="p-4 rounded-xl">
+            <div className="rounded-xl">
                 <div className="flex justify-end items-center mb-2">
                     {exportable && (
                         <Button type="button" icon="pi pi-external-link" label="Export" onClick={exportCSV} className="bg-primary text-white font-bold px-4 py-2 rounded" />
