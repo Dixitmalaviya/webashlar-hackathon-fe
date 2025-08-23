@@ -8,9 +8,11 @@ const ProtectedRoutes = () => {
     //   }
 
     return (
+        <>
         <Fragment>
             <Outlet />
         </Fragment>
+        </>
     )
 }
 

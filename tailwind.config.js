@@ -4,7 +4,18 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: '#374151',      // Light yellow
+        secondary: '#C1DFFF',    // Soft blue
+        accent: '#000000',       // Black text/buttons
+        background: '#C1DFFF',  
+        sidebarbg: '#1f2937',
+      },
+      fontFamily: {
+        sans: ['"Helvetica Neue"', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 }

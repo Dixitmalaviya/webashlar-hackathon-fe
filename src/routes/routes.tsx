@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import MainLayout from "../layout/MainLayout/MainLayout";
 import EmailVerification from "../pages/auth/EmailVerify";
 import ForgotPasswordForm from "../pages/auth/ForgotPassword";
 import LoginForm from "../pages/auth/Login";
@@ -16,7 +17,9 @@ const Router = () => {
                 <Route path="forget-password" element={<ForgotPasswordForm />}></Route>
                 <Route path="signup" element={<SignupForm />}></Route>
                 <Route element={<ProtectedRoutes />}>
+                <Route element={<MainLayout />}>
                     <Route path="Home" element={<Home />}></Route>
+                    </Route>
                 </Route>
             </Routes>
         </>
