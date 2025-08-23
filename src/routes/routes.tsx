@@ -12,6 +12,7 @@ import Profile from '../pages/Profile/Profile'
 import Appointment from "../pages/Appontment/Appointment";
 import BookAppointment from "../pages/BookAppointment";
 import Analysis from "../component/analysis";
+import LandingPage from "../LandingPageTemp";
 
 const Router = () => {
     return (
@@ -22,7 +23,7 @@ const Router = () => {
                 <Route path="verify-email" element={<EmailVerification />}></Route>
                 <Route path="forget-password" element={<ForgotPasswordForm />}></Route>
                 <Route path="signup" element={<SignupForm />}></Route>
-                <Route path="Home" element={<Home />}></Route>
+                <Route path="Home" element={<LandingPage />}></Route>
                 <Route element={<ProtectedRoutes />}>
                     <Route element={<MainLayout />}>
                         <Route path="patients" element={<PatientList />}></Route>

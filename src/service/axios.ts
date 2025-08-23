@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios";
 const instance = axios.create();
-const baseUrl = "http://192.168.1.48:90/api";
+const baseUrl = "http://192.168.1.32:3333/api";
 
 instance.interceptors.request.use(
     async (config) => {
@@ -30,7 +30,10 @@ export const doFetch = (
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
     data?: any,
-    config?: AxiosRequestConfig
+    config?: {
+        contentType?: string;
+        showToast?: boolean;
+    } & AxiosRequestConfig
 ) => {
     return instance({
         url: baseUrl + url,
@@ -46,3 +49,8 @@ export const REQUEST_METHODS = {
     PUT: "PUT",
     DELETE: "DELETE",
 } as const;
+
+export const REQUEST_CONTENT_TYPE = {
+    JSON: "application/json",
+    MULTIPART: "multipart/form-data",
+};

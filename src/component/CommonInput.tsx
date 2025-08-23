@@ -12,6 +12,7 @@ interface CommonInputProps {
   showPasswordToggle?: boolean;
   onTogglePassword?: () => void;
   className?: string;
+  max?: string;
 }
 
 const CommonInput: React.FC<CommonInputProps> = ({
@@ -25,6 +26,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
   showPasswordToggle,
   onTogglePassword,
   className = '',
+  max,
 }) => (
   <div className={`mb-4 ${className}`}>
     {label && (
@@ -44,6 +46,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
           error ? 'border-red-500' : 'border-gray-300'
         }`}
         placeholder={placeholder}
+        {...(max ? { max } : {})}
       />
       {showPasswordToggle && (
         <button

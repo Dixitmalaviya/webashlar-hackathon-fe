@@ -8,6 +8,7 @@ interface CommonButtonProps {
   variant?: 'primary' | 'secondary';
   className?: string;
   type?: 'button' | 'submit' | 'reset';
+  title?: string;
 }
 
 const CommonButton: React.FC<CommonButtonProps> = ({
@@ -18,6 +19,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   variant = 'primary',
   className = '',
   type = 'button',
+  title,
 }) => {
   const baseClasses =
     'py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center';
@@ -32,6 +34,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
       onClick={onClick}
       disabled={disabled || isLoading}
       className={`${baseClasses} ${variantClasses} ${className}`}
+      title={title}
     >
       {isLoading ? (
         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
