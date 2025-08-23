@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import CommonTable from '../component/CommonTable';
 import type { TableColumn } from '../component/CommonTable';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { Button } from 'primereact/button';
 
 interface Patient {
     id: number;
@@ -86,7 +86,9 @@ const PatientList: React.FC = () => {
         <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-8">
             <div className={`w-full transition-all duration-300 bg-white rounded-xl p-6`} style={{ position: 'relative' }}>
                 <div className="flex justify-between items-center mb-4">
+                    <div></div>
                     <h2 className="text-2xl font-bold text-center flex-1 text-primary">Patient List</h2>
+                    <Button type="button" icon="pi pi-plus" label="Add Patient" className="bg-primary text-white font-bold px-4 py-2 rounded" />
                 </div>
                 <CommonTable
                     value={patients}

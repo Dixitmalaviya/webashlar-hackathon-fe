@@ -5,9 +5,9 @@ export default {
     createPatientService: async (patientData: any) =>
         doFetch(PATIENT_API_ENDPOINTS.CREATE_PATIENT, REQUEST_METHODS.POST, patientData),
     getPatientService: async (id: string) =>
-        doFetch(PATIENT_API_ENDPOINTS.GET_PATIENT.replace(":id", id), REQUEST_METHODS.GET),
+        doFetch(`${PATIENT_API_ENDPOINTS.GET_PATIENT}/${id}`, REQUEST_METHODS.GET),
     updatePatientService: async (id: string, patientData: any) =>
-        doFetch(PATIENT_API_ENDPOINTS.UPDATE_PATIENT.replace(":id", id), REQUEST_METHODS.PUT, patientData),
+        doFetch(`${PATIENT_API_ENDPOINTS.UPDATE_PATIENT}/${id}`, REQUEST_METHODS.PUT, patientData),
     deletePatientService: async (id: string) =>
-        doFetch(PATIENT_API_ENDPOINTS.DELETE_PATIENT.replace(":id", id), REQUEST_METHODS.DELETE)
+        doFetch(`${PATIENT_API_ENDPOINTS.DELETE_PATIENT}/${id}`, REQUEST_METHODS.DELETE)
 }
