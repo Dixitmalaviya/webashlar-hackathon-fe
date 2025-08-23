@@ -20,7 +20,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   type = 'button',
 }) => {
   const baseClasses =
-    'w-full py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center';
+    'py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center';
   const variantClasses =
     variant === 'primary'
       ? 'bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-400'
