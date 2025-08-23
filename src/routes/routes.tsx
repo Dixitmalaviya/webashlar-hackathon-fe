@@ -8,6 +8,8 @@ import Home from "../pages/Home";
 import PatientList from "../pages/PatientList";
 import ProtectedRoutes from "./protected-routes";
 import PatientReport from "../pages/PatientReport";
+import Profile from '../pages/Profile/Profile'
+import Appointment from "../pages/Appontment/Appointment";
 
 const Router = () => {
     return (
@@ -22,8 +24,10 @@ const Router = () => {
                     <Route element={<MainLayout />}>
                         <Route path="Home" element={<Home />}></Route>
                         <Route path="patients" element={<PatientList />}></Route>
+                        <Route path="profile" element={<Profile/>}></Route>
                         <Route path="patient-report" element={<PatientReport />}></Route>
-                    </Route>
+                        <Route path="appointment" element={<Appointment />}></Route>
+                        </Route>
                 </Route>
             </Routes>
         </>
