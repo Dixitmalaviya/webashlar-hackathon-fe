@@ -1,4 +1,4 @@
-const PatientCard = ({ patientData, logo }) => {
+const PatientCard = ({ patientData, logo }: any) => {
   return (
     <div className="relative max-w-sm w-full rounded-2xl shadow-lg font-sans text-white bg-gradient-to-br from-secondary to-secondary p-6 overflow-hidden min-h-[220px] flex flex-col justify-between">
       {/* Background Logo (Subtle watermark) */}

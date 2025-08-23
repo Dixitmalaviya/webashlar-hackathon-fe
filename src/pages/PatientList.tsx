@@ -6,7 +6,6 @@ import CommonTable from '../component/CommonTable';
 import CommonDropdown from '../component/CommonDropdown';
 import type { TableColumn } from '../component/CommonTable';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'primereact/button';
 import PatientService from '../service/Patient/PatientService';
 import toast from 'react-hot-toast';
 
@@ -167,7 +166,7 @@ const PatientList: React.FC = () => {
                     success: 'Patient created successfully',
                     error: 'Error when fetching',
                 }
-            ).then((response) => {
+            ).then((response: any) => {
                 console.log('response', response);
                 setModalOpen(false);
                 setForm({

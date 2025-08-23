@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { LineChart, Line, Tooltip, ResponsiveContainer, BarChart, Bar, AreaChart, Area, Cell } from 'recharts';
-import { Activity, Heart, Droplets, Thermometer, AlertTriangle, CheckCircle, Info, TrendingUp } from 'lucide-react';
+import { Activity, CheckCircle, Info, TrendingUp } from 'lucide-react';
 
 // Theme-based color palette
 const themeColors = {
@@ -146,26 +146,8 @@ const actualPatientData = {
     },
 };
 
-const fallbackPatientData = {
-    patientDetails: {
-        name: 'Sample Patient',
-        age: 'N/A',
-        sex: 'N/A',
-        pid: '000',
-    },
-    doctorDetails: {
-        referredBy: 'No Doctor Assigned',
-    },
-    reports: [],
-    overallAnalysis: {
-        summary: 'No test results available',
-        recommendations: 'Please upload or fetch patient data',
-        longTermTrends: 'No trends available',
-    },
-};
-
 const Analysis = () => {
-    const [selectedFilter, setSelectedFilter] = useState('All Tests');
+    const [selectedFilter, _setSelectedFilter] = useState('All Tests');
     const [patientData, setPatientData] = useState<any>(null);
 
     React.useEffect(() => {
@@ -309,16 +291,16 @@ const Analysis = () => {
 
     const { allFindings, categories, statusCounts, totalReports, totalFindings } = processPatientData;
 
-    function getIconForCategory(categoryName: string) {
-        const name = categoryName.toLowerCase();
-        if (name.includes('blood') || name.includes('hematology') || name.includes('cbc') || name.includes('hemoglobin')) return Droplets;
-        if (name.includes('thyroid') || name.includes('endocrin') || name.includes('tsh')) return Thermometer;
-        if (name.includes('liver') || name.includes('biochem') || name.includes('sgpt')) return Activity;
-        if (name.includes('cardiac') || name.includes('heart') || name.includes('troponin')) return Heart;
-        if (name.includes('infectious') || name.includes('dengue') || name.includes('antibody')) return AlertTriangle;
-        if (name.includes('kidney') || name.includes('nephro') || name.includes('creatinine')) return Droplets;
-        return Activity;
-    }
+    // function getIconForCategory(categoryName: string) {
+    //     const name = categoryName.toLowerCase();
+    //     if (name.includes('blood') || name.includes('hematology') || name.includes('cbc') || name.includes('hemoglobin')) return Droplets;
+    //     if (name.includes('thyroid') || name.includes('endocrin') || name.includes('tsh')) return Thermometer;
+    //     if (name.includes('liver') || name.includes('biochem') || name.includes('sgpt')) return Activity;
+    //     if (name.includes('cardiac') || name.includes('heart') || name.includes('troponin')) return Heart;
+    //     if (name.includes('infectious') || name.includes('dengue') || name.includes('antibody')) return AlertTriangle;
+    //     if (name.includes('kidney') || name.includes('nephro') || name.includes('creatinine')) return Droplets;
+    //     return Activity;
+    // }
 
     const filteredFindings = selectedFilter === 'All Tests'
         ? allFindings

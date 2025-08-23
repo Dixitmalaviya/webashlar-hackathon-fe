@@ -59,3 +59,19 @@ interface Audience {
 interface Styles {
   [key: string]: React.CSSProperties;
 }
+
+interface TimelineEvent {
+  title: string;
+  date: string;
+  description: string;
+  color: string;
+}
+
+interface TimelineYearData {
+  year: string | number;
+  events: TimelineEvent[];
+}
+
+interface TimelineProps {
+  timelineData: TimelineYearData[];
+}

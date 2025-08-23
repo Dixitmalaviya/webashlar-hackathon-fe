@@ -9,12 +9,10 @@ import {
   FaEye,
   FaHeartbeat,
   FaUserPlus,
-  FaUserTag,
   FaEthereum,
   FaUser,
 } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
-import { FaCalendar, FaPhone, FaMapMarkerAlt, FaUserFriends, FaHeart } from "react-icons/fa";
 
 
 const LoginForm: React.FC = () => {
@@ -96,8 +94,7 @@ const LoginForm: React.FC = () => {
   };
 
   const handleRegister = (
-    values: typeof initialRegistrationValues,
-    actions: FormikHelpers<typeof initialRegistrationValues>
+    values: typeof initialRegistrationValues
   ) => {
     console.log(values);
   };

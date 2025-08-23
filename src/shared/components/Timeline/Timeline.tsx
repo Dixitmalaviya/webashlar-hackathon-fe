@@ -1,4 +1,4 @@
-const Timeline = (props) => {
+const Timeline = (props: TimelineProps) => {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-5">
       {/* Timeline */}
