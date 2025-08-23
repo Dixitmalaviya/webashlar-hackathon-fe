@@ -8,6 +8,8 @@ import Home from "../pages/Home";
 import PatientList from "../pages/PatientList";
 import ProtectedRoutes from "./protected-routes";
 import PatientReport from "../pages/PatientReport";
+import BookAppointment from "../pages/BookAppointment";
+import Analysis from "../component/analysis";
 
 const Router = () => {
     return (
@@ -18,11 +20,14 @@ const Router = () => {
                 <Route path="verify-email" element={<EmailVerification />}></Route>
                 <Route path="forget-password" element={<ForgotPasswordForm />}></Route>
                 <Route path="signup" element={<SignupForm />}></Route>
+                <Route path="Home" element={<Home />}></Route>
                 <Route element={<ProtectedRoutes />}>
                     <Route element={<MainLayout />}>
-                        <Route path="Home" element={<Home />}></Route>
                         <Route path="patients" element={<PatientList />}></Route>
-                        <Route path="patient-report" element={<PatientReport />}></Route>
+                        <Route path="patients/report" element={<PatientReport />}></Route>
+                        <Route path="appointment" element={<BookAppointment />}></Route>
+                        <Route path="profile" element={<PatientReport />}></Route>
+                        <Route path="charts" element={<Analysis />}></Route>
                     </Route>
                 </Route>
             </Routes>
