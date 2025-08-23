@@ -13,6 +13,7 @@ import Appointment from "../pages/Appontment/Appointment";
 import BookAppointment from "../pages/BookAppointment";
 import Analysis from "../component/analysis";
 import LandingPage from "../LandingPageTemp";
+import Chatbot from "../pages/Chatbot";
 
 const Router = () => {
     return (
@@ -33,7 +34,8 @@ const Router = () => {
                         <Route path="patients/report" element={<PatientReport />}></Route>
                         <Route path="appointment" element={<BookAppointment />}></Route>
                         <Route path="profile" element={<PatientReport />}></Route>
-                        <Route path="charts" element={<Analysis />}></Route>
+                        <Route path="analysis" element={<Analysis />}></Route>
+                        <Route path="chatbot" element={<Chatbot />}></Route>
                     </Route>
                 </Route>
             </Routes>

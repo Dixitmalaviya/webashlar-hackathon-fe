@@ -51,7 +51,7 @@ const Profile = () => {
 
   const patientData = {
           name:"John Doe",
-          uniqueNumber:"12345",
+          uniqueNumber:"1234567890123456",
           address:"123 Main St, Springfield",
           bloodGroup: "O+",
           dob: "01/01/2000"  }

@@ -8,7 +8,7 @@ import AvtarImg from '../../assets/Avtar.svg';
 import patientServices from '../../service/Patient/PatientService'
 
 
-type SidebarItemKey = 'profile' | 'appointment' | 'patients' | 'logout';
+type SidebarItemKey = 'profile' | 'appointment' | 'patients' | 'logout' | 'chatbot' | 'analysis';
 
 const Sidebar = () => {
     const [activeItem, setActiveItem] = useState<SidebarItemKey>('profile');
@@ -23,6 +23,8 @@ const Sidebar = () => {
         if (item === 'profile') navigate('/profile');
         else if (item === 'appointment') navigate('/appointment');
         else if (item === 'patients') navigate('/patients');
+        else if (item === 'chatbot') navigate('/chatbot');
+        else if (item === 'analysis') navigate('/analysis');
         else if (item === 'logout') {
             localStorage.removeItem('auth');
             navigate('/')
@@ -101,6 +103,20 @@ const Sidebar = () => {
                     isActive={activeItem === "patients"}
                     onClick={() => handleItemClick("patients")}
                     label={collapsed ? "" : "Patients"}
+                    collapsed={collapsed}
+                />
+                <SidebarItem
+                    icon={<span role="img" aria-label="Chatbot">🧑‍⚕️</span>}
+                    isActive={activeItem === "chatbot"}
+                    onClick={() => handleItemClick("chatbot")}
+                    label={collapsed ? "" : "Chatbot"}
+                    collapsed={collapsed}
+                />
+                <SidebarItem
+                    icon={<span role="img" aria-label="Analysis">🧑‍⚕️</span>}
+                    isActive={activeItem === "analysis"}
+                    onClick={() => handleItemClick("analysis")}
+                    label={collapsed ? "" : "Analysis"}
                     collapsed={collapsed}
                 />
             </nav>
