@@ -9,8 +9,9 @@ export default {
         primary: '#374151',      // Light yellow
         secondary: '#C1DFFF',    // Soft blue
         accent: '#000000',       // Black text/buttons
-        background: '#C1DFFF',  
+        background: '#FDFDFD',  
         sidebarbg: '#1f2937',
+        sidebarprimary: '#374151',
       },
       fontFamily: {
         sans: ['"Helvetica Neue"', 'sans-serif'],
