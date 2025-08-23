@@ -5,7 +5,9 @@ import ForgotPasswordForm from "../pages/auth/ForgotPassword";
 import LoginForm from "../pages/auth/Login";
 import SignupForm from "../pages/auth/SignUp";
 import Home from "../pages/Home";
+import PatientList from "../pages/PatientList";
 import ProtectedRoutes from "./protected-routes";
+import PatientReport from "../pages/PatientReport";
 
 const Router = () => {
     return (
@@ -17,8 +19,10 @@ const Router = () => {
                 <Route path="forget-password" element={<ForgotPasswordForm />}></Route>
                 <Route path="signup" element={<SignupForm />}></Route>
                 <Route element={<ProtectedRoutes />}>
-                <Route element={<MainLayout />}>
-                    <Route path="Home" element={<Home />}></Route>
+                    <Route element={<MainLayout />}>
+                        <Route path="Home" element={<Home />}></Route>
+                        <Route path="patients" element={<PatientList />}></Route>
+                        <Route path="patient-report" element={<PatientReport />}></Route>
                     </Route>
                 </Route>
             </Routes>

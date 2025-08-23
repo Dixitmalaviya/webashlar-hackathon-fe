@@ -6,11 +6,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#374151',      // Light yellow
+        primary: '#FCE883',      // Light yellow
         secondary: '#C1DFFF',    // Soft blue
         accent: '#000000',       // Black text/buttons
-        background: '#C1DFFF',  
-        sidebarbg: '#1f2937',
+        background: '#FDFDFD',   // Light background
       },
       fontFamily: {
         sans: ['"Helvetica Neue"', 'sans-serif'],
@@ -19,3 +18,4 @@ export default {
   },
   plugins: [],
 }
+ 
