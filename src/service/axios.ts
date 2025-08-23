@@ -29,7 +29,10 @@ export const doFetch = (
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
     data?: any,
-    config?: AxiosRequestConfig
+    config?: {
+        contentType?: string;
+        showToast?: boolean;
+    } & AxiosRequestConfig
 ) => {
     return instance({
         url: baseUrl + url,
@@ -45,3 +48,8 @@ export const REQUEST_METHODS = {
     PUT: "PUT",
     DELETE: "DELETE",
 } as const;
+
+export const REQUEST_CONTENT_TYPE = {
+    JSON: "application/json",
+    MULTIPART: "multipart/form-data",
+};

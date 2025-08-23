@@ -7,6 +7,8 @@ import CommonDropdown from '../component/CommonDropdown';
 import type { TableColumn } from '../component/CommonTable';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
+import PatientService from '../service/Patient/PatientService';
+import toast from 'react-hot-toast';
 
 interface Patient {
     id: number;
@@ -101,6 +103,7 @@ const PatientList: React.FC = () => {
             relationship: '',
         },
     });
+    console.log('form', form)
     const [formErrors, setFormErrors] = useState<any>({});
 
     const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
@@ -124,7 +127,18 @@ const PatientList: React.FC = () => {
         if (!form.email) errors.email = 'Email is required';
         if (!form.password) errors.password = 'Password is required';
         if (!form.fullName) errors.fullName = 'Full name is required';
-        if (!form.dob) errors.dob = 'Date of birth is required';
+        if (!form.dob) {
+            errors.dob = 'Date of birth is required';
+        } else {
+            const today = new Date();
+            const dobDate = new Date(form.dob);
+            // Remove time part for accurate comparison
+            today.setHours(0, 0, 0, 0);
+            dobDate.setHours(0, 0, 0, 0);
+            if (dobDate > today) {
+                errors.dob = 'Date of birth cannot be in the future';
+            }
+        }
         if (!form.phone) {
             errors.phone = 'Phone is required';
         } else if (!phoneRegex.test(form.phone)) {
@@ -142,16 +156,26 @@ const PatientList: React.FC = () => {
         return Object.keys(errors).length === 0;
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (validateForm()) {
             // On valid, log the payload
             console.log('Patient Payload:', form);
-            setModalOpen(false);
-            setForm({
-                email: '', password: '', fullName: '', dob: '', phone: '', address: '',
-                emergencyContact: { name: '', phone: '', relationship: '' },
+            toast.promise(
+                PatientService.createPatientService(form),
+                {
+                    loading: 'Loading',
+                    success: 'Patient created successfully',
+                    error: 'Error when fetching',
+                }
+            ).then((response) => {
+                console.log('response', response);
+                setModalOpen(false);
+                setForm({
+                    email: '', password: '', fullName: '', dob: '', phone: '', address: '',
+                    emergencyContact: { name: '', phone: '', relationship: '' },
+                });
+                setFormErrors({});
             });
-            setFormErrors({});
         }
     };
 
@@ -213,6 +237,7 @@ const PatientList: React.FC = () => {
                         value={form.dob}
                         onChange={v => handleFormChange('dob', v)}
                         error={formErrors.dob}
+                        max={new Date().toISOString().split('T')[0]}
                     />
                     <CommonInput
                         label="Phone"
