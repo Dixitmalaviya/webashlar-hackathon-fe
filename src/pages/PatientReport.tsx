@@ -1,6 +1,7 @@
 import React from 'react';
 import CommonTable from '../component/CommonTable';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const mockReports = Array.from({ length: 5 }, (_, i) => ({
     id: i + 1,
@@ -22,23 +23,27 @@ const PatientReport: React.FC = () => {
     ];
 
     return (
-        <div className="p-6 bg-white rounded-lg">
-            <button
-                className="mb-4 px-4 py-2 bg-primary text-accent font-bold rounded hover:bg-yellow-300"
-                onClick={() => navigate(-1)}
-            >
-                Back
-            </button>
-            <h2 className="text-2xl font-bold mb-4 text-primary">Patient Report</h2>
-            <CommonTable
-                value={mockReports}
-                columns={columns}
-                rows={5}
-                totalRecords={5}
-                loading={false}
-                paginator={false}
-                exportable={true}
-            />
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-8">
+            {/* Back Button - top left, outside card */}
+            <div className="p-6 bg-white rounded-lg w-full">
+                <button
+                    className="flex items-center justify-center w-12 h-12 bg-white shadow-md border border-gray-200 rounded-full transition-colors duration-200 z-10"
+                    onClick={() => navigate(-1)}
+                    title="Back"
+                >
+                    <ArrowLeft className="w-6 h-6" />
+                </button>
+                <h2 className="text-2xl font-bold mb-4 text-primary text-center">Patient Report</h2>
+                <CommonTable
+                    value={mockReports}
+                    columns={columns}
+                    rows={5}
+                    totalRecords={5}
+                    loading={false}
+                    paginator={false}
+                    exportable={true}
+                />
+            </div>
         </div>
     );
 };

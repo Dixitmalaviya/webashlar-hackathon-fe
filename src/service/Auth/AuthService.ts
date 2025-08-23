@@ -1,0 +1,9 @@
+import { doFetch, REQUEST_METHODS } from "../axios";
+import AUTH_API_ENDPOINTS from "./AuthEndPoints";
+
+export default {
+    loginService: async (email: string, password: string) =>
+        doFetch(AUTH_API_ENDPOINTS.LOGIN, REQUEST_METHODS.POST, { email, password }),
+    registerService: async (userData: any) =>
+        doFetch(AUTH_API_ENDPOINTS.REGISTER, REQUEST_METHODS.POST, userData)
+}

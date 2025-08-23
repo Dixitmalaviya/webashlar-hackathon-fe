@@ -72,8 +72,8 @@ const PatientList: React.FC = () => {
             header: 'Actions',
             body: (_row, _col, _rowIndex) => (
                 <button
-                    className="px-3 py-1 bg-primary text-accent font-bold rounded hover:bg-yellow-300"
-                    onClick={() => navigate('/patient-report')}
+                    className="px-3 py-1 bg-primary rounded text-white"
+                    onClick={() => navigate('/patients/report')}
                 >
                     View Report
                 </button>
@@ -82,23 +82,25 @@ const PatientList: React.FC = () => {
         },
     ];
 
-    console.log('patients', patients)
-
     return (
-        <div className="p-6 bg-white rounded-lg">
-            <h2 className="text-2xl font-bold mb-4 text-primary">Patient List</h2>
-            <CommonTable
-                value={patients}
-                columns={columns}
-                rows={rows}
-                totalRecords={totalRecords}
-                loading={loading}
-                paginator={true}
-                exportable={true}
-                onPage={onPage}
-                first={page * rows}
-                lazy={true}
-            />
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-8">
+            <div className={`w-full transition-all duration-300 bg-white rounded-xl p-6`} style={{ position: 'relative' }}>
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-bold text-center flex-1 text-primary">Patient List</h2>
+                </div>
+                <CommonTable
+                    value={patients}
+                    columns={columns}
+                    rows={rows}
+                    totalRecords={totalRecords}
+                    loading={loading}
+                    paginator={true}
+                    exportable={true}
+                    onPage={onPage}
+                    first={page * rows}
+                    lazy={true}
+                />
+            </div>
         </div>
     );
 };
