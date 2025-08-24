@@ -1,21 +1,29 @@
 // // components/Sidebar.jsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaCalendarCheck, FaSignOutAlt, FaUser, FaUsers } from 'react-icons/fa';
+import { FaCalendarCheck, FaHospital, FaHospitalUser, FaSignOutAlt, FaUser, FaUsers } from 'react-icons/fa';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Sidebar.css';
 import AvtarImg from '../../assets/Avtar.svg';
 import patientServices from '../../service/Patient/PatientService'
 
 
-type SidebarItemKey = 'profile' | 'appointment' | 'patients' | 'logout' | 'chatbot' | 'analysis';
+type SidebarItemKey = 'profile' | 'appointment' | 'patients' | 'logout' | 'chatbot' | 'analysis' | 'doctors' | 'hospitals';
 
 const Sidebar = () => {
     const [activeItem, setActiveItem] = useState<SidebarItemKey>('profile');
     const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
     const { getPatientService } = patientServices;
-    const [userName, setUserName] = useState('')
+    const [userName, setUserName] = useState('');
+    const [role, setRole] = useState<string | null>('patient');
+
+    useEffect(() => {
+        const storedRole = localStorage.getItem('role');
+        if(storedRole) {
+        setRole(storedRole);
+        }
+    }, []);
 
     const handleItemClick = (item: SidebarItemKey) => {
         setActiveItem(item);
@@ -25,11 +33,65 @@ const Sidebar = () => {
         else if (item === 'patients') navigate('/patients');
         else if (item === 'chatbot') navigate('/chatbot');
         else if (item === 'analysis') navigate('/analysis');
+        else if (item === 'doctors') navigate('/doctors');
+        else if (item === 'hospitals') navigate('/hospitals');
         else if (item === 'logout') {
             localStorage.removeItem('auth');
             navigate('/')
         };
     };
+
+    interface SidebarItemConfig {
+        key: SidebarItemKey;
+        icon: React.ReactNode;
+        label: string;
+        roles: string[];
+    }
+
+    const sidebarItems: SidebarItemConfig[] = [
+        {
+            key: 'profile',
+            icon: <FaUser />,
+            label: 'Me',
+            roles: ['patient'],
+        },
+        {
+            key: 'appointment',
+            icon: <FaCalendarCheck />,
+            label: 'Book Appointment',
+            roles: ['patient'],
+        },
+        {
+            key: 'patients',
+            icon: <FaUsers />,
+            label: 'Patients',
+            roles: ['doctor', 'admin'],
+        },
+        {
+            key: 'chatbot',
+            icon: <span role="img" aria-label="Chatbot">🧑‍⚕️</span>,
+            label: 'Chatbot',
+            roles: ['patient', 'doctor', 'admin'],
+        },
+        {
+            key: 'analysis',
+            icon: <span role="img" aria-label="Analysis">🧑‍⚕️</span>,
+            label: 'Analysis',
+            roles: ['doctor', 'admin', 'patient'],
+        },
+        {
+            key: 'doctors',
+            icon: <FaHospitalUser />,
+            label: 'Doctors',
+            roles: ['admin'],
+        },
+        {
+            key: 'hospitals',
+            icon: <FaHospital />,
+            label: 'Hospitals',
+            roles: ['admin'],
+        },
+    ];
 
     useEffect(() => {
         if (localStorage.getItem('patientId')) {
@@ -80,45 +142,20 @@ const Sidebar = () => {
             </div>
             {/* <div className={`${collapsed ? 'text-xl mb-8 text-center' : 'text-2xl mb-8 text-center'} text-white font-bold`}>{!collapsed && 'Smart Health'}</div> */}
             {/* Top Navigation (Profile and Book Appointment) */}
-            <nav
-                className={`flex flex-col ${collapsed ? "gap-4 mt-16" : "space-y-4"
-                    } text-lg flex-grow`}
-            >
-                <SidebarItem
-                    icon={<FaUser />}
-                    isActive={activeItem === "profile"}
-                    onClick={() => handleItemClick("profile")}
-                    label={collapsed ? "" : "Me"}
-                    collapsed={collapsed}
-                />
-                <SidebarItem
-                    icon={<FaCalendarCheck />}
-                    isActive={activeItem === "appointment"}
-                    onClick={() => handleItemClick("appointment")}
-                    label={collapsed ? "" : "Book Appointment"}
-                    collapsed={collapsed}
-                />
-                <SidebarItem
-                    icon={<FaUsers />}
-                    isActive={activeItem === "patients"}
-                    onClick={() => handleItemClick("patients")}
-                    label={collapsed ? "" : "Patients"}
-                    collapsed={collapsed}
-                />
-                <SidebarItem
-                    icon={<span role="img" aria-label="Chatbot">🧑‍⚕️</span>}
-                    isActive={activeItem === "chatbot"}
-                    onClick={() => handleItemClick("chatbot")}
-                    label={collapsed ? "" : "Chatbot"}
-                    collapsed={collapsed}
-                />
-                <SidebarItem
-                    icon={<span role="img" aria-label="Analysis">🧑‍⚕️</span>}
-                    isActive={activeItem === "analysis"}
-                    onClick={() => handleItemClick("analysis")}
-                    label={collapsed ? "" : "Analysis"}
-                    collapsed={collapsed}
-                />
+
+            <nav className={`flex flex-col ${collapsed ? "gap-4 mt-16" : "space-y-4"} text-lg flex-grow`}>
+                {sidebarItems
+                    .filter(item => role && item.roles.includes(role))
+                    .map(item => (
+                        <SidebarItem
+                            key={item.key}
+                            icon={item.icon}
+                            isActive={activeItem === item.key}
+                            onClick={() => handleItemClick(item.key)}
+                            label={collapsed ? "" : item.label}
+                            collapsed={collapsed}
+                        />
+                    ))}
             </nav>
             {/* Bottom Navigation (Logout) */}
             <div

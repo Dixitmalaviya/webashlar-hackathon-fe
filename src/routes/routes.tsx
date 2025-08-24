@@ -17,6 +17,8 @@ import Chatbot from "../pages/Chatbot";
 import DoctorRegistrationPage from "../pages/auth/Doctor-registration";
 import CreateHospital from "../pages/auth/Create-Hospital";
 import LandingPage from "../pages/Home";
+import DoctorsList from "../pages/Admin/DoctorsList/DoctorsList";
+import HospitalsList from "../pages/Admin/HospitalsList/HospitalsList";
 
 const Router = () => {
     return (
@@ -41,6 +43,8 @@ const Router = () => {
                         <Route path="profile" element={<PatientReport />}></Route>
                         <Route path="analysis" element={<Analysis />}></Route>
                         <Route path="chatbot" element={<Chatbot />}></Route>
+                        <Route path="doctors" element={<DoctorsList />}></Route>
+                        <Route path="hospitals" element={<HospitalsList />}></Route>
                     </Route>
                 </Route>
             </Routes>

@@ -3,9 +3,9 @@ import { Fragment } from "react/jsx-runtime";
 
 const ProtectedRoutes = () => {
         const authToken = localStorage.getItem('auth');
-        if (!authToken) {
-        return <Navigate to='/login' replace />;
-      }
+    //     if (!authToken) {
+    //     return <Navigate to='/login' replace />;
+    //   }
 
     return (
         <>
