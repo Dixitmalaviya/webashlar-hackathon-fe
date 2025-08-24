@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // You may want to move these to a separate CSS/SCSS file or use Tailwind config for production
 const style = `
@@ -204,6 +205,8 @@ body {
 `;
 
 const LandingPage: React.FC = () => {
+    const navigate = useNavigate();
+
     useEffect(() => {
         // Animate On Scroll (AOS) init
         // @ts-ignore
@@ -293,8 +296,8 @@ const LandingPage: React.FC = () => {
                     <a href="#" className="flex items-center space-x-3 group">
                         <div className="relative">
                             {/* Replace with your logo path or import */}
-                            <img src="/vite.svg" alt="HealthSync Logo" className="logo-img h-10 w-10 object-contain" />
-                            <div className="absolute inset-0 bg-blue-400 rounded-full blur-lg opacity-30 group-hover:opacity-60 transition-opacity duration-300"></div>
+                            <img src="/logo-without-name.png" alt="HealthSync Logo" className="logo-img h-10 w-10 object-contain" />
+                            <div className="absolute inset-0 bg-blue-400 rounded-full blur-lg opacity-10 group-hover:opacity-60 transition-opacity duration-300"></div>
                         </div>
                         <span className="text-2xl font-bold heading-font gradient-text">HealthSync</span>
                     </a>
@@ -304,9 +307,17 @@ const LandingPage: React.FC = () => {
                         <a href="#solution" className="nav-item text-gray-300 hover:text-blue-400 font-medium">Solution</a>
                         <a href="#contact" className="nav-item text-gray-300 hover:text-blue-400 font-medium">Contact</a>
                     </nav>
+                    <div className='flex'>
                     <a href="#demo" className="hidden md:inline-block magnetic-btn bg-blue-400 text-gray-900 font-semibold px-6 py-3 rounded-full shadow-lg relative z-10">
                         Get Started
                     </a>
+                    <button 
+                    className="hidden ml-4 md:inline-block magnetic-btn bg-blue-400 text-gray-900 font-semibold px-6 py-3 rounded-full shadow-lg relative z-10"
+                    onClick={() => navigate('/login')}
+                    >
+                        Login
+                    </button>
+                    </div>
                     <button id="mobile-menu-btn" className="md:hidden text-gray-300 hover:text-blue-400 transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -532,7 +543,10 @@ const LandingPage: React.FC = () => {
                     <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
                         Take control of your health with HealthSync's Smart Health Card. AI-powered insights, blockchain security, unified records - all in one intelligent platform.
                     </p>
-                    <a href="#" className="magnetic-btn bg-white text-blue-600 font-bold px-10 py-4 rounded-full shadow-2xl hover:bg-gray-100 transition-transform transform hover:scale-105 duration-300 inline-block">
+                    <a 
+                    className="magnetic-btn bg-white text-blue-600 font-bold px-10 py-4 rounded-full shadow-2xl hover:bg-gray-100 transition-transform transform hover:scale-105 duration-300 inline-block"
+                    onClick={() => navigate("/login#signup")}
+                    >
                         Start Your Health Journey
                     </a>
                 </div>

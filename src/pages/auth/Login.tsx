@@ -7,7 +7,6 @@ import {
   FaEnvelope,
   FaLock,
   FaEye,
-  FaHeartbeat,
   FaUserPlus,
   FaEthereum,
   FaUser,
@@ -103,8 +102,13 @@ const LoginForm: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 font-inter relative overflow-hidden">
       {/* Brand */}
       <div className="absolute top-6 left-6 flex items-center gap-3 z-10">
-        <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 text-white text-lg font-bold">
-          <FaHeartbeat />
+        <div className="w-50 h-10 flex items-center justify-center text-white text-lg font-bold">
+          {/* <FaHeartbeat /> */}
+           <img
+          src={"/logo-without-name.png"}
+          alt="Logo"
+          className="w-10 h-10 object-contain drop-shadow-md"
+        />
         </div>
         <span className="text-2xl font-bold font-space text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
           HealthSync
@@ -242,7 +246,7 @@ const LoginForm: React.FC = () => {
                           Full Name
                         </label>
                         <div className="relative">
-                          <FaUser className="absolute left-4 top-3 text-blue-300/70" />
+                          <FaUser className="absolute left-4 top-4 text-blue-300/70" />
                           <Field
                             name="name"
                             className="w-full bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -261,7 +265,7 @@ const LoginForm: React.FC = () => {
                           Email
                         </label>
                         <div className="relative">
-                          <FaEnvelope className="absolute left-4 top-3 text-blue-300/70" />
+                          <FaEnvelope className="absolute left-4 top-4 text-blue-300/70" />
                           <Field
                             type="email"
                             name="email"
@@ -281,12 +285,17 @@ const LoginForm: React.FC = () => {
                           Password
                         </label>
                         <div className="relative">
-                          <FaLock className="absolute left-4 top-3 text-blue-300/70" />
+                          <FaLock className="absolute left-4 top-4 text-blue-300/70" />
                           <Field
-                            type="password"
+                            // type="password"
                             name="password"
+                            type={showPassword ? "text" : "password"}
                             className="w-full bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Create password"
+                          />
+                          <FaEye
+                            className="absolute right-4 top-4 text-gray-400 cursor-pointer hover:text-blue-400"
+                            onClick={() => setShowPassword(!showPassword)}
                           />
                         </div>
                         <ErrorMessage
@@ -301,7 +310,7 @@ const LoginForm: React.FC = () => {
                           Wallet Address
                         </label>
                         <div className="relative">
-                          <FaEthereum className="absolute left-4 top-3 text-blue-300/70" />
+                          <FaEthereum className="absolute left-4 top-4 text-blue-300/70" />
                           <Field
                             name="wallet"
                             className="w-full bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -318,7 +327,7 @@ const LoginForm: React.FC = () => {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full py-3 rounded-xl font-semibold uppercase tracking-wide text-white bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg hover:scale-[1.02] transition"
+                        className="w-full py-3 rounded-xl font-semibold uppercase tracking-wide text-white bg-gradient-to-r from-blue-500 to-blue-700 shadow-lg hover:scale-[1.02] transition"
                       >
                         {isSubmitting ? "Creating..." : "Create Account"}
                       </button>
