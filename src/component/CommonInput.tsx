@@ -30,7 +30,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
 }) => (
   <div className={`mb-4 ${className}`}>
     {label && (
-      <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+      <label className="block text-sm font-medium text-gray-700 mb-2 flex justify-start">{label}</label>
     )}
     <div className="relative">
       {icon && (
@@ -60,7 +60,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
         </button>
       )}
     </div>
-    {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+    {error && <p className="mt-1 text-sm text-red-600 flex justify-start">{error}</p>}
   </div>
 );
 
