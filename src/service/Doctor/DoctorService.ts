@@ -1,4 +1,4 @@
-import { doFetch, REQUEST_CONTENT_TYPE, REQUEST_METHODS } from "../axios";
+import { doFetch, REQUEST_METHODS } from "../axios";
 import DOCTOR_API_ENDPOINTS from "./DoctorEndPoints";
 
 export default {

@@ -15,137 +15,137 @@ const themeColors = {
 };
 
 
-const actualPatientData = {
-    patientDetails: {
-        name: 'Yash M. Patel',
-        age: '21 Years',
-        sex: 'Male',
-        pid: '555',
-    },
-    doctorDetails: {
-        referredBy: 'Dr. Hiren Shah',
-    },
-    reports: [
-        {
-            testName: 'Complete Blood Count (CBC)',
-            dateReported: '02 Dec, 2X',
-            timeReported: '04:35 PM',
-            abnormalFindings: [
-                {
-                    investigation: 'HEMOGLOBIN',
-                    result: 12.5,
-                    unit: 'g/dL',
-                    status: 'Low',
-                    referenceValue: '13.0-17.0',
-                },
-                {
-                    investigation: 'Packed Cell Volume (PCV)',
-                    result: 57.5,
-                    unit: '%',
-                    status: 'High',
-                    referenceValue: '40-50',
-                },
-                {
-                    investigation: 'Platelet Count',
-                    result: 150000,
-                    unit: 'cumm',
-                    status: 'Borderline',
-                    referenceValue: '150000-410000',
-                },
-            ],
-            interpretation:
-                'Further confirm for Anemia. Low hemoglobin/hematocrit can indicate anemia.',
-            trends: [],
-        },
-        {
-            testName: 'THYROID PROFILE, TOTAL',
-            dateReported: '02 Dec, 2X',
-            timeReported: '04:35 PM',
-            abnormalFindings: [
-                {
-                    investigation: 'T3, TOTAL, SERUM',
-                    result: 217.4,
-                    unit: 'ng/dL',
-                    status: 'High',
-                    referenceValue: '80.00-200.00',
-                },
-                {
-                    investigation: 'T4, TOTAL, SERUM',
-                    result: 13.6,
-                    unit: 'mcg/dL',
-                    status: 'High',
-                    referenceValue: '4.50-12.50',
-                },
-                {
-                    investigation: 'TSH',
-                    result: 10.1,
-                    unit: 'mU/L',
-                    status: 'High',
-                    referenceValue: '0.40-4.00',
-                },
-            ],
-            interpretation:
-                'Abnormal thyroid hormone levels (e.g. TSH) can indicate thyroid disorders.',
-            trends: [],
-        },
-        {
-            testName: 'THYROID ANTIBODIES',
-            dateReported: '02 Dec, 2X',
-            timeReported: '04:35 PM',
-            abnormalFindings: [
-                {
-                    investigation: 'ANTI THYROGLOBULIN ANTIBODY (ANTI - Tg)',
-                    result: 217.4,
-                    unit: 'U/mL',
-                    status: 'High',
-                    referenceValue: '< 60.00',
-                },
-                {
-                    investigation: 'ANTI THYROID PEROXIDASE ANTIBODY (ANTI TPO)',
-                    result: 128.0,
-                    unit: 'U/mL',
-                    status: 'High',
-                    referenceValue: '< 60.00',
-                },
-            ],
-            interpretation:
-                'Increased levels of these antibodies confirm autoimmune thyroid disease such as Hashimoto thyroiditis or Graves disease. Anti TPO is a more specific method for measuring thyroid antibodies.',
-            trends: [],
-        },
-        {
-            testName: 'DENGUE FEVER PANEL',
-            dateReported: '02 Dec, 2X',
-            timeReported: '04:35 PM',
-            abnormalFindings: [
-                {
-                    investigation: 'DENGUE FEVER ANTIBODY, IgG, SERUM',
-                    result: 25.0,
-                    unit: 'Index',
-                    status: 'Positive (> 2.20)',
-                    referenceValue: 'Index',
-                },
-                {
-                    investigation: 'DENGUE FEVER ANTIBODY, IgM, SERUM',
-                    result: 21.0,
-                    unit: 'Index',
-                    status: 'Positive (> 1.10)',
-                    referenceValue: 'Index',
-                },
-            ],
-            interpretation:
-                'IgG antibody detected, indicating presumptive evidence of recent exposure to or current infection with the dengue virus. IgM antibody detected, suggestive of primary or secondary dengue infection.',
-            trends: [],
-        },
-    ],
-    overallAnalysis: {
-        summary:
-            'This is a summary of all lab reports. The CBC results suggest potential anemia, requiring further investigation. The thyroid reports for T3, T4, TSH, and thyroid antibodies indicate a high probability of autoimmune thyroid disease, such as Hashimoto thyroiditis. The Dengue Fever Panel is positive for both IgG and IgM antibodies, suggesting a recent or current dengue infection.',
-        recommendations:
-            'Based on the findings, it is recommended to follow up with the referring doctor, Dr. Hiren Shah, to discuss the results and confirm diagnoses for anemia, thyroid disease, and dengue fever. The AI can highlight these key findings to both the patient and doctor to aid in decision-making.',
-        longTermTrends:
-            'For future analysis, the system will track key values like Hemoglobin, TSH, and antibody levels over time to show trends and evaluate the effectiveness of any treatment plans.',
-    },
-};
+// const actualPatientData = {
+//     patientDetails: {
+//         name: 'Yash M. Patel',
+//         age: '21 Years',
+//         sex: 'Male',
+//         pid: '555',
+//     },
+//     doctorDetails: {
+//         referredBy: 'Dr. Hiren Shah',
+//     },
+//     reports: [
+//         {
+//             testName: 'Complete Blood Count (CBC)',
+//             dateReported: '02 Dec, 2X',
+//             timeReported: '04:35 PM',
+//             abnormalFindings: [
+//                 {
+//                     investigation: 'HEMOGLOBIN',
+//                     result: 12.5,
+//                     unit: 'g/dL',
+//                     status: 'Low',
+//                     referenceValue: '13.0-17.0',
+//                 },
+//                 {
+//                     investigation: 'Packed Cell Volume (PCV)',
+//                     result: 57.5,
+//                     unit: '%',
+//                     status: 'High',
+//                     referenceValue: '40-50',
+//                 },
+//                 {
+//                     investigation: 'Platelet Count',
+//                     result: 150000,
+//                     unit: 'cumm',
+//                     status: 'Borderline',
+//                     referenceValue: '150000-410000',
+//                 },
+//             ],
+//             interpretation:
+//                 'Further confirm for Anemia. Low hemoglobin/hematocrit can indicate anemia.',
+//             trends: [],
+//         },
+//         {
+//             testName: 'THYROID PROFILE, TOTAL',
+//             dateReported: '02 Dec, 2X',
+//             timeReported: '04:35 PM',
+//             abnormalFindings: [
+//                 {
+//                     investigation: 'T3, TOTAL, SERUM',
+//                     result: 217.4,
+//                     unit: 'ng/dL',
+//                     status: 'High',
+//                     referenceValue: '80.00-200.00',
+//                 },
+//                 {
+//                     investigation: 'T4, TOTAL, SERUM',
+//                     result: 13.6,
+//                     unit: 'mcg/dL',
+//                     status: 'High',
+//                     referenceValue: '4.50-12.50',
+//                 },
+//                 {
+//                     investigation: 'TSH',
+//                     result: 10.1,
+//                     unit: 'mU/L',
+//                     status: 'High',
+//                     referenceValue: '0.40-4.00',
+//                 },
+//             ],
+//             interpretation:
+//                 'Abnormal thyroid hormone levels (e.g. TSH) can indicate thyroid disorders.',
+//             trends: [],
+//         },
+//         {
+//             testName: 'THYROID ANTIBODIES',
+//             dateReported: '02 Dec, 2X',
+//             timeReported: '04:35 PM',
+//             abnormalFindings: [
+//                 {
+//                     investigation: 'ANTI THYROGLOBULIN ANTIBODY (ANTI - Tg)',
+//                     result: 217.4,
+//                     unit: 'U/mL',
+//                     status: 'High',
+//                     referenceValue: '< 60.00',
+//                 },
+//                 {
+//                     investigation: 'ANTI THYROID PEROXIDASE ANTIBODY (ANTI TPO)',
+//                     result: 128.0,
+//                     unit: 'U/mL',
+//                     status: 'High',
+//                     referenceValue: '< 60.00',
+//                 },
+//             ],
+//             interpretation:
+//                 'Increased levels of these antibodies confirm autoimmune thyroid disease such as Hashimoto thyroiditis or Graves disease. Anti TPO is a more specific method for measuring thyroid antibodies.',
+//             trends: [],
+//         },
+//         {
+//             testName: 'DENGUE FEVER PANEL',
+//             dateReported: '02 Dec, 2X',
+//             timeReported: '04:35 PM',
+//             abnormalFindings: [
+//                 {
+//                     investigation: 'DENGUE FEVER ANTIBODY, IgG, SERUM',
+//                     result: 25.0,
+//                     unit: 'Index',
+//                     status: 'Positive (> 2.20)',
+//                     referenceValue: 'Index',
+//                 },
+//                 {
+//                     investigation: 'DENGUE FEVER ANTIBODY, IgM, SERUM',
+//                     result: 21.0,
+//                     unit: 'Index',
+//                     status: 'Positive (> 1.10)',
+//                     referenceValue: 'Index',
+//                 },
+//             ],
+//             interpretation:
+//                 'IgG antibody detected, indicating presumptive evidence of recent exposure to or current infection with the dengue virus. IgM antibody detected, suggestive of primary or secondary dengue infection.',
+//             trends: [],
+//         },
+//     ],
+//     overallAnalysis: {
+//         summary:
+//             'This is a summary of all lab reports. The CBC results suggest potential anemia, requiring further investigation. The thyroid reports for T3, T4, TSH, and thyroid antibodies indicate a high probability of autoimmune thyroid disease, such as Hashimoto thyroiditis. The Dengue Fever Panel is positive for both IgG and IgM antibodies, suggesting a recent or current dengue infection.',
+//         recommendations:
+//             'Based on the findings, it is recommended to follow up with the referring doctor, Dr. Hiren Shah, to discuss the results and confirm diagnoses for anemia, thyroid disease, and dengue fever. The AI can highlight these key findings to both the patient and doctor to aid in decision-making.',
+//         longTermTrends:
+//             'For future analysis, the system will track key values like Hemoglobin, TSH, and antibody levels over time to show trends and evaluate the effectiveness of any treatment plans.',
+//     },
+// };
 
 
 interface AnalysisProps {

@@ -15,8 +15,8 @@ import {
 const CreateHospital = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { registerHospitalService } = authService;
-    const [countries, setCountries] = useState(["United States", "Canada", "India", "United Kingdom", "Germany"]);
-    const [states, setStates] = useState(["California", "Texas", "New York", "Ontario", "Gujarat"]);
+    const [countries, _setCountries] = useState(["United States", "Canada", "India", "United Kingdom", "Germany"]);
+    const [states, _setStates] = useState(["California", "Texas", "New York", "Ontario", "Gujarat"]);
 
     const registerSchema = Yup.object().shape({
         email: Yup.string()

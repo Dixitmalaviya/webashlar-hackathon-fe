@@ -122,6 +122,7 @@ const PatientList: React.FC = () => {
            error: "Error when deleting Patient",
          })
          .then((response: any) => {
+            console.log("response", response);
            fetchPatients(page * rows, rows);
          });
      };

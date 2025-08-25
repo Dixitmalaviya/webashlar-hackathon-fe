@@ -20,4 +20,6 @@ export default {
         doFetch(`${PATIENT_API_ENDPOINTS.FETCH_CONVERSATION}/${patientId}`, REQUEST_METHODS.GET),
     fetchPatientAnalysisData: async (details: any) =>
         doFetch(PATIENT_API_ENDPOINTS.FETCH_ANALYSIS, REQUEST_METHODS.POST, details),
+    deletePatientReportService: async (id: string) =>
+        doFetch(`${PATIENT_API_ENDPOINTS.PATIENT_REPORT_DELETE}/${id}`, REQUEST_METHODS.DELETE),
 }

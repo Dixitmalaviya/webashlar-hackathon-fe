@@ -8,7 +8,6 @@ import {
   FaLock,
   FaEye,
   FaUserPlus,
-  FaEthereum,
   FaUser,
   FaPhone,
 } from "react-icons/fa";
@@ -24,8 +23,8 @@ const LoginForm: React.FC = () => {
   const { loginService } = authService;
   const location = useLocation();
   
-    const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
-    const relationshipOptions = relationships.map(r => ({ label: r, value: r }));
+    // const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
+    // const relationshipOptions = relationships.map(r => ({ label: r, value: r }));
 
   useEffect(() => {
     const hash = location.hash;
@@ -119,7 +118,7 @@ const LoginForm: React.FC = () => {
   };
 
   const handleRegister = (values: typeof initialRegistrationValues,
-    actions: FormikHelpers<typeof initialRegistrationValues>
+    _actions: FormikHelpers<typeof initialRegistrationValues>
   ) => {
           // actions.setSubmitting(false);
     console.log(values);

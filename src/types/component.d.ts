@@ -75,3 +75,25 @@ interface TimelineYearData {
 interface TimelineProps {
   timelineData: TimelineYearData[];
 }
+
+interface SidebarItemConfig {
+  key: SidebarItemKey;
+  icon: React.ReactNode;
+  label: string;
+  roles: string[];
+}
+
+interface CommonInputProps {
+  label?: string;
+  type?: string;
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+  placeholder?: string;
+  icon?: React.ReactNode;
+  showPasswordToggle?: boolean;
+  onTogglePassword?: () => void;
+  className?: string;
+  max?: string;
+  disabled?: boolean;
+}

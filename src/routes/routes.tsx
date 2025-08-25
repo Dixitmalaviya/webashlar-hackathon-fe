@@ -4,7 +4,6 @@ import EmailVerification from "../pages/auth/EmailVerify";
 import ForgotPasswordForm from "../pages/auth/ForgotPassword";
 import LoginForm from "../pages/auth/Login";
 import SignupForm from "../pages/auth/SignUp";
-import Home from "../pages/Home-v1";
 import PatientList from "../pages/PatientList";
 import ProtectedRoutes from "./protected-routes";
 import PatientReport from "../pages/PatientReport";

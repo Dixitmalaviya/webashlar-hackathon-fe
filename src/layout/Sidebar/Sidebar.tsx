@@ -17,7 +17,7 @@ const Sidebar = () => {
     const location = useLocation()
     // const { getPatientService } = patientServices;
     const [userName, setUserName] = useState('');
-    const [role, setRole] = useState<string | null>('patient');
+    const [_role, setRole] = useState<string | null>('patient');
     console.log(activeItem)
     useEffect(() => {
         const storedRole = localStorage.getItem('role');
@@ -43,57 +43,50 @@ const Sidebar = () => {
         };
     };
 
-    interface SidebarItemConfig {
-        key: SidebarItemKey;
-        icon: React.ReactNode;
-        label: string;
-        roles: string[];
-    }
-
-    const sidebarItems: SidebarItemConfig[] = [
-        {
-            key: 'profile',
-            icon: <FaUser />,
-            label: 'Me',
-            roles: ['patient'],
-        },
-        {
-            key: 'appointment',
-            icon: <FaCalendarCheck />,
-            label: 'Book Appointment',
-            roles: ['patient'],
-        },
-        {
-            key: 'patients',
-            icon: <FaUsers />,
-            label: 'Patients',
-            roles: ['doctor', 'admin'],
-        },
-        {
-            key: 'chatbot',
-            icon: <span role="img" aria-label="Chatbot">🧑‍⚕️</span>,
-            label: 'Chatbot',
-            roles: ['patient', 'doctor', 'admin'],
-        },
-        {
-            key: 'analysis',
-            icon: <span role="img" aria-label="Analysis">🧑‍⚕️</span>,
-            label: 'Analysis',
-            roles: ['doctor', 'admin', 'patient'],
-        },
-        {
-            key: 'doctors',
-            icon: <FaHospitalUser />,
-            label: 'Doctors',
-            roles: ['admin'],
-        },
-        {
-            key: 'hospitals',
-            icon: <FaHospital />,
-            label: 'Hospitals',
-            roles: ['admin'],
-        },
-    ];
+    // const sidebarItems: SidebarItemConfig[] = [
+    //     {
+    //         key: 'profile',
+    //         icon: <FaUser />,
+    //         label: 'Me',
+    //         roles: ['patient'],
+    //     },
+    //     {
+    //         key: 'appointment',
+    //         icon: <FaCalendarCheck />,
+    //         label: 'Book Appointment',
+    //         roles: ['patient'],
+    //     },
+    //     {
+    //         key: 'patients',
+    //         icon: <FaUsers />,
+    //         label: 'Patients',
+    //         roles: ['doctor', 'admin'],
+    //     },
+    //     {
+    //         key: 'chatbot',
+    //         icon: <span role="img" aria-label="Chatbot">🧑‍⚕️</span>,
+    //         label: 'Chatbot',
+    //         roles: ['patient', 'doctor', 'admin'],
+    //     },
+    //     {
+    //         key: 'analysis',
+    //         icon: <span role="img" aria-label="Analysis">🧑‍⚕️</span>,
+    //         label: 'Analysis',
+    //         roles: ['doctor', 'admin', 'patient'],
+    //     },
+    //     {
+    //         key: 'doctors',
+    //         icon: <FaHospitalUser />,
+    //         label: 'Doctors',
+    //         roles: ['admin'],
+    //     },
+    //     {
+    //         key: 'hospitals',
+    //         icon: <FaHospital />,
+    //         label: 'Hospitals',
+    //         roles: ['admin'],
+    //     },
+    // ];
 
     useEffect(() => {
         if (localStorage.getItem('patientId')) {
@@ -101,7 +94,7 @@ const Sidebar = () => {
             patientServices.getPatientService(patientId).then((res) => {
                 console.log("Patient res", res)
                 setUserName(res.data.patient.fullName);
-            }).catch(error => console.error("error fetching patient"))
+            }).catch(error => console.error("error fetching patient", error))
         }
     })
 
