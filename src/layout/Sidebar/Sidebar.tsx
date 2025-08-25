@@ -1,7 +1,7 @@
 // // components/Sidebar.jsx
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { FaCalendarCheck, FaSignOutAlt, FaUser, FaUsers } from 'react-icons/fa';
+import { FaCalendarCheck, FaHospital, FaHospitalUser, FaSignOutAlt, FaUser, FaUsers } from 'react-icons/fa';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Sidebar.css';
 import AvtarImg from '../../assets/Avtar.svg';
@@ -17,7 +17,7 @@ const Sidebar = () => {
     const location = useLocation()
     // const { getPatientService } = patientServices;
     const [userName, setUserName] = useState('');
-    const [_role, setRole] = useState<string | null>('patient');
+    const [role, setRole] = useState<string | null>('patient');
     console.log(activeItem)
     useEffect(() => {
         const storedRole = localStorage.getItem('role');
@@ -43,50 +43,50 @@ const Sidebar = () => {
         };
     };
 
-    // const sidebarItems: SidebarItemConfig[] = [
-    //     {
-    //         key: 'profile',
-    //         icon: <FaUser />,
-    //         label: 'Me',
-    //         roles: ['patient'],
-    //     },
-    //     {
-    //         key: 'appointment',
-    //         icon: <FaCalendarCheck />,
-    //         label: 'Book Appointment',
-    //         roles: ['patient'],
-    //     },
-    //     {
-    //         key: 'patients',
-    //         icon: <FaUsers />,
-    //         label: 'Patients',
-    //         roles: ['doctor', 'admin'],
-    //     },
-    //     {
-    //         key: 'chatbot',
-    //         icon: <span role="img" aria-label="Chatbot">🧑‍⚕️</span>,
-    //         label: 'Chatbot',
-    //         roles: ['patient', 'doctor', 'admin'],
-    //     },
-    //     {
-    //         key: 'analysis',
-    //         icon: <span role="img" aria-label="Analysis">🧑‍⚕️</span>,
-    //         label: 'Analysis',
-    //         roles: ['doctor', 'admin', 'patient'],
-    //     },
-    //     {
-    //         key: 'doctors',
-    //         icon: <FaHospitalUser />,
-    //         label: 'Doctors',
-    //         roles: ['admin'],
-    //     },
-    //     {
-    //         key: 'hospitals',
-    //         icon: <FaHospital />,
-    //         label: 'Hospitals',
-    //         roles: ['admin'],
-    //     },
-    // ];
+    const sidebarItems: SidebarItemConfig[] = [
+        {
+            key: 'profile',
+            icon: <FaUser />,
+            label: 'Me',
+            roles: ['patient'],
+        },
+        {
+            key: 'appointment',
+            icon: <FaCalendarCheck />,
+            label: 'Book Appointment',
+            roles: ['patient'],
+        },
+        {
+            key: 'patients',
+            icon: <FaUsers />,
+            label: 'Patients',
+            roles: ['doctor', 'admin'],
+        },
+        {
+            key: 'chatbot',
+            icon: <span role="img" aria-label="Chatbot">🧑‍⚕️</span>,
+            label: 'Chatbot',
+            roles: ['patient', 'doctor', 'admin'],
+        },
+        {
+            key: 'analysis',
+            icon: <span role="img" aria-label="Analysis">🧑‍⚕️</span>,
+            label: 'Analysis',
+            roles: ['doctor', 'admin', 'patient'],
+        },
+        {
+            key: 'doctors',
+            icon: <FaHospitalUser />,
+            label: 'Doctors',
+            roles: ['admin'],
+        },
+        {
+            key: 'hospitals',
+            icon: <FaHospital />,
+            label: 'Hospitals',
+            roles: ['admin'],
+        },
+    ];
 
     useEffect(() => {
         if (localStorage.getItem('patientId')) {
@@ -140,27 +140,18 @@ const Sidebar = () => {
                 className={`flex flex-col ${collapsed ? "gap-4 mt-16" : "space-y-4"
                     } text-lg flex-grow`}
             >
-                <SidebarItem
-                    icon={<FaUser />}
-                    isActive={activeItem === "profile"}
-                    onClick={() => handleItemClick("profile")}
-                    label={collapsed ? "" : "Me"}
-                    collapsed={collapsed}
-                />
-                <SidebarItem
-                    icon={<FaCalendarCheck />}
-                    isActive={activeItem === "appointment"}
-                    onClick={() => handleItemClick("appointment")}
-                    label={collapsed ? "" : "Book Appointment"}
-                    collapsed={collapsed}
-                />
-                <SidebarItem
-                    icon={<FaUsers />}
-                    isActive={activeItem === "patients"}
-                    onClick={() => handleItemClick("patients")}
-                    label={collapsed ? "" : "Patients"}
-                    collapsed={collapsed}
-                />
+                {sidebarItems
+                    .filter(item => role && item.roles.includes(role))
+                    .map(item => (
+                        <SidebarItem
+                            key={item.key}
+                            icon={item.icon}
+                            isActive={activeItem === item.key}
+                            onClick={() => handleItemClick(item.key)}
+                            label={collapsed ? "" : item.label}
+                            collapsed={collapsed}
+                        />
+                    ))}
             </nav>
             {/* Bottom Navigation (Logout) */}
             <div

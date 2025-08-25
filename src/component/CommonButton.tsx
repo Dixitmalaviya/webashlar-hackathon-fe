@@ -5,7 +5,7 @@ interface CommonButtonProps {
   onClick?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'danger';
   className?: string;
   type?: 'button' | 'submit' | 'reset';
   title?: string;
@@ -26,7 +26,9 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   const variantClasses =
     variant === 'primary'
       ? 'bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-400'
-      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:bg-gray-50';
+      : variant === 'secondary'
+      ? 'bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:bg-gray-50'
+      : 'bg-red-600 hover:bg-red-700 text-white disabled:bg-red-400';
 
   return (
     <button

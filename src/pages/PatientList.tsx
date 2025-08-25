@@ -11,6 +11,7 @@ import PatientService from '../service/Patient/PatientService';
 import toast from 'react-hot-toast';
 import { FaEye } from 'react-icons/fa';
 import { FiEdit, FiTrash } from 'react-icons/fi';
+import DoctorService from '../service/Doctor/DoctorService';
 
 interface Patient {
     id: string;
@@ -34,47 +35,51 @@ const PatientList: React.FC = () => {
     const fetchPatients = useCallback(async (page: number, rows: number) => {
         setLoading(true);
         try {
+            const response = await DoctorService.getPatientsListService();
+            console.log("response", response);
+            debugger
+            const mockData = response?.data?.patients || [];
             // Replace this with your real API endpoint
-            const mockData: Patient[] = Array.from({ length: 52 }, (_, i) => ({
-                id: '68abf55e9df6b967378b2ef8',
-                name: `Patient ${i + 1}`,
-                age: 20 + ((i + 1) % 30),
-                gender: (i % 2 === 0 ? 'Male' : 'Female'),
-                email: `patient${i + 1}@example.com`,
-                bloodType: (i % 4 === 0 ? 'A+' : i % 4 === 1 ? 'B+' : i % 4 === 2 ? 'AB+' : 'O+'),
-            }));
-            setPatients(mockData.slice(page, page + rows));
+            // const mockData: Patient[] = Array.from({ length: 52 }, (_, i) => ({
+            //     id: '68abf55e9df6b967378b2ef8',
+            //     name: `Patient ${i + 1}`,
+            //     age: 20 + ((i + 1) % 30),
+            //     gender: (i % 2 === 0 ? 'Male' : 'Female'),
+            //     email: `patient${i + 1}@example.com`,
+            //     bloodType: (i % 4 === 0 ? 'A+' : i % 4 === 1 ? 'B+' : i % 4 === 2 ? 'AB+' : 'O+'),
+            // }));
+            setPatients(mockData);
             setTotalRecords(mockData.length);
         } catch (error) {
             // Fallback mock data for demo
-            const mockData: Patient[] = Array.from({ length: 52 }, (_, i) => ({
-                id: '68abf55e9df6b967378b2ef8',
-                name: `Patient ${i + 1}`,
-                age: 20 + ((i + 1) % 30),
-                gender: (i % 2 === 0 ? 'Male' : 'Female'),
-                email: `patient${i + 1}@example.com`,
-                bloodType: (i % 4 === 0 ? 'A+' : i % 4 === 1 ? 'B+' : i % 4 === 2 ? 'AB+' : 'O+'),
-            }));
-            setPatients(mockData.slice(page, page + rows));
-            setTotalRecords(mockData.length);
+            // const mockData: Patient[] = Array.from({ length: 52 }, (_, i) => ({
+            //     id: '68abf55e9df6b967378b2ef8',
+            //     name: `Patient ${i + 1}`,
+            //     age: 20 + ((i + 1) % 30),
+            //     gender: (i % 2 === 0 ? 'Male' : 'Female'),
+            //     email: `patient${i + 1}@example.com`,
+            //     bloodType: (i % 4 === 0 ? 'A+' : i % 4 === 1 ? 'B+' : i % 4 === 2 ? 'AB+' : 'O+'),
+            // }));
+            setPatients([]);
+            // setTotalRecords(mockData.length);
         }
         setLoading(false);
     }, []);
 
     // const fetchPatients = useCallback(async (page: number, rows: number) => {
-        //   toast
-        //     .promise(DoctorService.getPatientsService(), {
-        //       loading: "Loading",
-        //       success: "Patients Fetched successfully",
-        //       error: "Error when fetching Patients",
-        //     })
-        //     .then((response: any) => {
-        //         debugger
-        //                     setPatients(response?.data?.data?.slice(page, page + rows));
-        //     setTotalRecords(response?.data?.data.length);
-        //       console.log("response", response);
-        //     });
-        // }, []);
+    //   toast
+    //     .promise(DoctorService.getPatientsService(), {
+    //       loading: "Loading",
+    //       success: "Patients Fetched successfully",
+    //       error: "Error when fetching Patients",
+    //     })
+    //     .then((response: any) => {
+    //         debugger
+    //                     setPatients(response?.data?.data?.slice(page, page + rows));
+    //     setTotalRecords(response?.data?.data.length);
+    //       console.log("response", response);
+    //     });
+    // }, []);
 
     useEffect(() => {
         fetchPatients(page * rows, rows);
@@ -86,72 +91,103 @@ const PatientList: React.FC = () => {
     };
 
     const editPatient = (Id: string) => {
-      toast
-        .promise(PatientService.getPatientService(Id), {
-          loading: "Loading",
-          //   success: "Report Deleted successfully",
-          error: "Error when fetching patient details",
-        })
-        .then((response: any) => {
-          console.log("response", response);
-          const patientData = response?.data?.patient;
-          setIsEditMode(true);
-          setEditPatientId(Id);
-          setForm({
-            email: patientData.email,
-            password: "",
-            fullName: patientData.fullName,
-            dob: patientData.dob,
-            phone: patientData.emergencyContact.phone,
-            address: patientData.address,
-            emergencyContact: {
-              name: patientData.emergencyContact.name,
-              phone: patientData.emergencyContact.phone,
-              relationship: patientData.emergencyContact.relationship,
-            },
-          });
-          setModalOpen(true);
-        });
+        toast
+            .promise(PatientService.getPatientService(Id), {
+                loading: "Loading",
+                //   success: "Report Deleted successfully",
+                error: "Error when fetching patient details",
+            })
+            .then((response: any) => {
+                console.log("response", response);
+                const patientData = response?.data?.patient;
+                setIsEditMode(true);
+                setEditPatientId(Id);
+                setForm({
+                    email: patientData.email,
+                    password: "",
+                    fullName: patientData.fullName,
+                    dob: patientData.dob,
+                    phone: patientData.emergencyContact.phone,
+                    address: patientData.address,
+                    emergencyContact: {
+                        name: patientData.emergencyContact.name,
+                        phone: patientData.emergencyContact.phone,
+                        relationship: patientData.emergencyContact.relationship,
+                    },
+                });
+                setModalOpen(true);
+            });
     };
 
-     const deletePatient = (Id: string) => {
-       toast
-         .promise(PatientService.deletePatientService(Id), {
-           loading: "Loading",
-           success: "Patient Deleted successfully",
-           error: "Error when deleting Patient",
-         })
-         .then((response: any) => {
-            console.log("response", response);
-           fetchPatients(page * rows, rows);
-         });
-     };
+    const deletePatient = (Id: string) => {
+        toast
+            .promise(PatientService.deletePatientService(Id), {
+                loading: "Loading",
+                success: "Patient Deleted successfully",
+                error: "Error when deleting Patient",
+            })
+            .then((response: any) => {
+                console.log("response", response);
+                fetchPatients(page * rows, rows);
+            });
+    };
+
+    // Helper to format date as YYYY-MM-DD
+    const formatDate = (dateString: string) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];
+    };
+
+    // Helper to calculate age from dob
+    const calculateAge = (dobString: string) => {
+        if (!dobString) return '';
+        const dob = new Date(dobString);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+        return age;
+    };
 
     const columns: TableColumn[] = [
-        { field: 'id', header: 'ID', sortable: true },
-        { field: 'name', header: 'Name', sortable: true },
-        { field: 'age', header: 'Age', sortable: true },
+        { field: '_id', header: 'ID', sortable: true },
+        { field: 'fullName', header: 'Name', sortable: true },
+        {
+            field: 'dob',
+            header: 'DOB',
+            sortable: true,
+            body: (row: any) => formatDate(row.dob),
+        },
+        {
+            field: 'age',
+            header: 'Age',
+            sortable: true,
+            body: (row: any) => calculateAge(row.dob),
+        },
         { field: 'gender', header: 'Gender', sortable: true },
         { field: 'email', header: 'Email', sortable: true },
         { field: 'bloodType', header: 'Blood Type', sortable: true },
-        { 
+        {
             field: 'actions',
             header: 'Actions',
             body: (_row, _col, _rowIndex) => (
                 <div className="flex justify-center">
-                            <FaEye
-                              className="text-xl text-blue-400 cursor-pointer hover:text-blue-400"
-                              onClick={() => navigate('/patients/report')}
-                            />
-                            <FiEdit
-                              className="text-xl ml-4 text-blue-400 cursor-pointer hover:text-blue-400"
-                              onClick={() => editPatient(_row.id)}
-                            />
-                            <FiTrash
-                              className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
-                              onClick={() => deletePatient(_row?.id)}
-                            />
-                          </div>
+                    <FaEye
+                        className="text-xl text-blue-400 cursor-pointer hover:text-blue-400"
+                        onClick={() => navigate('/patients/report', { state: { patientId: _row._id } })}
+                    />
+                    <FiEdit
+                        className="text-xl ml-4 text-blue-400 cursor-pointer hover:text-blue-400"
+                        onClick={() => editPatient(_row.id)}
+                    />
+                    <FiTrash
+                        className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
+                        onClick={() => deletePatient(_row?.id)}
+                    />
+                </div>
             ),
             style: { textAlign: 'center', minWidth: 120 },
         },
@@ -229,42 +265,43 @@ const PatientList: React.FC = () => {
         if (validateForm()) {
             // On valid, log the payload
             console.log('Patient Payload:', form);
-            if(isEditMode) {
+            if (isEditMode) {
                 toast.promise(
-                PatientService.updatePatientService(editPatientId, form),
-                {
-                    loading: 'Loading',
-                    success: 'Patient Updated successfully',
-                    error: 'Error Updating Patient',
-                }
-            ).then((response: any) => {
-                console.log('response', response);
-                setModalOpen(false);
-                setForm({
-                    email: '', password: '', fullName: '', dob: '', phone: '', address: '',
-                    emergencyContact: { name: '', phone: '', relationship: '' },
+                    PatientService.updatePatientService(editPatientId, form),
+                    {
+                        loading: 'Loading',
+                        success: 'Patient Updated successfully',
+                        error: 'Error Updating Patient',
+                    }
+                ).then((response: any) => {
+                    console.log('response', response);
+                    setModalOpen(false);
+                    setForm({
+                        email: '', password: '', fullName: '', dob: '', phone: '', address: '',
+                        emergencyContact: { name: '', phone: '', relationship: '' },
+                    });
+                    setFormErrors({});
                 });
-                setFormErrors({});
-            });
             }
             else {
-            toast.promise(
-                PatientService.createPatientService(form),
-                {
-                    loading: 'Loading',
-                    success: 'Patient created successfully',
-                    error: 'Error when fetching',
-                }
-            ).then((response: any) => {
-                console.log('response', response);
-                setModalOpen(false);
-                setForm({
-                    email: '', password: '', fullName: '', dob: '', phone: '', address: '',
-                    emergencyContact: { name: '', phone: '', relationship: '' },
+                toast.promise(
+                    PatientService.createPatientService(form),
+                    {
+                        loading: 'Loading',
+                        success: 'Patient created successfully',
+                        error: 'Error when fetching',
+                    }
+                ).then((response: any) => {
+                    console.log('response', response);
+                    setPatients((prevPatients) => [...prevPatients, response.data?.patient]);
+                    setModalOpen(false);
+                    setForm({
+                        email: '', password: '', fullName: '', dob: '', phone: '', address: '',
+                        emergencyContact: { name: '', phone: '', relationship: '' },
+                    });
+                    setFormErrors({});
                 });
-                setFormErrors({});
-            });
-        }
+            }
         }
     };
 
@@ -295,7 +332,7 @@ const PatientList: React.FC = () => {
                 />
             </div>
             {/* Render modal here, outside the main content container */}
-            <CommonModal isOpen={modalOpen} onClose={() => {setModalOpen(false); setIsEditMode(false); setEditPatientId('')}} title={isEditMode ? "Update Patient" : "Add Patient"}>
+            <CommonModal isOpen={modalOpen} onClose={() => { setModalOpen(false); setIsEditMode(false); setEditPatientId('') }} title={isEditMode ? "Update Patient" : "Add Patient"}>
                 <form className="space-y-3" onSubmit={e => { e.preventDefault(); handleSave(); }}>
                     <CommonInput
                         label="Email"
@@ -373,7 +410,7 @@ const PatientList: React.FC = () => {
                             Cancel
                         </CommonButton>
                         <CommonButton type="submit" className="w-auto px-6">
-                            { isEditMode ? "Update" : "Save"}
+                            {isEditMode ? "Update" : "Save"}
                         </CommonButton>
                     </div>
                 </form>

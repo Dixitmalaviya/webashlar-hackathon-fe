@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { LineChart, Line, Tooltip, ResponsiveContainer, BarChart, Bar, AreaChart, Area, Cell } from 'recharts';
 import { Activity, CheckCircle, Info, TrendingUp } from 'lucide-react';
 import PatientService from '../service/Patient/PatientService';
+import { useLocation } from 'react-router-dom';
 
 // Theme-based color palette
 const themeColors = {
@@ -155,26 +156,29 @@ interface AnalysisProps {
 const Analysis: React.FC<AnalysisProps> = ({ patientData: propPatientData }) => {
     const [selectedFilter, _setSelectedFilter] = useState('All Tests');
     const [patientData, setPatientData] = useState<any>(null);
+    const location = useLocation();
+    const state = location.state;
 
     const fetchAnalysisData = async () => {
         const reqObj = {
             patientId: localStorage.getItem('patientId'),
-            "fromDate": "2021-07-01",
-            "toDate": "2030-08-30"
+            "fromDate": state?.startDate || "2021-07-01",
+            "toDate": state?.endDate || "2030-08-30"
         }
         const response = await PatientService.fetchPatientAnalysisData(reqObj);
-        console.log("response", response)
-        setPatientData(response.data?.data);
+        debugger
+        if (response?.status === 200) {
+            console.log("response", response)
+            setPatientData(response.data?.data);
+        } else {
+            setPatientData(null);
+        }
     }
 
     React.useEffect(() => {
-        if (propPatientData) {
-            setPatientData(propPatientData);
-        } else {
+ 
             fetchAnalysisData();
-            // setPatientData(actualPatientData);
-        }
-    }, [propPatientData]);
+    }, []);
 
     const processPatientData = useMemo(() => {
         if (!patientData) return null;
@@ -462,7 +466,60 @@ const Analysis: React.FC<AnalysisProps> = ({ patientData: propPatientData }) => 
     return (
         <div className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
             <div className="max-w-7xl mx-auto px-6 py-8">
-                <div className="grid grid-cols-12 gap-6">
+                <div className="mt-8 bg-white rounded-3xl p-6 shadow-sm">
+                    <div className="grid grid-cols-3 gap-8">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4" style={{ color: '#141414' }}>
+                                Patient: {patientData.patientDetails?.name || 'Unknown'}
+                            </h3>
+                            <div className="space-y-2 text-sm" style={{ color: '#141414' }}>
+                                <p>Age: {patientData.patientDetails?.age || 'N/A'}</p>
+                                <p>Gender: {patientData.patientDetails?.sex || 'N/A'}</p>
+                                <p>Patient ID: {patientData.patientDetails?.pid || 'N/A'}</p>
+                                <p>Referred by: {patientData.doctorDetails?.referredBy || 'N/A'}</p>
+                                <p>Total Reports: {totalReports}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4" style={{ color: '#141414' }}>Clinical Summary</h3>
+                            <p className="text-sm leading-relaxed" style={{ color: '#141414' }}>
+                                {patientData.overallAnalysis?.summary || 'No summary available'}
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4" style={{ color: '#141414' }}>Critical Findings</h3>
+                            <div className="space-y-2">
+                                {categories.slice(0, 4).map((category, index) => {
+                                    const criticalCount = category.findings.filter((finding: any) =>
+                                        finding.status === 'High' || finding.status.includes('Positive') || finding.severity === 'high'
+                                    ).length;
+                                    return (
+                                        <div key={index} className="flex items-center justify-between p-2 rounded-lg" style={{ backgroundColor: '#d9ebfe' }}>
+                                            <span className="text-sm font-medium" style={{ color: '#141414' }}>
+                                                {category.name}
+                                            </span>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-xs font-semibold px-2 py-1 rounded-full"
+                                                    style={{
+                                                        backgroundColor: criticalCount > 0 ? themeColors.accent : themeColors.secondary,
+                                                        color: '#141414',
+                                                    }}>
+                                                    {criticalCount} critical
+                                                </span>
+                                                {criticalCount > 0 ? (
+                                                    <TrendingUp className="w-4 h-4" style={{ color: themeColors.accent }} />
+                                                ) : (
+                                                    <CheckCircle className="w-4 h-4" style={{ color: '#d9ebfe' }} />
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="grid grid-cols-12 gap-6 mt-5">
                     {categories.slice(0, 4).map((category, index) => (
                         <div key={index} className="col-span-4 bg-white rounded-3xl p-6 shadow-sm">
                             <div className="mb-4">
@@ -576,59 +633,6 @@ const Analysis: React.FC<AnalysisProps> = ({ patientData: propPatientData }) => 
                                 <p>No abnormal findings</p>
                             </div>
                         )}
-                    </div>
-                </div>
-                <div className="mt-8 bg-white rounded-3xl p-6 shadow-sm">
-                    <div className="grid grid-cols-3 gap-8">
-                        <div>
-                            <h3 className="text-lg font-semibold mb-4" style={{ color: '#141414' }}>
-                                Patient: {patientData.patientDetails?.name || 'Unknown'}
-                            </h3>
-                            <div className="space-y-2 text-sm" style={{ color: '#141414' }}>
-                                <p>Age: {patientData.patientDetails?.age || 'N/A'}</p>
-                                <p>Gender: {patientData.patientDetails?.sex || 'N/A'}</p>
-                                <p>Patient ID: {patientData.patientDetails?.pid || 'N/A'}</p>
-                                <p>Referred by: {patientData.doctorDetails?.referredBy || 'N/A'}</p>
-                                <p>Total Reports: {totalReports}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 className="text-lg font-semibold mb-4" style={{ color: '#141414' }}>Clinical Summary</h3>
-                            <p className="text-sm leading-relaxed" style={{ color: '#141414' }}>
-                                {patientData.overallAnalysis?.summary || 'No summary available'}
-                            </p>
-                        </div>
-                        <div>
-                            <h3 className="text-lg font-semibold mb-4" style={{ color: '#141414' }}>Critical Findings</h3>
-                            <div className="space-y-2">
-                                {categories.slice(0, 4).map((category, index) => {
-                                    const criticalCount = category.findings.filter((finding: any) =>
-                                        finding.status === 'High' || finding.status.includes('Positive') || finding.severity === 'high'
-                                    ).length;
-                                    return (
-                                        <div key={index} className="flex items-center justify-between p-2 rounded-lg" style={{ backgroundColor: '#d9ebfe' }}>
-                                            <span className="text-sm font-medium" style={{ color: '#141414' }}>
-                                                {category.name}
-                                            </span>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-xs font-semibold px-2 py-1 rounded-full"
-                                                    style={{
-                                                        backgroundColor: criticalCount > 0 ? themeColors.accent : themeColors.secondary,
-                                                        color: '#141414',
-                                                    }}>
-                                                    {criticalCount} critical
-                                                </span>
-                                                {criticalCount > 0 ? (
-                                                    <TrendingUp className="w-4 h-4" style={{ color: themeColors.accent }} />
-                                                ) : (
-                                                    <CheckCircle className="w-4 h-4" style={{ color: '#d9ebfe' }} />
-                                                )}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

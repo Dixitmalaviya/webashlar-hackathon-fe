@@ -1,7 +1,6 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CommonTable from '../component/CommonTable';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import CommonButton from '../component/CommonButton';
 import CommonModal from '../component/CommonModal';
@@ -10,96 +9,240 @@ import PatientService from '../service/Patient/PatientService';
 import { toast } from 'react-hot-toast';
 import { FiTrash } from 'react-icons/fi';
 import { FaEye } from 'react-icons/fa';
-// Restore PatientReport component
-const mockReports = Array.from({ length: 5 }, (_, i) => ({
-    id: i + 1,
-    test: `Test ${i + 1}`,
-    result: i % 2 === 0 ? 'Normal' : 'Abnormal',
-    value: `${Math.round(Math.random() * 100)}`,
-    unit: 'mg/dL',
-}));
 
 const PatientReport: React.FC = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state; // This is the state object passed via navigate
     const [modalOpen, setModalOpen] = useState(false);
+    const [pdfModalOpen, setPdfModalOpen] = useState(false);
+    const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+    const [role, setRole] = useState<string | null>(null);
+    const [reportList, setReportList] = useState<any[]>([]);
+    const [filteredReportList, setFilteredReportList] = useState<any[]>([]);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
 
-    const deleteReport = (Id: string) => {
-      toast
-        .promise(PatientService.deletePatientReportService(Id), {
-          loading: "Loading",
-          success: "Report Deleted successfully",
-          error: "Error when deleting Report",
-        })
-        .then((response: any) => {
-          console.log("response", response);
-        });
+    const handleDeleteClick = (id: string) => {
+        setDeleteId(id);
+        setDeleteModalOpen(true);
+    };
+
+    const confirmDelete = () => {
+        debugger
+        if (!deleteId) return;
+        setDeleteModalOpen(false);
+        toast
+            .promise(PatientService.deletePatientReportService(deleteId), {
+                loading: "Loading",
+                success: "Report Deleted successfully",
+                error: "Error when deleting Report",
+            })
+            .then((response: any) => {
+                setReportList((prevList) => prevList.filter((report) => report._id !== deleteId));
+                console.log("response", response);
+            });
+        setDeleteId(null);
     };
 
     const columns: any[] = [
-      { field: "id", header: "Report ID", sortable: true },
-      { field: "test", header: "Test", sortable: true },
-      { field: "result", header: "Result", sortable: true },
-      { field: "value", header: "Value", sortable: true },
-      { field: "unit", header: "Unit", sortable: true },
-      {
-        field: "actions",
-        header: "Actions",
-        body: (_row: any, _col: any, _rowIndex: any) => (
-          <div className="flex justify-center">
-            <FaEye
-              className="text-xl text-blue-400 cursor-pointer hover:text-blue-400"
-              onClick={() => navigate("/patients/report")}
-            />
-            <FiTrash
-              className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
-              onClick={() => deleteReport(_row?.id)}
-            />
-          </div>
-        ),
-        style: { textAlign: "center", minWidth: 120 },
-      },
+        { field: "reportName", header: "Report Name", sortable: true },
+        {
+            field: "reportDate",
+            header: "Report Date",
+            sortable: true,
+            body: (row: any) => {
+                // If reportDate is ISO string, split at T
+                if (row.reportDate && typeof row.reportDate === 'string' && row.reportDate.includes('T')) {
+                    return row.reportDate.split('T')[0];
+                }
+                return row.reportDate || '';
+            }
+        },
+        {
+            field: "isCritical",
+            header: "Critical",
+            sortable: true,
+            body: (row: any) => row.isCritical === true ? 'Yes' : 'No'
+        },
+        // { field: "value", header: "Value", sortable: true },
+        // { field: "unit", header: "Unit", sortable: true },
+        {
+            field: "actions",
+            header: "Actions",
+            body: (_row: any, _col: any, _rowIndex: any) => (
+                <div className="flex justify-center">
+                    <FaEye
+                        className="text-xl text-blue-400 cursor-pointer hover:text-blue-400"
+                        onClick={() => {
+                            setPdfUrl('https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf');
+                            setPdfModalOpen(true);
+                        }}
+                    />
+                    <FiTrash
+                        className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
+                        onClick={() => handleDeleteClick(_row?._id)}
+                    />
+                </div>
+            ),
+            style: { textAlign: "center", minWidth: 120 },
+        },
     ];
+
+    const fetchUserRole = async () => {
+        localStorage.getItem('role') && setRole(localStorage.getItem('role'));
+        const patientId = state?.patientId ? state?.patientId : localStorage.getItem('patientId');
+
+        const response = await PatientService.fetchPatientReportsService(patientId);
+        if (response?.status === 200) {
+            setReportList(response?.data?.data);
+        }
+    }
+
+    // Filter reports by date range
+    useEffect(() => {
+        if (!startDate && !endDate) {
+            setFilteredReportList(reportList);
+            return;
+        }
+        setFilteredReportList(
+            reportList.filter((report) => {
+                if (!report.reportDate) return false;
+                const reportDate = new Date(report.reportDate);
+                const start = startDate ? new Date(startDate) : null;
+                const end = endDate ? new Date(endDate) : null;
+                if (start && reportDate < start) return false;
+                if (end) {
+                    // include end date full day
+                    end.setHours(23, 59, 59, 999);
+                    if (reportDate > end) return false;
+                }
+                return true;
+            })
+        );
+    }, [reportList, startDate, endDate]);
+
+    const viewAnalysis = () => {
+        navigate('/analysis', { state: { startDate, endDate } })
+    };
+
+    useEffect(() => {
+        fetchUserRole();
+    }, [modalOpen]);
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start p-8">
             {/* Back Button - top left, outside card */}
             <div className="p-6 bg-white rounded-lg w-full">
                 <div className="flex justify-between items-center mb-4">
-                    <button
-                        className="flex items-center justify-center w-12 h-12 bg-white shadow-md border border-gray-200 rounded-full transition-colors duration-200 z-10"
-                        onClick={() => navigate(-1)}
-                        title="Back"
-                    >
-                        <ArrowLeft className="w-6 h-6" />
-                    </button>
+                    {
+                        role === "doctor" && (
+                            <button
+                                className="flex items-center justify-center w-12 h-12 bg-white shadow-md border border-gray-200 rounded-full transition-colors duration-200 z-10"
+                                onClick={() => navigate(-1)}
+                                title="Back"
+                            >
+                                <ArrowLeft className="w-6 h-6" />
+                            </button>
+                        )
+                    }
                     <h2 className="text-2xl font-bold text-center flex-1 text-primary">Patient Report</h2>
-                    <CommonButton
-                        className="w-auto px-6 py-2 ml-4"
-                        onClick={() => setModalOpen(true)}
-                    >
-                        Add Report
-                    </CommonButton>
+                    {
+                        role === "doctor" && (
+                            <CommonButton
+                                className="w-auto px-6 py-2 ml-4"
+                                onClick={() => setModalOpen(true)}
+                            >
+                                Add Report
+                            </CommonButton>
+                        )
+                    }
                 </div>
 
-                {/* <h2 className="text-2xl font-bold mb-4 text-primary text-center">Patient Report</h2> */}
+                {/* Date Range Filter - Improved UI */}
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 flex flex-col md:flex-row md:items-end md:gap-6 gap-4 w-full">
+                    <div className="flex flex-col flex-1 min-w-[160px]">
+                        <label className="font-medium mb-1 text-gray-700">Start Date</label>
+                        <input
+                            type="date"
+                            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                            value={startDate}
+                            onChange={e => setStartDate(e.target.value)}
+                            max={endDate || undefined}
+                        />
+                    </div>
+                    <div className="flex flex-col flex-1 min-w-[160px]">
+                        <label className="font-medium mb-1 text-gray-700">End Date</label>
+                        <input
+                            type="date"
+                            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                            value={endDate}
+                            onChange={e => setEndDate(e.target.value)}
+                            min={startDate || undefined}
+                        />
+                    </div>
+                    <div className="flex flex-row gap-2 mt-4 md:mt-0">
+                        <CommonButton
+                            className="w-auto px-4 py-2"
+                            onClick={() => { setStartDate(''); setEndDate(''); }}
+                            variant="secondary"
+                        >
+                            Clear Filter
+                        </CommonButton>
+                        <CommonButton
+                            className="w-auto px-4 py-2"
+                            onClick={viewAnalysis}
+                        >
+                            View Analysis
+                        </CommonButton>
+                    </div>
+                </div>
                 <CommonTable
-                    value={mockReports}
+                    value={filteredReportList}
                     columns={columns}
                     rows={5}
-                    totalRecords={5}
+                    totalRecords={filteredReportList.length}
                     loading={false}
                     paginator={false}
-                    exportable={true}
+                    exportable={false}
                 />
             </div>
             <CommonModal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Add Report">
                 <AddReportForm onClose={() => setModalOpen(false)} />
+            </CommonModal>
+            <CommonModal isOpen={pdfModalOpen} onClose={() => setPdfModalOpen(false)} title="View Report PDF">
+                {pdfUrl && (
+                    <iframe
+                        src={pdfUrl}
+                        title="Report PDF"
+                        width="100%"
+                        height="600px"
+                        style={{ border: 'none' }}
+                    />
+                )}
+            </CommonModal>
+            <CommonModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Delete Report Confirmation">
+                <div className="p-4">
+                    <p className="mb-6 text-lg text-gray-800">Are you sure you want to delete this report?</p>
+                    <div className="flex justify-end gap-3">
+                        <CommonButton variant="secondary" onClick={() => setDeleteModalOpen(false)}>
+                            Cancel
+                        </CommonButton>
+                        <CommonButton variant="danger" onClick={confirmDelete}>
+                            Delete
+                        </CommonButton>
+                    </div>
+                </div>
             </CommonModal>
         </div>
     );
 };
 
 const AddReportForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+    const location = useLocation();
+    const state = location.state;
     const [reportName, setReportName] = React.useState('');
     const [file, setFile] = React.useState<File | null>(null);
     const [dragActive, setDragActive] = React.useState(false);
@@ -148,7 +291,7 @@ const AddReportForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         setLoading(true);
         try {
             // Create FormData payload
-            const patientId = localStorage.getItem('patientId');
+            const patientId = state?.patientId ? state?.patientId : localStorage.getItem('patientId');
             const formData = new FormData();
             formData.append('reportName', reportName);
             formData.append('patient_id', patientId || '');
@@ -173,6 +316,7 @@ const AddReportForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             setFile(null);
             setError('');
             onClose();
+
         } catch (err) {
             // error handled by toast
         } finally {

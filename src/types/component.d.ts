@@ -97,3 +97,10 @@ interface CommonInputProps {
   max?: string;
   disabled?: boolean;
 }
+
+interface SidebarItemConfig {
+  key: SidebarItemKey;
+  icon: React.ReactNode;
+  label: string;
+  roles: string[];
+}
