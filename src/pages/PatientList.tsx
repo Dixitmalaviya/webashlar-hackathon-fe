@@ -32,7 +32,7 @@ const PatientList: React.FC = () => {
     const [editPatientId, setEditPatientId] = useState('');
 
     // Simulate server-side fetch with fallback mock data
-    const fetchPatients = useCallback(async (page: number, rows: number) => {
+    const fetchPatients = useCallback(async (_page: number, _rows: number) => {
         setLoading(true);
         try {
             const response = await DoctorService.getPatientsListService();

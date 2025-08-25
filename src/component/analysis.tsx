@@ -153,7 +153,7 @@ interface AnalysisProps {
     patientData?: any;
 }
 
-const Analysis: React.FC<AnalysisProps> = ({ patientData: propPatientData }) => {
+const Analysis: React.FC<AnalysisProps> = () => {
     const [selectedFilter, _setSelectedFilter] = useState('All Tests');
     const [patientData, setPatientData] = useState<any>(null);
     const location = useLocation();
