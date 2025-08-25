@@ -10,8 +10,11 @@ import {
   FaUserPlus,
   FaEthereum,
   FaUser,
+  FaPhone,
 } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
+import PatientService from "../../service/Patient/PatientService";
 
 
 const LoginForm: React.FC = () => {
@@ -20,6 +23,9 @@ const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { loginService } = authService;
   const location = useLocation();
+  
+    const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
+    const relationshipOptions = relationships.map(r => ({ label: r, value: r }));
 
   useEffect(() => {
     const hash = location.hash;
@@ -45,10 +51,20 @@ const LoginForm: React.FC = () => {
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
-    wallet: Yup.string()
-      .required("wallet Address is required"),
-    name: Yup.string()
+    // wallet: Yup.string()
+    //   .required("wallet Address is required"),
+    fullName: Yup.string()
       .required("Name is required"),
+      phone: Yup.string()
+      .required("Phone Number is required"),
+      dob: Yup.string()
+      .required("Date Of Birth   is required"),
+      emContName: Yup.string()
+      .required("Emergency Contact Name is required"),
+      emContPhone: Yup.string()
+      .required("Emergency Contact Number is required"),
+      // emContRelation: Yup.string()
+      // .required("relation is required"),
   });
 
   // Initial form values
@@ -58,13 +74,17 @@ const LoginForm: React.FC = () => {
     remember: false,
   };
 
-  const initialRegistrationValues = {
-    name: "",
+  const [initialRegistrationValues, setInitialRegistrationValues] = useState({
+    fullName: "",
     email: "",
     password: "",
     wallet: "",
-    role: "",
-  };
+    phone: '',
+    dob:'',
+    emContName: '',
+    emContPhone: '',
+    emContRelation: ''
+  });
 
   // Submit handler
   const handleSubmit = (
@@ -98,10 +118,31 @@ const LoginForm: React.FC = () => {
     // Here you would usually call an API or trigger auth logic
   };
 
-  const handleRegister = (
-    values: typeof initialRegistrationValues
+  const handleRegister = (values: typeof initialRegistrationValues,
+    actions: FormikHelpers<typeof initialRegistrationValues>
   ) => {
+          // actions.setSubmitting(false);
     console.log(values);
+    toast
+      .promise(PatientService.createPatientService(values), {
+        loading: "Loading",
+        success: "Patient Registered successfully",
+        error: "Error Registering Patient",
+      })
+      .then((response: any) => {
+        console.log("response", response);
+        setInitialRegistrationValues({
+          fullName: "",
+          email: "",
+          password: "",
+          wallet: "",
+          phone: "",
+          dob: "",
+          emContName: "",
+          emContPhone: "",
+          emContRelation: "Friend",
+        });
+      });
   };
 
   return (
@@ -254,13 +295,13 @@ const LoginForm: React.FC = () => {
                         <div className="relative">
                           <FaUser className="absolute left-4 top-4 text-blue-300/70" />
                           <Field
-                            name="name"
+                            name="fullName"
                             className="w-full bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter full name"
                           />
                         </div>
                         <ErrorMessage
-                          name="name"
+                          name="fullName"
                           component="div"
                           className="text-red-500 text-sm mt-1"
                         />
@@ -281,6 +322,26 @@ const LoginForm: React.FC = () => {
                         </div>
                         <ErrorMessage
                           name="email"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
+                      </div>
+
+                      <div className="relative">
+                        <label className="block text-sm text-gray-300 mb-2">
+                          Phone Number
+                        </label>
+                        <div className="relative">
+                          <FaPhone className="absolute left-4 top-4 text-blue-300/70" />
+                          <Field
+                            name="phone"
+                            type="text"
+                            className="w-full text-white bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Phone Number"
+                          />
+                        </div>
+                        <ErrorMessage
+                          name="phone"
                           component="div"
                           className="text-red-500 text-sm mt-1"
                         />
@@ -311,7 +372,7 @@ const LoginForm: React.FC = () => {
                         />
                       </div>
 
-                      <div className="relative">
+                      {/* <div className="relative">
                         <label className="block text-sm text-gray-300 mb-2">
                           Wallet Address
                         </label>
@@ -328,6 +389,96 @@ const LoginForm: React.FC = () => {
                           component="div"
                           className="text-red-500 text-sm mt-1"
                         />
+                      </div> */}
+                        
+                      <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                          Date Of Birth
+                        </label>
+                        <div className="relative">
+                          <Field
+                            name="dob"
+                            type="date"
+                            className="w-full text-white bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <ErrorMessage
+                          name="dob"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
+                      </div>
+                      
+                      
+                      <div className="relative flex">
+                      <div className="relative">
+                        <label className="block text-sm text-gray-300 mb-2">
+                          Emergency Contact Name
+                        </label>
+                        <div className="relative">
+                          <FaUser className="absolute left-4 top-4 text-blue-300/70" />
+                          <Field
+                            // type="password"
+                            name="emContName"
+                            type="text"
+                            className="w-full bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Name"
+                          />
+                        </div>
+                        <ErrorMessage
+                          name="emContName"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
+                      </div>
+                       <div className="relative ml-2">
+                        <label className="block text-sm text-gray-300 mb-2">
+                          Emergency Contact Phone
+                        </label>
+                        <div className="relative">
+                          <FaPhone className="absolute left-4 top-4 text-blue-300/70" />
+                          <Field
+                            name="emContPhone"
+                            type="text"
+                            className="w-full text-white bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <ErrorMessage
+                          name="emContPhone"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
+                      </div>
+                      {/* <div className="relative ml-2">
+                        <label className="block text-sm text-gray-300 mb-2">
+                          Relation With Them
+                        </label>
+                        <div className="relative">
+                          <Field
+                            name="emContRelation"
+                            as="select"
+                            value={initialRegistrationValues.emContRelation}
+                            onChange={(e: any) => {
+                              setInitialRegistrationValues({...initialRegistrationValues, emContRelation: e.target.value})}}
+                            className="w-full text-white bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="">Select Relation</option>
+                            {
+                              relationshipOptions && relationshipOptions.map(relation => 
+                                // return (
+                                    <option value={relation.value}>{relation.label}</option>
+                                // )
+                              )
+                            }
+                          </Field>
+                        </div>
+                        <ErrorMessage
+                          name="emContRelation"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
+                      </div> */}
+                      
                       </div>
 
                       <button
