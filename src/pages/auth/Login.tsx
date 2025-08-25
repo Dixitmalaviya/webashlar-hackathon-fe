@@ -78,9 +78,15 @@ const LoginForm: React.FC = () => {
           actions.setSubmitting(false);
           console.log("Login Response", res);
           localStorage.setItem("auth", res?.data?.data?.token);
-          navigate("/profile");
           if (res?.data?.data?.user?.role == "patient") {
-            localStorage.setItem("patientId", res?.data?.data?.user?.entityId);
+            navigate("/profile");
+            localStorage.setItem("userId", res?.data?.data?.user?.entityId);
+            localStorage.setItem("role", "patient");
+          }
+          else if (res?.data?.data?.user?.role == "doctor") {
+            navigate("/patients");
+            localStorage.setItem("userId", res?.data?.data?.user?.entityId);
+            localStorage.setItem("role", "doctor");
           }
         })
         .catch((error) => {

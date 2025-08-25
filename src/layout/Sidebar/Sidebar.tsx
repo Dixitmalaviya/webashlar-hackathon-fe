@@ -94,8 +94,8 @@ const Sidebar = () => {
     ];
 
     useEffect(() => {
-        if (localStorage.getItem('patientId')) {
-            const patientId: string = localStorage.getItem('patientId') || '';
+        if (localStorage.getItem('userId')) {
+            const patientId: string = localStorage.getItem('userId') || '';
             getPatientService(patientId).then((res) => {
                 console.log("Patient res", res)
                 setUserName(res.data.patient.fullName);
