@@ -1,3 +1,15 @@
+
+import React, { useState } from 'react';
+import CommonTable from '../component/CommonTable';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
+import CommonButton from '../component/CommonButton';
+import CommonModal from '../component/CommonModal';
+import CommonInput from '../component/CommonInput';
+import PatientService from '../service/Patient/PatientService';
+import { toast } from 'react-hot-toast';
+import { FiTrash } from 'react-icons/fi';
+import { FaEye } from 'react-icons/fa';
 // Restore PatientReport component
 const mockReports = Array.from({ length: 5 }, (_, i) => ({
     id: i + 1,
@@ -11,12 +23,41 @@ const PatientReport: React.FC = () => {
     const navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
 
+    const deleteReport = (Id: string) => {
+      toast
+        .promise(PatientService.deletePatientReportService(Id), {
+          loading: "Loading",
+          success: "Report Deleted successfully",
+          error: "Error when deleting Report",
+        })
+        .then((response: any) => {
+          console.log("response", response);
+        });
+    };
+
     const columns: any[] = [
-        { field: 'id', header: 'Report ID', sortable: true },
-        { field: 'test', header: 'Test', sortable: true },
-        { field: 'result', header: 'Result', sortable: true },
-        { field: 'value', header: 'Value', sortable: true },
-        { field: 'unit', header: 'Unit', sortable: true },
+      { field: "id", header: "Report ID", sortable: true },
+      { field: "test", header: "Test", sortable: true },
+      { field: "result", header: "Result", sortable: true },
+      { field: "value", header: "Value", sortable: true },
+      { field: "unit", header: "Unit", sortable: true },
+      {
+        field: "actions",
+        header: "Actions",
+        body: (_row: any, _col: any, _rowIndex: any) => (
+          <div className="flex justify-center">
+            <FaEye
+              className="text-xl text-blue-400 cursor-pointer hover:text-blue-400"
+              onClick={() => navigate("/patients/report")}
+            />
+            <FiTrash
+              className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
+              onClick={() => deleteReport(_row?.id)}
+            />
+          </div>
+        ),
+        style: { textAlign: "center", minWidth: 120 },
+      },
     ];
 
     return (
@@ -57,16 +98,6 @@ const PatientReport: React.FC = () => {
         </div>
     );
 };
-
-import React, { useState } from 'react';
-import CommonTable from '../component/CommonTable';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import CommonButton from '../component/CommonButton';
-import CommonModal from '../component/CommonModal';
-import CommonInput from '../component/CommonInput';
-import PatientService from '../service/Patient/PatientService';
-import { toast } from 'react-hot-toast';
 
 const AddReportForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [reportName, setReportName] = React.useState('');
