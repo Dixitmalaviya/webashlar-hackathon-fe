@@ -117,8 +117,10 @@ const AddReportForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         setLoading(true);
         try {
             // Create FormData payload
+            const patientId = localStorage.getItem('patientId');
             const formData = new FormData();
             formData.append('reportName', reportName);
+            formData.append('patient_id', patientId || '');
             if (file) {
                 formData.append('file', file);
             }

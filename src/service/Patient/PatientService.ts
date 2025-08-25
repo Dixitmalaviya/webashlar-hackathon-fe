@@ -11,5 +11,13 @@ export default {
     deletePatientService: async (id: string) =>
         doFetch(`${PATIENT_API_ENDPOINTS.DELETE_PATIENT}/${id}`, REQUEST_METHODS.DELETE),
     createPatientReportService: async (reportData: any) =>
-        doFetch(PATIENT_API_ENDPOINTS.PATIENT_REPORT_CREATE, REQUEST_METHODS.POST, reportData, { contentType: REQUEST_CONTENT_TYPE.MULTIPART}),
+        doFetch(PATIENT_API_ENDPOINTS.PATIENT_REPORT_CREATE, REQUEST_METHODS.POST, reportData, { contentType: REQUEST_CONTENT_TYPE.MULTIPART }),
+    fetchChatService: async () =>
+        doFetch(PATIENT_API_ENDPOINTS.FETCH_CHAT, REQUEST_METHODS.GET),
+    sendNewMessageService: async (messageData: any) =>
+        doFetch(PATIENT_API_ENDPOINTS.SENT_NEW_MESSAGE, REQUEST_METHODS.POST, messageData),
+    fetchConversationService: async (patientId: string) =>
+        doFetch(`${PATIENT_API_ENDPOINTS.FETCH_CONVERSATION}/${patientId}`, REQUEST_METHODS.GET),
+    fetchPatientAnalysisData: async (details: any) =>
+        doFetch(PATIENT_API_ENDPOINTS.FETCH_ANALYSIS, REQUEST_METHODS.POST, details),
 }
