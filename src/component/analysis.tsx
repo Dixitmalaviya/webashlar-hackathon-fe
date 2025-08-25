@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { LineChart, Line, Tooltip, ResponsiveContainer, BarChart, Bar, AreaChart, Area, Cell } from 'recharts';
 import { Activity, CheckCircle, Info, TrendingUp } from 'lucide-react';
+import PatientService from '../service/Patient/PatientService';
 
 // Theme-based color palette
 const themeColors = {
@@ -146,13 +147,34 @@ const actualPatientData = {
     },
 };
 
-const Analysis = () => {
+
+interface AnalysisProps {
+    patientData?: any;
+}
+
+const Analysis: React.FC<AnalysisProps> = ({ patientData: propPatientData }) => {
     const [selectedFilter, _setSelectedFilter] = useState('All Tests');
     const [patientData, setPatientData] = useState<any>(null);
 
+    const fetchAnalysisData = async () => {
+        const reqObj = {
+            patientId: localStorage.getItem('patientId'),
+            "fromDate": "2021-07-01",
+            "toDate": "2030-08-30"
+        }
+        const response = await PatientService.fetchPatientAnalysisData(reqObj);
+        console.log("response", response)
+        setPatientData(response.data?.data);
+    }
+
     React.useEffect(() => {
-        setPatientData(actualPatientData);
-    }, []);
+        if (propPatientData) {
+            setPatientData(propPatientData);
+        } else {
+            fetchAnalysisData();
+            // setPatientData(actualPatientData);
+        }
+    }, [propPatientData]);
 
     const processPatientData = useMemo(() => {
         if (!patientData) return null;

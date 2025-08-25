@@ -4,7 +4,11 @@ const PATIENT_API_ENDPOINTS = {
     UPDATE_PATIENT: "/patients/",
     DELETE_PATIENT: "/patients/",
     PATIENT_REPORT_CREATE: "/reports/upload",
-    PATIENT_REPORT_DELETE: "/reports/delete"
+    PATIENT_REPORT_DELETE: "/reports/delete",
+    FETCH_CHAT: "/chat",
+    SENT_NEW_MESSAGE: "/auth/chat",
+    FETCH_CONVERSATION: "/auth/chat-history",
+    FETCH_ANALYSIS: "/auth/analyse-report"
 };
 
 export default PATIENT_API_ENDPOINTS;

@@ -1,7 +1,7 @@
 // // components/Sidebar.jsx
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaCalendarCheck, FaHospital, FaHospitalUser, FaSignOutAlt, FaUser, FaUsers } from 'react-icons/fa';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FaCalendarCheck, FaSignOutAlt, FaUser, FaUsers } from 'react-icons/fa';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Sidebar.css';
 import AvtarImg from '../../assets/Avtar.svg';
@@ -14,14 +14,16 @@ const Sidebar = () => {
     const [activeItem, setActiveItem] = useState<SidebarItemKey>('profile');
     const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
-    const { getPatientService } = patientServices;
+    const location = useLocation()
+    // const { getPatientService } = patientServices;
     const [userName, setUserName] = useState('');
     const [role, setRole] = useState<string | null>('patient');
-
+    console.log(activeItem)
     useEffect(() => {
         const storedRole = localStorage.getItem('role');
-        if(storedRole) {
-        setRole(storedRole);
+        setActiveItem(location.pathname.split('/')[1] as SidebarItemKey);
+        if (storedRole) {
+            setRole(storedRole);
         }
     }, []);
 
@@ -94,13 +96,12 @@ const Sidebar = () => {
     ];
 
     useEffect(() => {
-        if (localStorage.getItem('userId')) {
-            const patientId: string = localStorage.getItem('userId') || '';
-            getPatientService(patientId).then((res) => {
+        if (localStorage.getItem('patientId')) {
+            const patientId: string = localStorage.getItem('patientId') || '';
+            patientServices.getPatientService(patientId).then((res) => {
                 console.log("Patient res", res)
                 setUserName(res.data.patient.fullName);
-            })
-                .catch(error => console.error("error fetching patient", error))
+            }).catch(error => console.error("error fetching patient"))
         }
     })
 
@@ -142,20 +143,31 @@ const Sidebar = () => {
             </div>
             {/* <div className={`${collapsed ? 'text-xl mb-8 text-center' : 'text-2xl mb-8 text-center'} text-white font-bold`}>{!collapsed && 'Smart Health'}</div> */}
             {/* Top Navigation (Profile and Book Appointment) */}
-
-            <nav className={`flex flex-col ${collapsed ? "gap-4 mt-16" : "space-y-4"} text-lg flex-grow`}>
-                {sidebarItems
-                    .filter(item => role && item.roles.includes(role))
-                    .map(item => (
-                        <SidebarItem
-                            key={item.key}
-                            icon={item.icon}
-                            isActive={activeItem === item.key}
-                            onClick={() => handleItemClick(item.key)}
-                            label={collapsed ? "" : item.label}
-                            collapsed={collapsed}
-                        />
-                    ))}
+            <nav
+                className={`flex flex-col ${collapsed ? "gap-4 mt-16" : "space-y-4"
+                    } text-lg flex-grow`}
+            >
+                <SidebarItem
+                    icon={<FaUser />}
+                    isActive={activeItem === "profile"}
+                    onClick={() => handleItemClick("profile")}
+                    label={collapsed ? "" : "Me"}
+                    collapsed={collapsed}
+                />
+                <SidebarItem
+                    icon={<FaCalendarCheck />}
+                    isActive={activeItem === "appointment"}
+                    onClick={() => handleItemClick("appointment")}
+                    label={collapsed ? "" : "Book Appointment"}
+                    collapsed={collapsed}
+                />
+                <SidebarItem
+                    icon={<FaUsers />}
+                    isActive={activeItem === "patients"}
+                    onClick={() => handleItemClick("patients")}
+                    label={collapsed ? "" : "Patients"}
+                    collapsed={collapsed}
+                />
             </nav>
             {/* Bottom Navigation (Logout) */}
             <div

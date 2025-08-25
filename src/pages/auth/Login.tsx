@@ -148,7 +148,7 @@ const LoginForm: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 font-inter relative overflow-hidden">
       {/* Brand */}
-      <div className="absolute top-6 left-6 flex items-center gap-3 z-10">
+      <div className="absolute top-6 left-6 flex items-center gap-3 z-10 cursor-pointer" onClick={() => navigate("/")}>
         <div className="w-50 h-10 flex items-center justify-center text-white text-lg font-bold">
           {/* <FaHeartbeat /> */}
            <img
