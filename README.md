@@ -64,6 +64,12 @@ Our platform integrates cutting-edge technology to address core challenges in mo
 -   **Backend Repository:** [`https://github.com/Dixitmalaviya/webashlar-hackathon-be`](https://github.com/Dixitmalaviya/webashlar-hackathon-be)
 
 
+### 🎥 Health Sync Demo Videos
+
+You can explore the project walkthrough and demo videos here:
+
+👉 [Watch Project Videos (SharePoint)](https://webashlarr-my.sharepoint.com/:f:/g/personal/harsh_modi_webashlar_com/EnMp_T0o6fxHllypEDkYZkkBuSL5EcZpuzD6T0SOGKBX3g?e=1S0Ndf)
+
 ----------
 
 ## 🛠️ Configuration & Local Setup
@@ -123,4 +129,3 @@ Use the following test credentials to log in:
 ### 🏥 Hospital Login 
 - **Username:** `hospital@gmail.com`  
 - **Password:** `hospital@123`
- 
