@@ -4,7 +4,8 @@ const AUTH_API_ENDPOINTS = {
     FORGOT_PASSWORD: "/auth/forgot-password",
     REGISTER_DOCTOR: "/auth/identity/doctor/register",
     REGISTER_HOSPITAL: "/auth/hospital/register",
-    GET_USER_BY_ID: "/auth/get-data"
+    GET_USER_BY_ID: "/auth/get-data",
+    USER: "/auth/profile"
 };
 
 export default AUTH_API_ENDPOINTS;

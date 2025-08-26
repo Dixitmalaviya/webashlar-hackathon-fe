@@ -10,6 +10,10 @@ export default {
         doFetch(AUTH_API_ENDPOINTS.REGISTER_DOCTOR, REQUEST_METHODS.POST, userData),
     registerHospitalService: async (hospitalData: any) =>
         doFetch(AUTH_API_ENDPOINTS.REGISTER_HOSPITAL, REQUEST_METHODS.POST, hospitalData),
-    getUserById: async (Id: string) =>
-        doFetch(`${AUTH_API_ENDPOINTS.GET_USER_BY_ID}/${Id}`, REQUEST_METHODS.GET),
+    getUserById: async () =>
+        doFetch(`${AUTH_API_ENDPOINTS.USER}`, REQUEST_METHODS.GET),
+    deleteUserService: async () =>
+        doFetch(`${AUTH_API_ENDPOINTS.USER}`, REQUEST_METHODS.DELETE),
+    updateUserService: async (doctorData: any) =>
+        doFetch(`${AUTH_API_ENDPOINTS.USER}`, REQUEST_METHODS.PUT, doctorData),
 }

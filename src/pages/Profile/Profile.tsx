@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Timeline from "../../shared/components/Timeline/Timeline";
 import PatientCard from "../../shared/components/PatientCard/PatientCard";
 import PatientReport from "../PatientReport";
+import toast from "react-hot-toast";
+import PatientService from "../../service/Patient/PatientService";
 
 const logo = "/logo.png";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("reports");
+  const [patientData, setPatientData] = useState(
+    {
+          name:"John Doe",
+          uniqueNumber:"1234567890123456",
+          address:"123 Main St, Springfield",
+          bloodGroup: "O+",
+          dob: "01/01/2000"  }
+  );
 
   const timelineData = [
     {
@@ -49,16 +59,33 @@ const Profile = () => {
     },
   ];
 
-  const patientData = {
-          name:"John Doe",
-          uniqueNumber:"1234567890123456",
-          address:"123 Main St, Springfield",
-          bloodGroup: "O+",
-          dob: "01/01/2000"  }
-
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
+
+  const fetchPatientDetails = () => {
+    toast
+            .promise(PatientService.getPatientService(localStorage.getItem('userId')|| ''), {
+                loading: "Loading",
+                //   success: "Report Deleted successfully",
+                error: "Error when fetching patient details",
+            })
+            .then((response: any) => {
+                console.log("patientData", response);
+                const patientData = response?.data?.patient;
+                setPatientData({
+          name:patientData.fullName,
+          uniqueNumber:"1234567890123456",
+          address: patientData.address,
+          bloodGroup: patientData.bloodGroup,
+          dob: `${new Date(patientData.dob).getDate()}/${new Date(patientData.dob).getMonth()}/${new Date(patientData.dob).getFullYear()}` })
+                
+            });
+  }
+
+  useEffect(() => {
+    fetchPatientDetails();
+  }, []);
 
   return (
     <div className="p-6">

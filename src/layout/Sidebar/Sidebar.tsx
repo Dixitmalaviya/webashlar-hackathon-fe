@@ -91,13 +91,9 @@ const Sidebar = () => {
     ];
 
     useEffect(() => {
-        if (localStorage.getItem('userId') && localStorage.getItem('role') == "patient") {
-            const patientId: string = localStorage.getItem('userId') || '';
-            AuthService.getUserById(patientId).then((res) => {
-                console.log("Patient res", res)
-                setUserName(res.data.patient.fullName);
-            }).catch(error => console.error("error fetching patient", error))
-        }
+            AuthService.getUserById().then((res) => {
+                setUserName(res?.data?.data?.entityDetails?.fullName);
+            }).catch(error => console.error("error fetching User", error))
     })
 
     return (
