@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaCalendarCheck, FaHospital, FaHospitalUser, FaSignOutAlt, FaUser, FaUsers } from 'react-icons/fa';
+import { MdHealthAndSafety } from "react-icons/md";
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Sidebar.css';
 import AvtarImg from '../../assets/Avtar.svg';
@@ -38,9 +39,7 @@ const Sidebar = () => {
         else if (item === 'doctors') navigate('/doctors');
         else if (item === 'hospitals') navigate('/hospitals');
         else if (item === 'logout') {
-            localStorage.removeItem('auth');
-            localStorage.removeItem('userId');
-            localStorage.removeItem('role');
+            localStorage.clear();
             navigate('/')
         };
     };
@@ -65,18 +64,6 @@ const Sidebar = () => {
             roles: ['doctor', 'admin'],
         },
         {
-            key: 'chatbot',
-            icon: <span role="img" aria-label="Chatbot">🧑‍⚕️</span>,
-            label: 'Chatbot',
-            roles: ['patient', 'admin'],
-        },
-        {
-            key: 'analysis',
-            icon: <span role="img" aria-label="Analysis">🧑‍⚕️</span>,
-            label: 'Analysis',
-            roles: ['doctor', 'admin'],
-        },
-        {
             key: 'doctors',
             icon: <FaHospitalUser />,
             label: 'Doctors',
@@ -88,12 +75,24 @@ const Sidebar = () => {
             label: 'Hospitals',
             roles: ['admin'],
         },
+        {
+            key: 'chatbot',
+            icon: <MdHealthAndSafety />,
+            label: 'AI health assistant',
+            roles: ['patient', 'admin'],
+        },
+        // {
+        //     key: 'analysis',
+        //     icon: <span role="img" aria-label="Analysis">🧑‍⚕️</span>,
+        //     label: 'Analysis',
+        //     roles: ['doctor', 'admin'],
+        // },
     ];
 
     useEffect(() => {
-            AuthService.getUserById().then((res) => {
-                setUserName(res?.data?.data?.entityDetails?.fullName);
-            }).catch(error => console.error("error fetching User", error))
+        AuthService.getUserById().then((res) => {
+            setUserName(res?.data?.data?.role == "hospital" ? "Hospital" : res?.data?.data?.role == "admin" ? "Admin" : res?.data?.data?.entityDetails?.fullName);
+        }).catch(error => console.error("error fetching User", error))
     })
 
     return (

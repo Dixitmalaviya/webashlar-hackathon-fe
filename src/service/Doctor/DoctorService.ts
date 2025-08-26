@@ -11,7 +11,16 @@ export default {
         if (paginationDetails?.limit) params.push(`limit=${paginationDetails.limit}`);
         if (paginationDetails?.search) params.push(`search=${encodeURIComponent(paginationDetails.search)}`);
         const queryString = params.length ? `?${params.join('&')}` : '';
-        return doFetch(`${DOCTOR_API_ENDPOINTS.GET_PATINTS_LIST}${queryString}`, REQUEST_METHODS.GET);
+        return doFetch(`${DOCTOR_API_ENDPOINTS.GET_PATIENTS}${queryString}`, REQUEST_METHODS.GET);
+    },
+    getAllPatientsListService: async (paginationDetails: any) => {
+        // paginationDetails: { page, limit, search }
+        const params = [];
+        if (paginationDetails?.page) params.push(`page=${paginationDetails.page}`);
+        if (paginationDetails?.limit) params.push(`limit=${paginationDetails.limit}`);
+        if (paginationDetails?.search) params.push(`search=${encodeURIComponent(paginationDetails.search)}`);
+        const queryString = params.length ? `?${params.join('&')}` : '';
+        return doFetch(`${DOCTOR_API_ENDPOINTS.GET_PATIENTS_LIST}${queryString}`, REQUEST_METHODS.GET);
     },
     getDoctorById: async (id: string) =>
         doFetch(`${DOCTOR_API_ENDPOINTS.GET_DOCTOR_BY_ID}/${id}`, REQUEST_METHODS.GET),

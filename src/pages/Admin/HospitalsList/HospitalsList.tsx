@@ -19,56 +19,28 @@ interface Hospital {
 
 const HospitalsList: React.FC = () => {
     const [hospitals, setHospitals] = useState<Hospital[]>([]);
-    const [totalRecords, _setTotalRecords] = useState(0);
+    const [totalRecords, setTotalRecords] = useState(0);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [rows, setRows] = useState(10);
 
     //     const countries = ["United States", "Canada", "India", "United Kingdom", "Germany"];
     // const states = ["California", "Texas", "New York", "Ontario", "Gujarat"]
-        // const countriesOptions = countries.map(c => ({ label: c, value: c }));
-        // const stateOptions = states.map(s => ({ label: s, value: s }));
+    // const countriesOptions = countries.map(c => ({ label: c, value: c }));
+    // const stateOptions = states.map(s => ({ label: s, value: s }));
 
 
     // Simulate server-side fetch with fallback mock data
-    const fetchHospitals = useCallback(async (_page: number, _rows: number) => {
+    const fetchHospitals = useCallback(async (page: number, rows: number) => {
         setLoading(true);
         try {
-            toast.promise(
-                                AdminService.getAllHospitals(),
-                                {
-                                    loading: 'Loading',
-                                    success: 'Hospitals Fetched successfully',
-                                    error: 'Error when fetching hospitals',
-                                }
-                            ).then((response: any) => {
-                                setHospitals(response?.data?.data)
-                                console.log('all hospital response', response);
-                                // setPatients((prevPatients) => [...prevPatients, response.data?.patient]);
-                            });
-            // Replace this with your real API endpoint
-            // const mockData: Hospital[] = Array.from({ length: 52 }, (_, i) => ({
-            //     id: i + 1,
-            //     name: `Hospital ${i + 1}`,
-            //     email: `hospital${i + 1}@example.com`,
-            //     address: `Address: ${i+1}`,
-            //     country: "Inidia",
-            //     state: "Gujarat"
-            // }));
-            // setHospitals(mockData.slice(page, page + rows));
-            // setTotalRecords(mockData.length);
+            const response = await AdminService.getAllHospitals({ page: Math.floor(page / rows) + 1, limit: rows });
+            setHospitals(response?.data?.data || []);
+            setTotalRecords(response?.data?.total || 0);
+            console.log('all hospital response', response);
         } catch (error) {
-            // Fallback mock data for demo
-            // const mockData: Hospital[] = Array.from({ length: 52 }, (_, i) => ({
-            //     id: i + 1,
-            //     name: `Hospital ${i + 1}`,
-            //     email: `hospital${i + 1}@example.com`,
-            //     address: `Address: ${i+1}`,
-            //     country: "Inidia",
-            //     state: "Gujarat"
-            // }));
-            // setHospitals(mockData.slice(page, page + rows));
-            // setTotalRecords(mockData.length);
+            setHospitals([]);
+            setTotalRecords(0);
         }
         setLoading(false);
     }, []);
@@ -83,7 +55,14 @@ const HospitalsList: React.FC = () => {
     };
 
     const columns: TableColumn[] = [
-        { field: 'id', header: 'ID', sortable: true },
+        // { field: '_id', header: 'ID', sortable: true },
+        {
+            field: 'index',
+            header: 'ID',
+            sortable: false,
+            body: (_row: any, _col: any, rowIndex: number) => page * rows + rowIndex + 1,
+            style: { textAlign: 'center', width: 60 },
+        },
         { field: 'name', header: 'Hospital Name', sortable: true },
         { field: 'email', header: 'Official Email', sortable: true },
         { field: 'registrationNumber', header: 'Registration Number', sortable: true },
@@ -100,14 +79,14 @@ const HospitalsList: React.FC = () => {
         address: '',
         // country: '',
         // state: '',
-        registrationNumber:'',
+        registrationNumber: '',
         type: ''
     });
     console.log('form', form)
     const [formErrors, setFormErrors] = useState<any>({});
 
     const handleFormChange = (field: string, value: any) => {
-            setForm((prev) => ({ ...prev, [field]: value }));
+        setForm((prev) => ({ ...prev, [field]: value }));
     };
 
     const validateForm = () => {
@@ -135,9 +114,9 @@ const HospitalsList: React.FC = () => {
                 console.log('response', response);
                 setModalOpen(false);
                 setForm({
-                    email: '', password: '', name: '', address: '', registrationNumber: '', type:''
+                    email: '', password: '', name: '', address: '', registrationNumber: '', type: ''
                 });
-                fetchHospitals(page * rows, rows);                
+                fetchHospitals(page * rows, rows);
                 setFormErrors({});
             });
         }

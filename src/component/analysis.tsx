@@ -156,6 +156,7 @@ interface AnalysisProps {
 const Analysis: React.FC<AnalysisProps> = () => {
     const [selectedFilter, _setSelectedFilter] = useState('All Tests');
     const [patientData, setPatientData] = useState<any>(null);
+    const [userData, setUserData] = useState<any>(null);
     const location = useLocation();
     const state = location.state;
 
@@ -168,6 +169,10 @@ const Analysis: React.FC<AnalysisProps> = () => {
         const response = await PatientService.fetchPatientAnalysisData(reqObj);
         debugger
         if (response?.status === 200) {
+            const responseUser = await PatientService.getPatientService(reqObj.patientId);
+            if (responseUser?.status === 200) {
+                setUserData(responseUser.data?.patient);
+            }
             console.log("response", response)
             setPatientData(response.data?.data);
         } else {
@@ -176,8 +181,7 @@ const Analysis: React.FC<AnalysisProps> = () => {
     }
 
     React.useEffect(() => {
- 
-            fetchAnalysisData();
+        fetchAnalysisData();
     }, []);
 
     const processPatientData = useMemo(() => {
@@ -470,13 +474,22 @@ const Analysis: React.FC<AnalysisProps> = () => {
                     <div className="grid grid-cols-3 gap-8">
                         <div>
                             <h3 className="text-lg font-semibold mb-4" style={{ color: '#141414' }}>
-                                Patient: {patientData.patientDetails?.name || 'Unknown'}
+                                Patient: {userData?.fullName || 'Unknown'}
                             </h3>
                             <div className="space-y-2 text-sm" style={{ color: '#141414' }}>
-                                <p>Age: {patientData.patientDetails?.age || 'N/A'}</p>
-                                <p>Gender: {patientData.patientDetails?.sex || 'N/A'}</p>
-                                <p>Patient ID: {patientData.patientDetails?.pid || 'N/A'}</p>
-                                <p>Referred by: {patientData.doctorDetails?.referredBy || 'N/A'}</p>
+                                <p>Age: {userData?.dob ? (() => {
+                                    const dob = new Date(userData.dob);
+                                    const today = new Date();
+                                    let age = today.getFullYear() - dob.getFullYear();
+                                    const m = today.getMonth() - dob.getMonth();
+                                    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                                        age--;
+                                    }
+                                    return age;
+                                })() : 'N/A'}</p>
+                                <p>Gender: {userData?.gender || 'N/A'}</p>
+                                {/* <p>Patient ID: {patientData.patientDetails?.pid || 'N/A'}</p>
+                                <p>Referred by: {patientData.doctorDetails?.referredBy || 'N/A'}</p> */}
                                 <p>Total Reports: {totalReports}</p>
                             </div>
                         </div>

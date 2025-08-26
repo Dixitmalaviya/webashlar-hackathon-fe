@@ -9,7 +9,6 @@ import CommonInput from '../../../component/CommonInput';
 import AdminService from '../../../service/Admin/AdminService';
 import CommonDropdown from '../../../component/CommonDropdown';
 import { FiEdit, FiTrash } from 'react-icons/fi';
-import DoctorService from '../../../service/Doctor/DoctorService';
 import HospitalServices from '../../../service/Hospital/HospitalServices';
 
 interface Doctor {
@@ -28,23 +27,23 @@ const DoctorsList: React.FC = () => {
     const [page, setPage] = useState(0);
     const [rows, setRows] = useState(10);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [_editDoctorId, setDoctorId] = useState('');
-    const [hospitals, setHospitals] = useState([{label: '', value: ''}])
+    const [_editDoctorId, _setDoctorId] = useState('');
+    const [hospitals, setHospitals] = useState([{ label: '', value: '' }])
 
     // const hospitals = [
     //     { label: "Hospital 1", value: '68a98f2adf4c284e6966b693' }
     // ];
 
-    const fetchHospitalOptions = async() => {
+    const fetchHospitalOptions = async () => {
         try {
-                const response = await HospitalServices.getHospitalOptionsService();
-                setHospitals(response.data?.hospitals.map((h: any) => {return {label: h.name, value: h._id}}))
-                console.log("response", response);
-            } catch (error) {
-                setHospitals([]);
-                // setTotalRecords(mockData.length);
-            }
-            setLoading(false);
+            const response = await HospitalServices.getHospitalOptionsService();
+            setHospitals(response.data?.hospitals.map((h: any) => { return { label: h.name, value: h._id } }))
+            console.log("response", response);
+        } catch (error) {
+            setHospitals([]);
+            // setTotalRecords(mockData.length);
+        }
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -55,14 +54,15 @@ const DoctorsList: React.FC = () => {
     const fetchDoctors = useCallback(async (page: number, rows: number) => {
         setLoading(true);
         try {
-            const response = await AdminService.getDoctors();
+            // Pass pagination params to API
+            const response = await AdminService.getDoctors({ page: Math.floor(page / rows) + 1, limit: rows });
             console.log("response", response, page, rows);
-            const mockData = response?.data?.data || [];
-            setDoctors(mockData);
-            setTotalRecords(mockData.length);
+            const data = response?.data?.data || [];
+            setDoctors(data);
+            setTotalRecords(response?.data?.total || data.length);
         } catch (error) {
             setDoctors([]);
-            // setTotalRecords(mockData.length);
+            setTotalRecords(0);
         }
         setLoading(false);
     }, []);
@@ -77,40 +77,49 @@ const DoctorsList: React.FC = () => {
     };
 
 
-    const editDoctor = (Id: string) => {
-        toast
-            .promise(DoctorService.getDoctorById(Id), {
-                loading: "Loading",
-                //   success: "Report Deleted successfully",
-                error: "Error when fetching patient details",
-            })
-            .then((response: any) => {
-                console.log("Edit response", response);
-                const doctorData = response?.data?.doctor;
-                setForm({
-                    email: doctorData.email, password: '', fullName: doctorData.fullName, phone: doctorData.contactNumber, licenseNumber: doctorData.licenseNumber, specialization: doctorData.specialization, hospital: doctorData.hospital, role: 'doctor'
-                });
-                setIsEditMode(true);
-                setDoctorId(Id);
-                setModalOpen(true);
-            });
+    const editDoctor = (_Id: string) => {
+        toast.success("Coming soon...")
+        // toast
+        //     .promise(DoctorService.getDoctorById(Id), {
+        //         loading: "Loading",
+        //         //   success: "Report Deleted successfully",
+        //         error: "Error when fetching patient details",
+        //     })
+        //     .then((response: any) => {
+        //         console.log("Edit response", response);
+        //         const doctorData = response?.data?.doctor;
+        //         setForm({
+        //             email: doctorData.email, password: '', fullName: doctorData.fullName, phone: doctorData.contactNumber, licenseNumber: doctorData.licenseNumber, specialization: doctorData.specialization, hospital: doctorData.hospital, role: 'doctor'
+        //         });
+        //         setIsEditMode(true);
+        //         setDoctorId(Id);
+        //         setModalOpen(true);
+        //     });
     };
 
     const deleteDoctor = (_Id: string) => {
-        toast
-            .promise(AuthService.deleteUserService(), {
-                loading: "Loading",
-                success: "Doctor Deleted successfully",
-                error: "Error when deleting Doctor",
-            })
-            .then((response: any) => {
-                console.log("response", response);
-                fetchDoctors(page * rows, rows);
-            });
+        toast.success("Coming soon...")
+        // toast
+        //     .promise(AuthService.deleteUserService(), {
+        //         loading: "Loading",
+        //         success: "Doctor Deleted successfully",
+        //         error: "Error when deleting Doctor",
+        //     })
+        //     .then((response: any) => {
+        //         console.log("response", response);
+        //         fetchDoctors(page * rows, rows);
+        //     });
     };
 
     const columns: TableColumn[] = [
-        { field: '_id', header: 'ID', sortable: true },
+        // { field: '_id', header: 'ID', sortable: true },
+        {
+            field: 'index',
+            header: 'ID',
+            sortable: false,
+            body: (_row: any, _col: any, rowIndex: number) => page * rows + rowIndex + 1,
+            style: { textAlign: 'center', width: 60 },
+        },
         { field: 'fullName', header: 'Name', sortable: true },
         { field: 'email', header: 'Email', sortable: true },
         // { field: 'phone', header: 'Phone Number', sortable: true },
@@ -288,7 +297,7 @@ const DoctorsList: React.FC = () => {
                         placeholder="Enter License Number"
                     />
                     <CommonInput
-                        label="pecialization"
+                        label="Specialization"
                         value={form.specialization}
                         onChange={v => handleFormChange('specialization', v)}
                         error={formErrors.specialization}

@@ -31,32 +31,43 @@ const PatientList: React.FC = () => {
     const [rows, setRows] = useState(10);
     const [isEditMode, setIsEditMode] = useState(false);
     const [_editPatientId, setEditPatientId] = useState('');
-    const [hospitals, setHospitals] = useState([{label: '', value: ''}]);
-    const [doctors, setDoctors] = useState([{label: '', value: ''}]);
-    
+    const [hospitals, setHospitals] = useState([{ label: '', value: '' }]);
+    const [doctors, setDoctors] = useState([{ label: '', value: '' }]);
+    const [role, setRole] = useState<string | null>('patient');
 
-    const fetchHospitalOptions = async() => {
-            try {
-                    const response = await HospitalServices.getHospitalOptionsService();
-                    setHospitals(response.data?.hospitals.map((h: any) => {return {label: h.name, value: h._id}}))
-                    console.log("response", response);
-                } catch (error) {
-                    // setTotalRecords(mockData.length);
-                }
-                setLoading(false);
+
+    const fetchHospitalOptions = async () => {
+        try {
+            const role = localStorage.getItem('role');
+            setRole(role);
+            const response = await HospitalServices.getHospitalOptionsService();
+            setHospitals(response.data?.hospitals.map((h: any) => { return { label: h.name, value: h._id } }))
+            console.log("response", response);
+        } catch (error) {
+            // setTotalRecords(mockData.length);
         }
-    
-        useEffect(() => {
-            fetchHospitalOptions();
-        }, []);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        fetchHospitalOptions();
+    }, []);
 
     const fetchPatients = useCallback(async (page: number, rows: number) => {
         setLoading(true);
+        const role = localStorage.getItem('role');
         try {
-            const response = await DoctorService.getPatientsListService({ page: Math.floor(page / rows) + 1, limit: rows });
-            const data = response?.data?.data || [];
-            setPatients(data);
-            setTotalRecords(response?.data?.total || data.length);
+            if (role !== "admin") {
+                const response = await DoctorService.getPatientsListService({ page: Math.floor(page / rows) + 1, limit: rows });
+                const data = response?.data?.data || [];
+                setPatients(data);
+                setTotalRecords(response?.data?.total || data.length);
+            } else {
+                const response = await DoctorService.getAllPatientsListService({ page: Math.floor(page / rows) + 1, limit: rows });
+                const data = response?.data?.data || [];
+                setPatients(data);
+                setTotalRecords(response?.data?.total || data.length);
+            }
         } catch (error) {
             setPatients([]);
         }
@@ -96,8 +107,8 @@ const PatientList: React.FC = () => {
         //                 phone: patientData.emergencyContact.phone,
         //                 relationship: patientData.emergencyContact.relationship,
         //             },
-                    // hospital: patientData.hospital,
-                    // doctor: patientData.doctor
+        // hospital: patientData.hospital,
+        // doctor: patientData.doctor
         //             role: "patient"
         //         });
         //         setModalOpen(true);
@@ -137,23 +148,29 @@ const PatientList: React.FC = () => {
     };
 
     const columns: TableColumn[] = [
-        { field: '_id', header: 'ID', sortable: true },
+        {
+            field: 'index',
+            header: 'ID',
+            sortable: false,
+            body: (_row: any, _col: any, rowIndex: number) => page * rows + rowIndex + 1,
+            style: { textAlign: 'center', width: 60 },
+        },
         { field: 'fullName', header: 'Name', sortable: true },
         {
             field: 'dob',
             header: 'DOB',
             sortable: true,
-            body: (row: any) => formatDate(row.dob),
+            body: (row: any) => formatDate(row?.dob),
         },
         {
             field: 'age',
             header: 'Age',
             sortable: true,
-            body: (row: any) => calculateAge(row.dob),
+            body: (row: any) => calculateAge(row?.dob),
         },
         { field: 'gender', header: 'Gender', sortable: true },
         { field: 'email', header: 'Email', sortable: true },
-        { field: 'bloodType', header: 'Blood Type', sortable: true },
+        { field: 'bloodGroup', header: 'Blood Type', sortable: true },
         {
             field: 'actions',
             header: 'Actions',
@@ -192,24 +209,26 @@ const PatientList: React.FC = () => {
         },
         role: "patient",
         doctor: '',
-        hospital: ''
+        hospital: '',
+        bloodGroup: '',
+        gender: ''
     });
 
-    
-        const fetchDoctorsByHospital = async() => {
-            try {
-                    const response = await DoctorService.getDoctorByHospitalService(form.hospital);
-                    setDoctors(response.data?.data?.map((d: any) => {return {label: d.fullName, value: d._id}}));
-                } catch (error) {
-                    // setTotalRecords(mockData.length);
-                }
-                setLoading(false);
+    const fetchDoctorsByHospital = async () => {
+        try {
+            debugger;
+            const response = await DoctorService.getDoctorByHospitalService(form.hospital);
+            setDoctors(response.data?.data?.map((d: any) => { return { label: d.fullName, value: d._id } }));
+        } catch (error) {
+            // setTotalRecords(mockData.length);
         }
+        setLoading(false);
+    }
 
-        useEffect(() => {
-            fetchDoctorsByHospital();
-        }, [form.hospital]);
-        
+    useEffect(() => {
+        fetchDoctorsByHospital();
+    }, [form.hospital]);
+
     const [formErrors, setFormErrors] = useState<any>({});
 
     const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
@@ -260,6 +279,8 @@ const PatientList: React.FC = () => {
         if (!form.emergencyContact.relationship) errors['emergencyContact.relationship'] = 'Relationship is required';
         if (!form.hospital) errors['hospital'] = 'Hospital is required';
         if (!form.doctor) errors['doctor'] = 'Doctor is required';
+        if (!form.bloodGroup) errors['bloodGroup'] = 'Blood group is required';
+        if (!form.gender) errors['gender'] = 'Gender is required';
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -272,8 +293,8 @@ const PatientList: React.FC = () => {
                 // setModalOpen(false);
                 setForm({
                     email: '', password: '', fullName: '', dob: '', phone: '', address: '',
-                    emergencyContact: { name: '', phone: '', relationship: '' }, doctor: '', hospital:'',
-                    role: 'patient',
+                    emergencyContact: { name: '', phone: '', relationship: '' }, doctor: '', hospital: '',
+                    role: 'patient', bloodGroup: '', gender: ''
                 });
                 setFormErrors({});
             } else {
@@ -284,15 +305,30 @@ const PatientList: React.FC = () => {
                         success: 'Patient created successfully',
                         error: 'Error when fetching',
                     }
-                ).then((response: any) => {
+                ).then(async (response: any) => {
                     console.log('response', response);
-                    setPatients((prevPatients) => [...prevPatients, response.data?.patient]);
+                    // const responsePatient = await DoctorService.getPatientsListService({ page: Math.floor(page / rows) + 1, limit: rows });
+                    // const data = responsePatient?.data?.data || [];
+                    // setPatients(data);
+                    // setTotalRecords(responsePatient?.data?.total || data.length);
+                    if (role != "admin") {
+                        const response = await DoctorService.getPatientsListService({ page: Math.floor(page / rows) + 1, limit: rows });
+                        const data = response?.data?.data || [];
+                        setPatients(data);
+                        setTotalRecords(response?.data?.total || data.length);
+                    } else {
+                        const response = await DoctorService.getAllPatientsListService({ page: Math.floor(page / rows) + 1, limit: rows });
+                        const data = response?.data?.data || [];
+                        setPatients(data);
+                        setTotalRecords(response?.data?.total || data.length);
+                    }
+                    // setPatients((prevPatients) => [...prevPatients, response.data?.data?.user]);
                     setModalOpen(false);
                     setForm({
-                    email: '', password: '', fullName: '', dob: '', phone: '', address: '',
-                    emergencyContact: { name: '', phone: '', relationship: '' }, doctor: '', hospital:'',
-                    role: 'patient',
-                });
+                        email: '', password: '', fullName: '', dob: '', phone: '', address: '',
+                        emergencyContact: { name: '', phone: '', relationship: '' }, doctor: '', hospital: '',
+                        role: 'patient', bloodGroup: '', gender: ''
+                    });
                     setFormErrors({});
                 });
             }
@@ -384,6 +420,27 @@ const PatientList: React.FC = () => {
                         error={formErrors.address}
                         placeholder="Enter address"
                     />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <CommonInput
+                            label="Blood Group"
+                            value={form.bloodGroup}
+                            onChange={v => handleFormChange('bloodGroup', v)}
+                            error={formErrors.bloodGroup}
+                            placeholder="Enter blood group"
+                        />
+                        <CommonDropdown
+                            label="Gender"
+                            value={form.gender}
+                            onChange={v => handleFormChange('gender', v)}
+                            options={[
+                                { value: 'Male', label: 'Male' },
+                                { value: 'Female', label: 'Female' },
+                                { value: 'Other', label: 'Other' },
+                            ]}
+                            error={formErrors.gender}
+                            placeholder="Select"
+                        />
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <CommonInput
                             label="Emergency Contact Name"

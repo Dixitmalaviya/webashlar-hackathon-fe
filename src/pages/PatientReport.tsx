@@ -166,7 +166,7 @@ const PatientReport: React.FC = () => {
                 {/* Date Range Filter - Improved UI */}
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 flex flex-col md:flex-row md:items-end md:gap-6 gap-4 w-full">
                     <div className="flex flex-col flex-1 min-w-[160px]">
-                        <label className="font-medium mb-1 text-gray-700">Start Date</label>
+                        <label className="font-medium mb-1 text-gray-700 text-start">Start Date</label>
                         <input
                             type="date"
                             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
@@ -176,7 +176,7 @@ const PatientReport: React.FC = () => {
                         />
                     </div>
                     <div className="flex flex-col flex-1 min-w-[160px]">
-                        <label className="font-medium mb-1 text-gray-700">End Date</label>
+                        <label className="font-medium mb-1 text-gray-700 text-start">End Date</label>
                         <input
                             type="date"
                             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
@@ -193,12 +193,16 @@ const PatientReport: React.FC = () => {
                         >
                             Clear Filter
                         </CommonButton>
-                        <CommonButton
-                            className="w-auto px-4 py-2"
-                            onClick={viewAnalysis}
-                        >
-                            View Analysis
-                        </CommonButton>
+                        {
+                            role !== "patient" && (
+                                <CommonButton
+                                    className="w-auto px-4 py-2"
+                                    onClick={viewAnalysis}
+                                >
+                                    View Analysis
+                                </CommonButton>
+                            )
+                        }
                     </div>
                 </div>
                 <CommonTable

@@ -11,11 +11,13 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("reports");
   const [patientData, setPatientData] = useState(
     {
-          name:"John Doe",
-          uniqueNumber:"1234567890123456",
-          address:"123 Main St, Springfield",
-          bloodGroup: "O+",
-          dob: "01/01/2000"  }
+      name: "John Doe",
+      uniqueNumber: "1234567890123456",
+      address: "123 Main St, Springfield",
+      bloodGroup: "O+",
+      dob: "01/01/2000",
+      cardNumber: "1234567890123456"
+    }
   );
 
   const timelineData = [
@@ -65,22 +67,24 @@ const Profile = () => {
 
   const fetchPatientDetails = () => {
     toast
-            .promise(PatientService.getPatientService(localStorage.getItem('userId')|| ''), {
-                loading: "Loading",
-                //   success: "Report Deleted successfully",
-                error: "Error when fetching patient details",
-            })
-            .then((response: any) => {
-                console.log("patientData", response);
-                const patientData = response?.data?.patient;
-                setPatientData({
-          name:patientData.fullName,
-          uniqueNumber:"1234567890123456",
+      .promise(PatientService.getPatientService(localStorage.getItem('userId') || ''), {
+        loading: "Loading",
+        //   success: "Report Deleted successfully",
+        error: "Error when fetching patient details",
+      })
+      .then((response: any) => {
+        console.log("patientData", response);
+        const patientData = response?.data?.patient;
+        setPatientData({
+          name: patientData.fullName,
+          uniqueNumber: "1234567890123456",
           address: patientData.address,
           bloodGroup: patientData.bloodGroup,
-          dob: `${new Date(patientData.dob).getDate()}/${new Date(patientData.dob).getMonth()}/${new Date(patientData.dob).getFullYear()}` })
-                
-            });
+          cardNumber: patientData.cardNumber,
+          dob: `${new Date(patientData.dob).getDate()}/${new Date(patientData.dob).getMonth()}/${new Date(patientData.dob).getFullYear()}`
+        })
+
+      });
   }
 
   useEffect(() => {
@@ -91,7 +95,7 @@ const Profile = () => {
     <div className="p-6">
       <div className=" mt-10 p-5 bg-white shadow-md rounded-lg">
         <PatientCard
-            patientData = {patientData}
+          patientData={patientData}
           logo={logo}
         />
 
@@ -99,21 +103,19 @@ const Profile = () => {
         <div className="flex space-x-6 border-b mx-auto justify-center">
           <button
             onClick={() => handleTabClick("reports")}
-            className={`py-2 px-4 text-lg font-semibold ${
-              activeTab === "reports"
+            className={`py-2 px-4 text-lg font-semibold ${activeTab === "reports"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600"
-            }`}
+              }`}
           >
             Reports
           </button>
           <button
             onClick={() => handleTabClick("timeline")}
-            className={`py-2 px-4 text-lg font-semibold ${
-              activeTab === "timeline"
+            className={`py-2 px-4 text-lg font-semibold ${activeTab === "timeline"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600"
-            }`}
+              }`}
           >
             Timeline
           </button>

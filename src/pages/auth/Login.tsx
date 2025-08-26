@@ -22,9 +22,9 @@ const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { loginService } = authService;
   const location = useLocation();
-  
-    // const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
-    // const relationshipOptions = relationships.map(r => ({ label: r, value: r }));
+
+  // const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
+  // const relationshipOptions = relationships.map(r => ({ label: r, value: r }));
 
   useEffect(() => {
     const hash = location.hash;
@@ -54,16 +54,20 @@ const LoginForm: React.FC = () => {
     //   .required("wallet Address is required"),
     fullName: Yup.string()
       .required("Name is required"),
-      phone: Yup.string()
+    phone: Yup.string()
       .required("Phone Number is required"),
-      dob: Yup.string()
+    dob: Yup.string()
       .required("Date Of Birth   is required"),
-      emContName: Yup.string()
+    emContName: Yup.string()
       .required("Emergency Contact Name is required"),
-      emContPhone: Yup.string()
+    emContPhone: Yup.string()
       .required("Emergency Contact Number is required"),
-      // emContRelation: Yup.string()
-      // .required("relation is required"),
+    gender: Yup.string()
+      .required("Gender is required"),
+    bloodGroup: Yup.string()
+      .required("Blood Group is required"),
+    // emContRelation: Yup.string()
+    // .required("relation is required"),
   });
 
   // Initial form values
@@ -79,11 +83,13 @@ const LoginForm: React.FC = () => {
     password: "",
     wallet: "",
     phone: '',
-    dob:'',
+    dob: '',
     emContName: '',
     emContPhone: '',
     emContRelation: '',
-    role: 'patient'
+    role: 'patient',
+    bloodGroup: '',
+    gender: ''
   });
 
   // Submit handler
@@ -108,6 +114,14 @@ const LoginForm: React.FC = () => {
             navigate("/patients");
             localStorage.setItem("userId", res?.data?.data?.user?.entityId);
             localStorage.setItem("role", "doctor");
+          } else if (res?.data?.data?.user?.role == "admin") {
+            navigate("/patients");
+            localStorage.setItem("userId", res?.data?.data?.user?.entityId);
+            localStorage.setItem("role", "admin");
+          } else if (res?.data?.data?.user?.role == "admin") {
+            navigate("/patients");
+            localStorage.setItem("userId", res?.data?.data?.user?.entityId);
+            localStorage.setItem("role", "hospital");
           }
         })
         .catch((error) => {
@@ -122,8 +136,9 @@ const LoginForm: React.FC = () => {
   const handleRegister = (values: typeof initialRegistrationValues,
     _actions: FormikHelpers<typeof initialRegistrationValues>
   ) => {
-          // actions.setSubmitting(false);
+    // actions.setSubmitting(false);
     console.log(values);
+    debugger
     toast
       .promise(PatientService.createPatientService(values), {
         loading: "Loading",
@@ -142,7 +157,9 @@ const LoginForm: React.FC = () => {
           emContName: "",
           emContPhone: "",
           emContRelation: "Friend",
-          role: 'patient'
+          role: 'patient',
+          bloodGroup: '',
+          gender: ''
         });
         setShowRegister(false);
       });
@@ -154,11 +171,11 @@ const LoginForm: React.FC = () => {
       <div className="absolute top-6 left-6 flex items-center gap-3 z-10 cursor-pointer" onClick={() => navigate("/")}>
         <div className="w-50 h-10 flex items-center justify-center text-white text-lg font-bold">
           {/* <FaHeartbeat /> */}
-           <img
-          src={"/logo-without-name.png"}
-          alt="Logo"
-          className="w-10 h-10 object-contain drop-shadow-md"
-        />
+          <img
+            src={"/logo-without-name.png"}
+            alt="Logo"
+            className="w-10 h-10 object-contain drop-shadow-md"
+          />
         </div>
         <span className="text-2xl font-bold font-space text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
           HealthSync
@@ -167,9 +184,8 @@ const LoginForm: React.FC = () => {
 
       <div className="flex items-center justify-center min-h-screen p-4">
         <div
-          className={`relative w-full max-w-5xl min-h-[650px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden transition-all duration-700 ${
-            showRegister ? "translate-x-0" : ""
-          }`}
+          className={`relative w-full max-w-5xl min-h-[650px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden transition-all duration-700 ${showRegister ? "translate-x-0" : ""
+            }`}
         >
           {/* Toggle Button */}
           <div className="absolute top-6 right-6 z-10">
@@ -185,9 +201,8 @@ const LoginForm: React.FC = () => {
 
           {/* Panels */}
           <div
-            className={`flex w-[200%] h-full transition-transform duration-700 ${
-              showRegister ? "-translate-x-1/2" : ""
-            }`}
+            className={`flex w-[200%] h-full transition-transform duration-700 ${showRegister ? "-translate-x-1/2" : ""
+              }`}
           >
             {/* LOGIN PANEL */}
             <div className="w-1/2 flex flex-col justify-center p-10">
@@ -292,7 +307,7 @@ const LoginForm: React.FC = () => {
                   {({ isSubmitting }) => (
                     <Form className="space-y-5">
                       <div className="relative">
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-300 mb-2 text-start">
                           Full Name
                         </label>
                         <div className="relative">
@@ -306,12 +321,12 @@ const LoginForm: React.FC = () => {
                         <ErrorMessage
                           name="fullName"
                           component="div"
-                          className="text-red-500 text-sm mt-1"
+                          className="text-red-500 text-sm mt-1 text-start"
                         />
                       </div>
 
                       <div className="relative">
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-300 mb-2 text-start">
                           Email
                         </label>
                         <div className="relative">
@@ -326,12 +341,12 @@ const LoginForm: React.FC = () => {
                         <ErrorMessage
                           name="email"
                           component="div"
-                          className="text-red-500 text-sm mt-1"
+                          className="text-red-500 text-sm mt-1 text-start"
                         />
                       </div>
 
                       <div className="relative">
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-300 mb-2 text-start">
                           Phone Number
                         </label>
                         <div className="relative">
@@ -346,12 +361,12 @@ const LoginForm: React.FC = () => {
                         <ErrorMessage
                           name="phone"
                           component="div"
-                          className="text-red-500 text-sm mt-1"
+                          className="text-red-500 text-sm mt-1 text-start"
                         />
                       </div>
 
                       <div className="relative">
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-300 mb-2 text-start">
                           Password
                         </label>
                         <div className="relative">
@@ -371,7 +386,7 @@ const LoginForm: React.FC = () => {
                         <ErrorMessage
                           name="password"
                           component="div"
-                          className="text-red-500 text-sm mt-1"
+                          className="text-red-500 text-sm mt-1 text-start"
                         />
                       </div>
 
@@ -393,9 +408,9 @@ const LoginForm: React.FC = () => {
                           className="text-red-500 text-sm mt-1"
                         />
                       </div> */}
-                        
+
                       <div>
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-300 mb-2 text-start">
                           Date Of Birth
                         </label>
                         <div className="relative">
@@ -408,51 +423,96 @@ const LoginForm: React.FC = () => {
                         <ErrorMessage
                           name="dob"
                           component="div"
-                          className="text-red-500 text-sm mt-1"
+                          className="text-red-500 text-sm mt-1 text-start"
                         />
                       </div>
-                      
-                      
+
                       <div className="relative flex">
-                      <div className="relative">
-                        <label className="block text-sm text-gray-300 mb-2">
-                          Emergency Contact Name
-                        </label>
                         <div className="relative">
-                          <FaUser className="absolute left-4 top-4 text-blue-300/70" />
-                          <Field
-                            // type="password"
+                          <label className="block text-sm text-gray-300 mb-2 text-start">
+                            Blood Group
+                          </label>
+                          <div className="relative">
+                            <FaUser className="absolute left-4 top-4 text-blue-300/70" />
+                            <Field
+                              // type="password"
+                              name="bloodGroup"
+                              type="text"
+                              className="w-full bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Blood Group"
+                            />
+                          </div>
+                          <ErrorMessage
+                            name="bloodGroup"
+                            component="div"
+                            className="text-red-500 text-sm mt-1 text-start"
+                          />
+                        </div>
+                        <div className="relative ml-2">
+                          <label className="block text-sm text-gray-300 mb-2 text-start">
+                            Gender
+                          </label>
+                          <div className="relative">
+                            <FaUser className="absolute left-4 top-4 text-blue-300/70" />
+                            <Field
+                              as="select"
+                              name="gender"
+                              className="w-full text-white bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+                            >
+                              <option value="">Select Gender</option>
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Other">Other</option>
+                            </Field>
+                          </div>
+                          <ErrorMessage
+                            name="gender"
+                            component="div"
+                            className="text-red-500 text-sm mt-1 text-start"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="relative flex">
+                        <div className="relative">
+                          <label className="block text-sm text-gray-300 mb-2 text-start">
+                            Emergency Contact Name
+                          </label>
+                          <div className="relative">
+                            <FaUser className="absolute left-4 top-4 text-blue-300/70" />
+                            <Field
+                              // type="password"
+                              name="emContName"
+                              type="text"
+                              className="w-full bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Name"
+                            />
+                          </div>
+                          <ErrorMessage
                             name="emContName"
-                            type="text"
-                            className="w-full bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Name"
+                            component="div"
+                            className="text-red-500 text-sm mt-1 text-start"
                           />
                         </div>
-                        <ErrorMessage
-                          name="emContName"
-                          component="div"
-                          className="text-red-500 text-sm mt-1"
-                        />
-                      </div>
-                       <div className="relative ml-2">
-                        <label className="block text-sm text-gray-300 mb-2">
-                          Emergency Contact Phone
-                        </label>
-                        <div className="relative">
-                          <FaPhone className="absolute left-4 top-4 text-blue-300/70" />
-                          <Field
+                        <div className="relative ml-2">
+                          <label className="block text-sm text-gray-300 mb-2 text-start">
+                            Emergency Contact Phone
+                          </label>
+                          <div className="relative">
+                            <FaPhone className="absolute left-4 top-4 text-blue-300/70" />
+                            <Field
+                              name="emContPhone"
+                              type="text"
+                              className="w-full text-white bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                          <ErrorMessage
                             name="emContPhone"
-                            type="text"
-                            className="w-full text-white bg-gray-800/70 border border-blue-400/30 rounded-xl px-12 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            component="div"
+                            className="text-red-500 text-sm mt-1 text-start"
                           />
                         </div>
-                        <ErrorMessage
-                          name="emContPhone"
-                          component="div"
-                          className="text-red-500 text-sm mt-1"
-                        />
-                      </div>
-                      {/* <div className="relative ml-2">
+                        {/* <div className="relative ml-2">
                         <label className="block text-sm text-gray-300 mb-2">
                           Relation With Them
                         </label>
@@ -481,7 +541,7 @@ const LoginForm: React.FC = () => {
                           className="text-red-500 text-sm mt-1"
                         />
                       </div> */}
-                      
+
                       </div>
 
                       <button
@@ -492,13 +552,13 @@ const LoginForm: React.FC = () => {
                         {isSubmitting ? "Creating..." : "Create Account"}
                       </button>
 
-                      
+
                     </Form>
                   )}
                 </Formik>
               </div>
             </div>
-            
+
           </div>
         </div>
       </div>

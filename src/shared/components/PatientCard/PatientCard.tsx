@@ -47,7 +47,7 @@ const PatientCard = ({ patientData, logo }: any) => {
         </div> */}
         {/* Card Number */}
         <div className="text-[1.7rem] font-bold text-yellow-300 mb-2 select-text" style={cardNumberFont}>
-          {String(patientData.uniqueNumber)}
+          {String(patientData.cardNumber)}
         </div>
         {/* Cardholder Name */}
         {/* <div className="text-xs text-blue-200 tracking-widest mt-2 ml-1">CARDHOLDER NAME</div> */}
