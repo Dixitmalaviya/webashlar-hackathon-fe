@@ -151,16 +151,16 @@ const PatientReport: React.FC = () => {
                         )
                     }
                     <h2 className="text-2xl font-bold text-center flex-1 text-primary">Patient Report</h2>
-                    {
-                        role === "doctor" && (
+                    {/* //{ */}
+                        {/* // role === "doctor" || && ( */}
                             <CommonButton
                                 className="w-auto px-6 py-2 ml-4"
                                 onClick={() => setModalOpen(true)}
                             >
                                 Add Report
                             </CommonButton>
-                        )
-                    }
+                        {/* // )
+                    // } */}
                 </div>
 
                 {/* Date Range Filter - Improved UI */}
