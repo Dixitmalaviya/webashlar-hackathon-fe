@@ -68,7 +68,7 @@ const Sidebar = () => {
             key: 'chatbot',
             icon: <span role="img" aria-label="Chatbot">🧑‍⚕️</span>,
             label: 'Chatbot',
-            roles: ['patient', 'doctor', 'admin'],
+            roles: ['patient', 'admin'],
         },
         {
             key: 'analysis',

@@ -166,6 +166,7 @@ const PatientList: React.FC = () => {
             phone: '',
             relationship: '',
         },
+        role: "patient"
     });
     const [formErrors, setFormErrors] = useState<any>({});
 
@@ -188,7 +189,7 @@ const PatientList: React.FC = () => {
         const errors: any = {};
         const phoneRegex = /^\d{10}$/;
         if (!form.email) errors.email = 'Email is required';
-        if (!form.password) errors.password = 'Password is required';
+        if (!form.password && !isEditMode) errors.password = 'Password is required';
         if (!form.fullName) errors.fullName = 'Full name is required';
         if (!form.dob) {
             errors.dob = 'Date of birth is required';
@@ -224,7 +225,7 @@ const PatientList: React.FC = () => {
             if (isEditMode) {
                 // In edit mode, just log the data
                 console.log('Edit Patient Data:', form);
-                setModalOpen(false);
+                // setModalOpen(false);
                 setForm({
                     email: '', password: '', fullName: '', dob: '', phone: '', address: '',
                     emergencyContact: { name: '', phone: '', relationship: '' },
@@ -288,16 +289,22 @@ const PatientList: React.FC = () => {
                         error={formErrors.email}
                         placeholder="Enter email"
                         disabled={isEditMode}
+                        readOnly={isEditMode}
                     />
-                    <CommonInput
-                        label="Password"
-                        type="password"
-                        value={form.password}
-                        onChange={v => handleFormChange('password', v)}
-                        error={formErrors.password}
-                        placeholder="Enter password"
-                        disabled={isEditMode}
-                    />
+                    {
+                        !isEditMode && (
+                            <CommonInput
+                                label="Password"
+                                type="password"
+                                value={form.password}
+                                onChange={v => handleFormChange('password', v)}
+                                error={formErrors.password}
+                                placeholder="Enter password"
+                                disabled={isEditMode}
+                                readOnly={isEditMode}
+                            />
+                        )
+                    }
                     <CommonInput
                         label="Full Name"
                         value={form.fullName}
@@ -308,7 +315,7 @@ const PatientList: React.FC = () => {
                     <CommonInput
                         label="Date of Birth"
                         type="date"
-                        value={form.dob}
+                        value={form.dob ? new Date(form.dob).toISOString().slice(0, 10) : ''}
                         onChange={v => handleFormChange('dob', v)}
                         error={formErrors.dob}
                         max={new Date().toISOString().split('T')[0]}
@@ -322,6 +329,7 @@ const PatientList: React.FC = () => {
                         error={formErrors.phone}
                         placeholder="Enter phone number"
                         disabled={isEditMode}
+                        readOnly={isEditMode}
                     />
                     <CommonInput
                         label="Address"
