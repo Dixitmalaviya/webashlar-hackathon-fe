@@ -67,11 +67,10 @@ const DoctorsList: React.FC = () => {
                 error: "Error when fetching patient details",
             })
             .then((response: any) => {
-                debugger
                 console.log("Edit response", response);
                 const doctorData = response?.data?.doctor;
                 setForm({
-                    email: doctorData.email, password: '', fullName: doctorData.fullName, phone: '', licenseNumber: doctorData.licenseNumber, specialization: doctorData.specialization, hospital: doctorData.hospital, role: 'doctor'
+                    email: doctorData.email, password: '', fullName: doctorData.fullName, phone: doctorData.contactNumber, licenseNumber: doctorData.licenseNumber, specialization: doctorData.specialization, hospital: doctorData.hospital, role: 'doctor'
                 });
                 setIsEditMode(true);
                 setDoctorId(Id);
@@ -79,9 +78,9 @@ const DoctorsList: React.FC = () => {
             });
     };
 
-    const deletePatient = (Id: string) => {
+    const deleteDoctor = (Id: string) => {
         toast
-            .promise(DoctorService.deleteDoctorService(Id), {
+            .promise(AuthService.deleteUserService(), {
                 loading: "Loading",
                 success: "Doctor Deleted successfully",
                 error: "Error when deleting Doctor",
@@ -111,7 +110,7 @@ const DoctorsList: React.FC = () => {
                             />
                             <FiTrash
                                 className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
-                                onClick={() => deletePatient(_row?.id)}
+                                onClick={() => deleteDoctor(_row?.id)}
                             />
                         </div>
                     ),
@@ -162,7 +161,7 @@ const DoctorsList: React.FC = () => {
         if (validateForm()) {
             if (isEditMode) {
                 toast.promise(
-                    DoctorService.updateDoctorService(editDoctorId, form),
+                    AuthService.updateUserService(form),
                     {
                         loading: 'Loading',
                         success: 'Doctor Updated successfully',
@@ -208,7 +207,7 @@ const DoctorsList: React.FC = () => {
                         className="w-auto px-6 py-2 ml-4"
                         onClick={() => setModalOpen(true)}
                     >
-                        {isEditMode ? "Update Doctor" : "Add Doctor"}
+                        Add Doctor
                     </CommonButton>
                 </div>
                 <CommonTable
@@ -225,7 +224,9 @@ const DoctorsList: React.FC = () => {
                 />
             </div>
             {/* Render modal here, outside the main content container */}
-            <CommonModal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Add Dcotor">
+            <CommonModal isOpen={modalOpen} onClose={() => {setModalOpen(false); setIsEditMode(false); setForm({
+                    email: '', password: '', fullName: '', phone: '', licenseNumber: '', specialization:'', hospital: '', role: 'doctor'
+                }); }} title=  {isEditMode ? "Update Doctor" : "Add Doctor"}>
                 <form className="space-y-3" onSubmit={e => { e.preventDefault(); handleSave(); }}>
                     <CommonInput
                         label="Email"
@@ -282,7 +283,9 @@ const DoctorsList: React.FC = () => {
                             placeholder="Select"
                         />
                     <div className="flex justify-end gap-3 pt-2">
-                        <CommonButton type="button" variant="secondary" className="w-auto px-6" onClick={() => setModalOpen(false)}>
+                        <CommonButton type="button" variant="secondary" className="w-auto px-6" onClick={() => {setModalOpen(false); setIsEditMode(false); setForm({
+                    email: '', password: '', fullName: '', phone: '', licenseNumber: '', specialization:'', hospital: '', role: 'doctor'
+                });}}>
                             Cancel
                         </CommonButton>
                         <CommonButton type="submit" className="w-auto px-6">
