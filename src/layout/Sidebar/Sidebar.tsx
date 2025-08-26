@@ -6,6 +6,7 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Sidebar.css';
 import AvtarImg from '../../assets/Avtar.svg';
 import patientServices from '../../service/Patient/PatientService'
+import AuthService from '../../service/Auth/AuthService';
 
 
 type SidebarItemKey = 'profile' | 'appointment' | 'patients' | 'logout' | 'chatbot' | 'analysis' | 'doctors' | 'hospitals';
@@ -39,6 +40,8 @@ const Sidebar = () => {
         else if (item === 'hospitals') navigate('/hospitals');
         else if (item === 'logout') {
             localStorage.removeItem('auth');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('role');
             navigate('/')
         };
     };
@@ -89,9 +92,9 @@ const Sidebar = () => {
     ];
 
     useEffect(() => {
-        if (localStorage.getItem('patientId')) {
-            const patientId: string = localStorage.getItem('patientId') || '';
-            patientServices.getPatientService(patientId).then((res) => {
+        if (localStorage.getItem('userId') && localStorage.getItem('role') == "patient") {
+            const patientId: string = localStorage.getItem('userId') || '';
+            AuthService.getUserById(patientId).then((res) => {
                 console.log("Patient res", res)
                 setUserName(res.data.patient.fullName);
             }).catch(error => console.error("error fetching patient", error))

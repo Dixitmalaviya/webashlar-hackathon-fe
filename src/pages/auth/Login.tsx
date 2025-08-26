@@ -82,7 +82,8 @@ const LoginForm: React.FC = () => {
     dob:'',
     emContName: '',
     emContPhone: '',
-    emContRelation: ''
+    emContRelation: '',
+    role: 'patient'
   });
 
   // Submit handler
@@ -140,7 +141,9 @@ const LoginForm: React.FC = () => {
           emContName: "",
           emContPhone: "",
           emContRelation: "Friend",
+          role: 'patient'
         });
+        setShowRegister(false);
       });
   };
 

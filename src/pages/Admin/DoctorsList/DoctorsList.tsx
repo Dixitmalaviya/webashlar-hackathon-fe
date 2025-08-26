@@ -6,13 +6,18 @@ import CommonButton from '../../../component/CommonButton';
 import CommonTable from '../../../component/CommonTable';
 import CommonModal from '../../../component/CommonModal';
 import CommonInput from '../../../component/CommonInput';
+import AdminService from '../../../service/Admin/AdminService';
+import CommonDropdown from '../../../component/CommonDropdown';
+import { FiEdit, FiTrash } from 'react-icons/fi';
+import DoctorService from '../../../service/Doctor/DoctorService';
 
 interface Doctor {
     id: number;
-    name: string;
-    phone: number;
-    address: string;
-    email: string;
+    fullName: string;
+        // phone: number;
+        // address: string;
+    licenseNumber: string,
+    specialization: string;
 }
 
 const DoctorsList: React.FC = () => {
@@ -21,34 +26,27 @@ const DoctorsList: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [rows, setRows] = useState(10);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editDoctorId, setDoctorId] = useState('');
+
+    const hospitals =[
+        {label: "Hospital 1", value: '68a98f2adf4c284e6966b693'}
+    ];
 
     // Simulate server-side fetch with fallback mock data
     const fetchDoctors = useCallback(async (page: number, rows: number) => {
         setLoading(true);
-        try {
-            // Replace this with your real API endpoint
-            const mockData: Doctor[] = Array.from({ length: 52 }, (_, i) => ({
-                id: i + 1,
-                name: `Dcotor ${i + 1}`,
-                email: `Doctor${i + 1}@example.com`,
-                phone: 1234567890,
-                address: `Address: ${i+1}`
-            }));
-            setDoctors(mockData.slice(page, page + rows));
-            setTotalRecords(mockData.length);
-        } catch (error) {
-            // Fallback mock data for demo
-            const mockData: Doctor[] = Array.from({ length: 52 }, (_, i) => ({
-                id: i + 1,
-                name: `Dcotor ${i + 1}`,
-                email: `Doctor${i + 1}@example.com`,
-                phone: 1234567890,
-                address: `Address: ${i+1}`
-            }));
-            setDoctors(mockData.slice(page, page + rows));
-            setTotalRecords(mockData.length);
-        }
-        setLoading(false);
+            try {
+                const response = await AdminService.getDoctors();
+                console.log("response", response);
+                const mockData = response?.data?.data || [];
+                setDoctors(mockData);
+                setTotalRecords(mockData.length);
+            } catch (error) {
+                setDoctors([]);
+                // setTotalRecords(mockData.length);
+            }
+            setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -60,12 +58,65 @@ const DoctorsList: React.FC = () => {
         setRows(event.rows);
     };
 
+    
+    const editDoctor = (Id: string) => {
+        toast
+            .promise(DoctorService.getDoctorById(Id), {
+                loading: "Loading",
+                //   success: "Report Deleted successfully",
+                error: "Error when fetching patient details",
+            })
+            .then((response: any) => {
+                debugger
+                console.log("Edit response", response);
+                const doctorData = response?.data?.doctor;
+                setForm({
+                    email: doctorData.email, password: '', fullName: doctorData.fullName, phone: '', licenseNumber: doctorData.licenseNumber, specialization: doctorData.specialization, hospital: doctorData.hospital, role: 'doctor'
+                });
+                setIsEditMode(true);
+                setDoctorId(Id);
+                setModalOpen(true);
+            });
+    };
+
+    const deletePatient = (Id: string) => {
+        toast
+            .promise(DoctorService.deleteDoctorService(Id), {
+                loading: "Loading",
+                success: "Doctor Deleted successfully",
+                error: "Error when deleting Doctor",
+            })
+            .then((response: any) => {
+                console.log("response", response);
+                fetchDoctors(page * rows, rows);
+            });
+    };
+
     const columns: TableColumn[] = [
-        { field: 'id', header: 'ID', sortable: true },
-        { field: 'name', header: 'Name', sortable: true },
+        { field: '_id', header: 'ID', sortable: true },
+        { field: 'fullName', header: 'Name', sortable: true },
         { field: 'email', header: 'Email', sortable: true },
-        { field: 'phone', header: 'Phone Number', sortable: true },
-        { field: 'address', header: 'Address', sortable: true }
+        // { field: 'phone', header: 'Phone Number', sortable: true },
+        // { field: 'address', header: 'Address', sortable: true }
+        { field: 'licenseNumber', header: 'License Number', sortable: true },
+        { field: 'specialization', header: 'Specialization', sortable: true },
+        {
+                    field: 'actions',
+                    header: 'Actions',
+                    body: (_row, _col, _rowIndex) => (
+                        <div className="flex justify-center">
+                            <FiEdit
+                                className="text-xl ml-4 text-blue-400 cursor-pointer hover:text-blue-400"
+                                onClick={() => editDoctor(_row._id)}
+                            />
+                            <FiTrash
+                                className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
+                                onClick={() => deletePatient(_row?.id)}
+                            />
+                        </div>
+                    ),
+                    style: { textAlign: 'center', minWidth: 120 },
+                },
     ];
 
     // Modal state and form state
@@ -75,7 +126,11 @@ const DoctorsList: React.FC = () => {
         password: '',
         fullName: '',
         phone: '',
-        address: '',
+        licenseNumber: '',
+        specialization: '',
+        hospital:'',
+        role: 'doctor'
+        // address: '',
     });
     console.log('form', form)
     const [formErrors, setFormErrors] = useState<any>({});
@@ -95,28 +150,51 @@ const DoctorsList: React.FC = () => {
         } else if (!phoneRegex.test(form.phone)) {
             errors.phone = 'Phone must be 10 digits';
         }
-        if (!form.address) errors.address = 'Address is required';
+        if (!form.licenseNumber) errors.licenseNumber = 'License Number is required';
+        if (!form.specialization) errors.specialization = 'Specialization is required';
+        if (!form.hospital) errors.hospital = 'Select Hospital';
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
     const handleSave = async () => {
+        form.role = 'doctor';
         if (validateForm()) {
+            if (isEditMode) {
+                toast.promise(
+                    DoctorService.updateDoctorService(editDoctorId, form),
+                    {
+                        loading: 'Loading',
+                        success: 'Doctor Updated successfully',
+                        error: 'Error Updating Doctor',
+                    }
+                ).then((response: any) => {
+                    console.log('response', response);
+                    setModalOpen(false);
+                    setIsEditMode(false);
+                    setForm({
+                    email: '', password: '', fullName: '', phone: '', licenseNumber: '', specialization:'', hospital: '', role: 'doctor'
+                });
+                    setFormErrors({});
+                });
+            }
+            else {
             toast.promise(
-                AuthService.registerDoctorService(form),
+                AuthService.registerService(form),
                 {
                     loading: 'Loading',
                     success: 'Doctor created successfully',
-                    error: 'Error when fetching',
+                    error: 'Error Creating Doctor',
                 }
             ).then((response: any) => {
-                console.log('response', response);
+                fetchDoctors(page * rows, rows);
                 setModalOpen(false);
                 setForm({
-                    email: '', password: '', fullName: '', phone: '', address: ''
+                    email: '', password: '', fullName: '', phone: '', licenseNumber: '', specialization:'', hospital: '', role: 'doctor'
                 });
                 setFormErrors({});
             });
+        }
         }
     };
 
@@ -130,7 +208,7 @@ const DoctorsList: React.FC = () => {
                         className="w-auto px-6 py-2 ml-4"
                         onClick={() => setModalOpen(true)}
                     >
-                        Add Doctor
+                        {isEditMode ? "Update Doctor" : "Add Doctor"}
                     </CommonButton>
                 </div>
                 <CommonTable
@@ -181,18 +259,34 @@ const DoctorsList: React.FC = () => {
                         placeholder="Enter phone number"
                     />
                     <CommonInput
-                        label="Address"
-                        value={form.address}
-                        onChange={v => handleFormChange('address', v)}
-                        error={formErrors.address}
-                        placeholder="Enter address"
+                        label="License Number"
+                        value={form.licenseNumber}
+                        onChange={v => handleFormChange('licenseNumber', v)}
+                        error={formErrors.licenseNumber}
+                        placeholder="Enter License Number"
                     />
+                    <CommonInput
+                        label="pecialization"
+                        value={form.specialization}
+                        onChange={v => handleFormChange('specialization', v)}
+                        error={formErrors.specialization}
+                        placeholder="Enter Specialization"
+                    />
+                    
+                        <CommonDropdown
+                            label="Hospital"
+                            value={form.hospital}
+                            onChange={v => handleFormChange('hospital', v)}
+                            options={hospitals}
+                            error={formErrors['hospital']}
+                            placeholder="Select"
+                        />
                     <div className="flex justify-end gap-3 pt-2">
                         <CommonButton type="button" variant="secondary" className="w-auto px-6" onClick={() => setModalOpen(false)}>
                             Cancel
                         </CommonButton>
                         <CommonButton type="submit" className="w-auto px-6">
-                            Save
+                            {isEditMode ? "Update" : "Save"}
                         </CommonButton>
                     </div>
                 </form>

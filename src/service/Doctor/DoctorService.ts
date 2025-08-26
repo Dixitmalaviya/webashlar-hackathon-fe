@@ -12,5 +12,11 @@ export default {
         if (paginationDetails?.search) params.push(`search=${encodeURIComponent(paginationDetails.search)}`);
         const queryString = params.length ? `?${params.join('&')}` : '';
         return doFetch(`${DOCTOR_API_ENDPOINTS.GET_PATINTS_LIST}${queryString}`, REQUEST_METHODS.GET);
-    }
+    },
+    getDoctorById: async (id: string) =>
+        doFetch(`${DOCTOR_API_ENDPOINTS.GET_DOCTOR_BY_ID}/${id}`, REQUEST_METHODS.GET),
+    deleteDoctorService: async (id: string) =>
+        doFetch(`${DOCTOR_API_ENDPOINTS.DOCTORS}/${id}`, REQUEST_METHODS.DELETE),
+    updateDoctorService: async (id: string, doctorData: any) =>
+        doFetch(`${DOCTOR_API_ENDPOINTS.DOCTORS}/${id}`, REQUEST_METHODS.PUT, doctorData),
 }
