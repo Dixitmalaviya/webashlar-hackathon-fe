@@ -101,6 +101,7 @@ const LoginForm: React.FC = () => {
           if (res?.data?.data?.user?.role == "patient") {
             navigate("/profile");
             localStorage.setItem("userId", res?.data?.data?.user?.entityId);
+            localStorage.setItem("patientId", res?.data?.data?.user?.entityId);
             localStorage.setItem("role", "patient");
           }
           else if (res?.data?.data?.user?.role == "doctor") {

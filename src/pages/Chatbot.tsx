@@ -53,7 +53,7 @@ const Chatbot: React.FC = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
       const patientId = localStorage.getItem('patientId');
       if (patientId) {
@@ -75,7 +75,7 @@ const Chatbot: React.FC = () => {
       }
     };
     fetchData();
-  },[])
+  }, [])
 
   return (
     <div className="flex flex-col h-full bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
