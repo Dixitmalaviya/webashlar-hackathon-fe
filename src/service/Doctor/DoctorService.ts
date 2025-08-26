@@ -19,4 +19,6 @@ export default {
         doFetch(`${DOCTOR_API_ENDPOINTS.DOCTORS}/${id}`, REQUEST_METHODS.DELETE),
     updateDoctorService: async (id: string, doctorData: any) =>
         doFetch(`${DOCTOR_API_ENDPOINTS.DOCTORS}/${id}`, REQUEST_METHODS.PUT, doctorData),
+    getDoctorByHospitalService: async (Id: string) =>
+        doFetch(`${DOCTOR_API_ENDPOINTS.DOCTORS_BY_HOSPITAL}/${Id}`, REQUEST_METHODS.GET),
 }

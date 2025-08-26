@@ -7,6 +7,7 @@ import CommonTable from '../../../component/CommonTable';
 import CommonModal from '../../../component/CommonModal';
 import CommonInput from '../../../component/CommonInput';
 import CommonDropdown from '../../../component/CommonDropdown';
+import AdminService from '../../../service/Admin/AdminService';
 
 interface Hospital {
     id: number;
@@ -34,29 +35,41 @@ const HospitalsList: React.FC = () => {
     const fetchHospitals = useCallback(async (page: number, rows: number) => {
         setLoading(true);
         try {
+            toast.promise(
+                                AdminService.getAllHospitals(),
+                                {
+                                    loading: 'Loading',
+                                    success: 'Hospitals Fetched successfully',
+                                    error: 'Error when fetching hospitals',
+                                }
+                            ).then((response: any) => {
+                                setHospitals(response?.data?.data)
+                                console.log('all hospital response', response);
+                                // setPatients((prevPatients) => [...prevPatients, response.data?.patient]);
+                            });
             // Replace this with your real API endpoint
-            const mockData: Hospital[] = Array.from({ length: 52 }, (_, i) => ({
-                id: i + 1,
-                name: `Hospital ${i + 1}`,
-                email: `hospital${i + 1}@example.com`,
-                address: `Address: ${i+1}`,
-                country: "Inidia",
-                state: "Gujarat"
-            }));
-            setHospitals(mockData.slice(page, page + rows));
-            setTotalRecords(mockData.length);
+            // const mockData: Hospital[] = Array.from({ length: 52 }, (_, i) => ({
+            //     id: i + 1,
+            //     name: `Hospital ${i + 1}`,
+            //     email: `hospital${i + 1}@example.com`,
+            //     address: `Address: ${i+1}`,
+            //     country: "Inidia",
+            //     state: "Gujarat"
+            // }));
+            // setHospitals(mockData.slice(page, page + rows));
+            // setTotalRecords(mockData.length);
         } catch (error) {
             // Fallback mock data for demo
-            const mockData: Hospital[] = Array.from({ length: 52 }, (_, i) => ({
-                id: i + 1,
-                name: `Hospital ${i + 1}`,
-                email: `hospital${i + 1}@example.com`,
-                address: `Address: ${i+1}`,
-                country: "Inidia",
-                state: "Gujarat"
-            }));
-            setHospitals(mockData.slice(page, page + rows));
-            setTotalRecords(mockData.length);
+            // const mockData: Hospital[] = Array.from({ length: 52 }, (_, i) => ({
+            //     id: i + 1,
+            //     name: `Hospital ${i + 1}`,
+            //     email: `hospital${i + 1}@example.com`,
+            //     address: `Address: ${i+1}`,
+            //     country: "Inidia",
+            //     state: "Gujarat"
+            // }));
+            // setHospitals(mockData.slice(page, page + rows));
+            // setTotalRecords(mockData.length);
         }
         setLoading(false);
     }, []);
@@ -74,8 +87,8 @@ const HospitalsList: React.FC = () => {
         { field: 'id', header: 'ID', sortable: true },
         { field: 'name', header: 'Hospital Name', sortable: true },
         { field: 'email', header: 'Official Email', sortable: true },
-        { field: 'country', header: 'Country', sortable: true },
-        { field: 'state', header: 'State', sortable: true },
+        { field: 'registrationNumber', header: 'Registration Number', sortable: true },
+        { field: 'type', header: 'Hospital Type', sortable: true },
         { field: 'address', header: 'Address', sortable: true }
     ];
 
@@ -86,8 +99,10 @@ const HospitalsList: React.FC = () => {
         password: '',
         name: '',
         address: '',
-        country: '',
-        state: ''
+        // country: '',
+        // state: '',
+        registrationNumber:'',
+        type: ''
     });
     console.log('form', form)
     const [formErrors, setFormErrors] = useState<any>({});
@@ -102,8 +117,8 @@ const HospitalsList: React.FC = () => {
         if (!form.password) errors.password = 'Password is required';
         if (!form.name) errors.name = 'Hospital Name is required';
         if (!form.address) errors.address = 'Address is required';
-        if (!form.country) errors.country = 'Country is required';
-        if (!form.state) errors.state = 'State is required';
+        if (!form.registrationNumber) errors.registrationNumber = 'Registration Number is required';
+        if (!form.type) errors.type = 'Hospital Type is required';
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -115,14 +130,15 @@ const HospitalsList: React.FC = () => {
                 {
                     loading: 'Loading',
                     success: 'Hospital created successfully',
-                    error: 'Error when fetching',
+                    error: 'Error Creating Hospital',
                 }
             ).then((response: any) => {
                 console.log('response', response);
                 setModalOpen(false);
                 setForm({
-                    email: '', password: '', name: '', address: '', country: '', state:''
+                    email: '', password: '', name: '', address: '', registrationNumber: '', type:''
                 });
+                fetchHospitals(page * rows, rows);                
                 setFormErrors({});
             });
         }
@@ -165,6 +181,20 @@ const HospitalsList: React.FC = () => {
                         placeholder="Enter Hospital Name"
                     />
                     <CommonInput
+                        label="Hospital Registration Number"
+                        value={form.registrationNumber}
+                        onChange={v => handleFormChange('registrationNumber', v)}
+                        error={formErrors.registrationNumber}
+                        placeholder="Enter Hospital Registration Number"
+                    />
+                    <CommonInput
+                        label="Type"
+                        value={form.type}
+                        onChange={v => handleFormChange('type', v)}
+                        error={formErrors.type}
+                        placeholder="Enter Hospital Name"
+                    />
+                    <CommonInput
                         label="Email"
                         type="email"
                         value={form.email}
@@ -187,7 +217,7 @@ const HospitalsList: React.FC = () => {
                         error={formErrors.address}
                         placeholder="Enter address"
                     />
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <CommonDropdown
                             label="Country"
                             value={form.country}
@@ -204,7 +234,7 @@ const HospitalsList: React.FC = () => {
                             error={formErrors['state']}
                             placeholder="Select"
                         />
-                    </div>
+                    </div> */}
                     <div className="flex justify-end gap-3 pt-2">
                         <CommonButton type="button" variant="secondary" className="w-auto px-6" onClick={() => setModalOpen(false)}>
                             Cancel

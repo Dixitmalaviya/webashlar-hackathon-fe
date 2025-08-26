@@ -4,4 +4,6 @@ import ADMIN_API_ENDPOINTS from "./AdminEndPoints";
 export default {
     getDoctors: async () =>
         doFetch(ADMIN_API_ENDPOINTS.GET_DOCTORS, REQUEST_METHODS.GET),
+    getAllHospitals: async () =>
+        doFetch(ADMIN_API_ENDPOINTS.GET_ALL_HOSPITALS, REQUEST_METHODS.GET),
 }

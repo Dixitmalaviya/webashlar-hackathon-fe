@@ -10,6 +10,7 @@ import AdminService from '../../../service/Admin/AdminService';
 import CommonDropdown from '../../../component/CommonDropdown';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import DoctorService from '../../../service/Doctor/DoctorService';
+import HospitalServices from '../../../service/Hospital/HospitalServices';
 
 interface Doctor {
     id: number;
@@ -28,10 +29,27 @@ const DoctorsList: React.FC = () => {
     const [rows, setRows] = useState(10);
     const [isEditMode, setIsEditMode] = useState(false);
     const [_editDoctorId, setDoctorId] = useState('');
+    const [hospitals, setHospitals] = useState([{label: '', value: ''}])
 
-    const hospitals = [
-        { label: "Hospital 1", value: '68a98f2adf4c284e6966b693' }
-    ];
+    // const hospitals = [
+    //     { label: "Hospital 1", value: '68a98f2adf4c284e6966b693' }
+    // ];
+
+    const fetchHospitalOptions = async() => {
+        try {
+                const response = await HospitalServices.getHospitalOptionsService();
+                setHospitals(response.data?.hospitals.map((h: any) => {return {label: h.name, value: h._id}}))
+                console.log("response", response);
+            } catch (error) {
+                setHospitals([]);
+                // setTotalRecords(mockData.length);
+            }
+            setLoading(false);
+    }
+
+    useEffect(() => {
+        fetchHospitalOptions();
+    }, []);
 
     // Simulate server-side fetch with fallback mock data
     const fetchDoctors = useCallback(async (page: number, rows: number) => {

@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import DoctorService from '../service/Doctor/DoctorService';
+import HospitalServices from '../service/Hospital/HospitalServices';
 
 interface Patient {
     id: string;
@@ -30,6 +31,24 @@ const PatientList: React.FC = () => {
     const [rows, setRows] = useState(10);
     const [isEditMode, setIsEditMode] = useState(false);
     const [_editPatientId, setEditPatientId] = useState('');
+    const [hospitals, setHospitals] = useState([{label: '', value: ''}]);
+    const [doctors, setDoctors] = useState([{label: '', value: ''}]);
+    
+
+    const fetchHospitalOptions = async() => {
+            try {
+                    const response = await HospitalServices.getHospitalOptionsService();
+                    setHospitals(response.data?.hospitals.map((h: any) => {return {label: h.name, value: h._id}}))
+                    console.log("response", response);
+                } catch (error) {
+                    // setTotalRecords(mockData.length);
+                }
+                setLoading(false);
+        }
+    
+        useEffect(() => {
+            fetchHospitalOptions();
+        }, []);
 
     const fetchPatients = useCallback(async (page: number, rows: number) => {
         setLoading(true);
@@ -77,6 +96,8 @@ const PatientList: React.FC = () => {
         //                 phone: patientData.emergencyContact.phone,
         //                 relationship: patientData.emergencyContact.relationship,
         //             },
+                    // hospital: patientData.hospital,
+                    // doctor: patientData.doctor
         //             role: "patient"
         //         });
         //         setModalOpen(true);
@@ -169,8 +190,26 @@ const PatientList: React.FC = () => {
             phone: '',
             relationship: '',
         },
-        role: "patient"
+        role: "patient",
+        doctor: '',
+        hospital: ''
     });
+
+    
+        const fetchDoctorsByHospital = async() => {
+            try {
+                    const response = await DoctorService.getDoctorByHospitalService(form.hospital);
+                    setDoctors(response.data?.data?.map((d: any) => {return {label: d.fullName, value: d._id}}));
+                } catch (error) {
+                    // setTotalRecords(mockData.length);
+                }
+                setLoading(false);
+        }
+
+        useEffect(() => {
+            fetchDoctorsByHospital();
+        }, [form.hospital]);
+        
     const [formErrors, setFormErrors] = useState<any>({});
 
     const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
@@ -219,6 +258,8 @@ const PatientList: React.FC = () => {
             errors['emergencyContact.phone'] = 'Emergency contact phone must be 10 digits';
         }
         if (!form.emergencyContact.relationship) errors['emergencyContact.relationship'] = 'Relationship is required';
+        if (!form.hospital) errors['hospital'] = 'Hospital is required';
+        if (!form.doctor) errors['doctor'] = 'Doctor is required';
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -231,7 +272,7 @@ const PatientList: React.FC = () => {
                 // setModalOpen(false);
                 setForm({
                     email: '', password: '', fullName: '', dob: '', phone: '', address: '',
-                    emergencyContact: { name: '', phone: '', relationship: '' },
+                    emergencyContact: { name: '', phone: '', relationship: '' }, doctor: '', hospital:'',
                     role: 'patient',
                 });
                 setFormErrors({});
@@ -248,10 +289,10 @@ const PatientList: React.FC = () => {
                     setPatients((prevPatients) => [...prevPatients, response.data?.patient]);
                     setModalOpen(false);
                     setForm({
-                        email: '', password: '', fullName: '', dob: '', phone: '', address: '',
-                        emergencyContact: { name: '', phone: '', relationship: '' },
-                        role: 'patient',
-                    });
+                    email: '', password: '', fullName: '', dob: '', phone: '', address: '',
+                    emergencyContact: { name: '', phone: '', relationship: '' }, doctor: '', hospital:'',
+                    role: 'patient',
+                });
                     setFormErrors({});
                 });
             }
@@ -365,6 +406,24 @@ const PatientList: React.FC = () => {
                             onChange={v => handleFormChange('emergencyContact.relationship', v)}
                             options={relationshipOptions}
                             error={formErrors['emergencyContact.relationship']}
+                            placeholder="Select"
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <CommonDropdown
+                            label="Select Hospital"
+                            value={form.hospital}
+                            onChange={v => handleFormChange('hospital', v)}
+                            options={hospitals}
+                            error={formErrors['hospital']}
+                            placeholder="Select"
+                        />
+                        <CommonDropdown
+                            label="Select Doctor"
+                            value={form.doctor}
+                            onChange={v => handleFormChange('doctor', v)}
+                            options={doctors}
+                            error={formErrors['doctor']}
                             placeholder="Select"
                         />
                     </div>
