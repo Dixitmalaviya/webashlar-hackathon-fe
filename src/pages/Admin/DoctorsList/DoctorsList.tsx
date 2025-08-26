@@ -14,8 +14,8 @@ import DoctorService from '../../../service/Doctor/DoctorService';
 interface Doctor {
     id: number;
     fullName: string;
-        // phone: number;
-        // address: string;
+    // phone: number;
+    // address: string;
     licenseNumber: string,
     specialization: string;
 }
@@ -29,24 +29,24 @@ const DoctorsList: React.FC = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [editDoctorId, setDoctorId] = useState('');
 
-    const hospitals =[
-        {label: "Hospital 1", value: '68a98f2adf4c284e6966b693'}
+    const hospitals = [
+        { label: "Hospital 1", value: '68a98f2adf4c284e6966b693' }
     ];
 
     // Simulate server-side fetch with fallback mock data
     const fetchDoctors = useCallback(async (page: number, rows: number) => {
         setLoading(true);
-            try {
-                const response = await AdminService.getDoctors();
-                console.log("response", response);
-                const mockData = response?.data?.data || [];
-                setDoctors(mockData);
-                setTotalRecords(mockData.length);
-            } catch (error) {
-                setDoctors([]);
-                // setTotalRecords(mockData.length);
-            }
-            setLoading(false);
+        try {
+            const response = await AdminService.getDoctors();
+            console.log("response", response, page, rows);
+            const mockData = response?.data?.data || [];
+            setDoctors(mockData);
+            setTotalRecords(mockData.length);
+        } catch (error) {
+            setDoctors([]);
+            // setTotalRecords(mockData.length);
+        }
+        setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -58,7 +58,7 @@ const DoctorsList: React.FC = () => {
         setRows(event.rows);
     };
 
-    
+
     const editDoctor = (Id: string) => {
         toast
             .promise(DoctorService.getDoctorById(Id), {
@@ -101,22 +101,22 @@ const DoctorsList: React.FC = () => {
         { field: 'licenseNumber', header: 'License Number', sortable: true },
         { field: 'specialization', header: 'Specialization', sortable: true },
         {
-                    field: 'actions',
-                    header: 'Actions',
-                    body: (_row, _col, _rowIndex) => (
-                        <div className="flex justify-center">
-                            <FiEdit
-                                className="text-xl ml-4 text-blue-400 cursor-pointer hover:text-blue-400"
-                                onClick={() => editDoctor(_row._id)}
-                            />
-                            <FiTrash
-                                className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
-                                onClick={() => deletePatient(_row?.id)}
-                            />
-                        </div>
-                    ),
-                    style: { textAlign: 'center', minWidth: 120 },
-                },
+            field: 'actions',
+            header: 'Actions',
+            body: (_row, _col, _rowIndex) => (
+                <div className="flex justify-center">
+                    <FiEdit
+                        className="text-xl ml-4 text-blue-400 cursor-pointer hover:text-blue-400"
+                        onClick={() => editDoctor(_row._id)}
+                    />
+                    <FiTrash
+                        className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
+                        onClick={() => deletePatient(_row?.id)}
+                    />
+                </div>
+            ),
+            style: { textAlign: 'center', minWidth: 120 },
+        },
     ];
 
     // Modal state and form state
@@ -128,7 +128,7 @@ const DoctorsList: React.FC = () => {
         phone: '',
         licenseNumber: '',
         specialization: '',
-        hospital:'',
+        hospital: '',
         role: 'doctor'
         // address: '',
     });
@@ -136,7 +136,7 @@ const DoctorsList: React.FC = () => {
     const [formErrors, setFormErrors] = useState<any>({});
 
     const handleFormChange = (field: string, value: any) => {
-            setForm((prev) => ({ ...prev, [field]: value }));
+        setForm((prev) => ({ ...prev, [field]: value }));
     };
 
     const validateForm = () => {
@@ -173,28 +173,29 @@ const DoctorsList: React.FC = () => {
                     setModalOpen(false);
                     setIsEditMode(false);
                     setForm({
-                    email: '', password: '', fullName: '', phone: '', licenseNumber: '', specialization:'', hospital: '', role: 'doctor'
-                });
+                        email: '', password: '', fullName: '', phone: '', licenseNumber: '', specialization: '', hospital: '', role: 'doctor'
+                    });
                     setFormErrors({});
                 });
             }
             else {
-            toast.promise(
-                AuthService.registerService(form),
-                {
-                    loading: 'Loading',
-                    success: 'Doctor created successfully',
-                    error: 'Error Creating Doctor',
-                }
-            ).then((response: any) => {
-                fetchDoctors(page * rows, rows);
-                setModalOpen(false);
-                setForm({
-                    email: '', password: '', fullName: '', phone: '', licenseNumber: '', specialization:'', hospital: '', role: 'doctor'
+                toast.promise(
+                    AuthService.registerService(form),
+                    {
+                        loading: 'Loading',
+                        success: 'Doctor created successfully',
+                        error: 'Error Creating Doctor',
+                    }
+                ).then((response: any) => {
+                    console.log("response", response);
+                    fetchDoctors(page * rows, rows);
+                    setModalOpen(false);
+                    setForm({
+                        email: '', password: '', fullName: '', phone: '', licenseNumber: '', specialization: '', hospital: '', role: 'doctor'
+                    });
+                    setFormErrors({});
                 });
-                setFormErrors({});
-            });
-        }
+            }
         }
     };
 
@@ -272,15 +273,15 @@ const DoctorsList: React.FC = () => {
                         error={formErrors.specialization}
                         placeholder="Enter Specialization"
                     />
-                    
-                        <CommonDropdown
-                            label="Hospital"
-                            value={form.hospital}
-                            onChange={v => handleFormChange('hospital', v)}
-                            options={hospitals}
-                            error={formErrors['hospital']}
-                            placeholder="Select"
-                        />
+
+                    <CommonDropdown
+                        label="Hospital"
+                        value={form.hospital}
+                        onChange={v => handleFormChange('hospital', v)}
+                        options={hospitals}
+                        error={formErrors['hospital']}
+                        placeholder="Select"
+                    />
                     <div className="flex justify-end gap-3 pt-2">
                         <CommonButton type="button" variant="secondary" className="w-auto px-6" onClick={() => setModalOpen(false)}>
                             Cancel

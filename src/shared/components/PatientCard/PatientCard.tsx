@@ -38,19 +38,19 @@ const PatientCard = ({ patientData, logo }: any) => {
       {/* Card Number & Name - card style */}
       <div className="relative z-10 flex flex-col items-start mt-2 mb-2 w-full">
         {/* Chip SVG */}
-        <div className="mb-3 ml-1">
+        {/* <div className="mb-3 ml-1">
           <svg width="40" height="28" viewBox="0 0 40 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="2" y="4" width="36" height="20" rx="6" fill="#FFD700" fillOpacity="0.7" stroke="#FFD700" strokeWidth="2"/>
             <rect x="10" y="10" width="20" height="8" rx="2" fill="#fff2b2" fillOpacity="0.5" />
             <rect x="16" y="12" width="8" height="4" rx="1" fill="#FFD700" fillOpacity="0.7" />
           </svg>
-        </div>
+        </div> */}
         {/* Card Number */}
         <div className="text-[1.7rem] font-bold text-yellow-300 mb-2 select-text" style={cardNumberFont}>
-          {String(patientData.uniqueNumber).replace(/(.{4})/g, '$1 ').trim()}
+          {String(patientData.uniqueNumber)}
         </div>
         {/* Cardholder Name */}
-        <div className="text-xs text-blue-200 tracking-widest mt-2 ml-1">CARDHOLDER NAME</div>
+        {/* <div className="text-xs text-blue-200 tracking-widest mt-2 ml-1">CARDHOLDER NAME</div> */}
         <div className="text-lg font-semibold text-blue-100 tracking-wide ml-1">{patientData.name}</div>
       </div>
       {/* Divider */}

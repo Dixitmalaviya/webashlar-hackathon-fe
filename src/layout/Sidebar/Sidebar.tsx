@@ -5,7 +5,6 @@ import { FaCalendarCheck, FaHospital, FaHospitalUser, FaSignOutAlt, FaUser, FaUs
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Sidebar.css';
 import AvtarImg from '../../assets/Avtar.svg';
-import patientServices from '../../service/Patient/PatientService'
 import AuthService from '../../service/Auth/AuthService';
 
 

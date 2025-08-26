@@ -9,8 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import PatientService from '../service/Patient/PatientService';
 // import DoctorService from '../service/Doctor/DoctorService';
 import toast from 'react-hot-toast';
-import { FaEye } from 'react-icons/fa';
 import { FiEdit, FiTrash } from 'react-icons/fi';
+import { HiOutlineDocumentReport } from "react-icons/hi";
 import DoctorService from '../service/Doctor/DoctorService';
 
 interface Patient {
@@ -29,10 +29,8 @@ const PatientList: React.FC = () => {
     const [page, setPage] = useState(0);
     const [rows, setRows] = useState(10);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [editPatientId, setEditPatientId] = useState('');
+    const [_editPatientId, setEditPatientId] = useState('');
 
-    // Simulate server-side fetch with fallback mock data
-    // Server-side pagination: pass page and rows to API
     const fetchPatients = useCallback(async (page: number, rows: number) => {
         setLoading(true);
         try {
@@ -46,26 +44,10 @@ const PatientList: React.FC = () => {
         setLoading(false);
     }, []);
 
-    // const fetchPatients = useCallback(async (page: number, rows: number) => {
-    //   toast
-    //     .promise(DoctorService.getPatientsService(), {
-    //       loading: "Loading",
-    //       success: "Patients Fetched successfully",
-    //       error: "Error when fetching Patients",
-    //     })
-    //     .then((response: any) => {
-    //         debugger
-    //                     setPatients(response?.data?.data?.slice(page, page + rows));
-    //     setTotalRecords(response?.data?.data.length);
-    //       console.log("response", response);
-    //     });
-    // }, []);
-
     useEffect(() => {
         fetchPatients(page * rows, rows);
     }, [page, rows, fetchPatients]);
 
-    // PrimeReact paginator sends zero-based page index, but we use page * rows for offset
     const onPage = (event: any) => {
         setPage(event.page);
         setRows(event.rows);
@@ -75,7 +57,6 @@ const PatientList: React.FC = () => {
         toast
             .promise(PatientService.getPatientService(Id), {
                 loading: "Loading",
-                //   success: "Report Deleted successfully",
                 error: "Error when fetching patient details",
             })
             .then((response: any) => {
@@ -113,14 +94,12 @@ const PatientList: React.FC = () => {
             });
     };
 
-    // Helper to format date as YYYY-MM-DD
     const formatDate = (dateString: string) => {
         if (!dateString) return '';
         const date = new Date(dateString);
         return date.toISOString().split('T')[0];
     };
 
-    // Helper to calculate age from dob
     const calculateAge = (dobString: string) => {
         if (!dobString) return '';
         const dob = new Date(dobString);
@@ -156,13 +135,13 @@ const PatientList: React.FC = () => {
             header: 'Actions',
             body: (_row, _col, _rowIndex) => (
                 <div className="flex justify-center">
-                    <FaEye
+                    <HiOutlineDocumentReport
                         className="text-xl text-blue-400 cursor-pointer hover:text-blue-400"
                         onClick={() => navigate('/patients/report', { state: { patientId: _row._id } })}
                     />
                     <FiEdit
                         className="text-xl ml-4 text-blue-400 cursor-pointer hover:text-blue-400"
-                        onClick={() => editPatient(_row.id)}
+                        onClick={() => editPatient(_row._id)}
                     />
                     <FiTrash
                         className="text-xl ml-4 text-red-400 cursor-pointer hover:text-red-400"
@@ -174,7 +153,6 @@ const PatientList: React.FC = () => {
         },
     ];
 
-    // Modal state and form state
     const [modalOpen, setModalOpen] = useState(false);
     const [form, setForm] = useState({
         email: '',
@@ -189,7 +167,6 @@ const PatientList: React.FC = () => {
             relationship: '',
         },
     });
-    console.log('form', form)
     const [formErrors, setFormErrors] = useState<any>({});
 
     const relationships = ['Spouse', 'Parent', 'Sibling', 'Friend', 'Other'];
@@ -244,27 +221,16 @@ const PatientList: React.FC = () => {
 
     const handleSave = async () => {
         if (validateForm()) {
-            // On valid, log the payload
-            console.log('Patient Payload:', form);
             if (isEditMode) {
-                toast.promise(
-                    PatientService.updatePatientService(editPatientId, form),
-                    {
-                        loading: 'Loading',
-                        success: 'Patient Updated successfully',
-                        error: 'Error Updating Patient',
-                    }
-                ).then((response: any) => {
-                    console.log('response', response);
-                    setModalOpen(false);
-                    setForm({
-                        email: '', password: '', fullName: '', dob: '', phone: '', address: '',
-                        emergencyContact: { name: '', phone: '', relationship: '' },
-                    });
-                    setFormErrors({});
+                // In edit mode, just log the data
+                console.log('Edit Patient Data:', form);
+                setModalOpen(false);
+                setForm({
+                    email: '', password: '', fullName: '', dob: '', phone: '', address: '',
+                    emergencyContact: { name: '', phone: '', relationship: '' },
                 });
-            }
-            else {
+                setFormErrors({});
+            } else {
                 toast.promise(
                     PatientService.createPatientService(form),
                     {
@@ -312,7 +278,6 @@ const PatientList: React.FC = () => {
                     lazy={true}
                 />
             </div>
-            {/* Render modal here, outside the main content container */}
             <CommonModal isOpen={modalOpen} onClose={() => { setModalOpen(false); setIsEditMode(false); setEditPatientId('') }} title={isEditMode ? "Update Patient" : "Add Patient"}>
                 <form className="space-y-3" onSubmit={e => { e.preventDefault(); handleSave(); }}>
                     <CommonInput
@@ -322,6 +287,7 @@ const PatientList: React.FC = () => {
                         onChange={v => handleFormChange('email', v)}
                         error={formErrors.email}
                         placeholder="Enter email"
+                        disabled={isEditMode}
                     />
                     <CommonInput
                         label="Password"
@@ -330,6 +296,7 @@ const PatientList: React.FC = () => {
                         onChange={v => handleFormChange('password', v)}
                         error={formErrors.password}
                         placeholder="Enter password"
+                        disabled={isEditMode}
                     />
                     <CommonInput
                         label="Full Name"
@@ -345,6 +312,7 @@ const PatientList: React.FC = () => {
                         onChange={v => handleFormChange('dob', v)}
                         error={formErrors.dob}
                         max={new Date().toISOString().split('T')[0]}
+                        disabled={isEditMode}
                     />
                     <CommonInput
                         label="Phone"
@@ -353,6 +321,7 @@ const PatientList: React.FC = () => {
                         onChange={v => handleFormChange('phone', v)}
                         error={formErrors.phone}
                         placeholder="Enter phone number"
+                        disabled={isEditMode}
                     />
                     <CommonInput
                         label="Address"

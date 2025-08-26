@@ -161,9 +161,9 @@ const Analysis: React.FC<AnalysisProps> = () => {
 
     const fetchAnalysisData = async () => {
         const reqObj = {
-            patientId: localStorage.getItem('patientId'),
-            "fromDate": state?.startDate || "2021-07-01",
-            "toDate": state?.endDate || "2030-08-30"
+            patientId: state?.patientId || localStorage.getItem('patientId'),
+            "fromDate": state?.startDate || undefined,
+            "toDate": state?.endDate || undefined
         }
         const response = await PatientService.fetchPatientAnalysisData(reqObj);
         debugger
@@ -520,7 +520,7 @@ const Analysis: React.FC<AnalysisProps> = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-12 gap-6 mt-5">
-                    {categories.slice(0, 4).map((category, index) => (
+                    {categories.slice(0, 4).filter(category => Array.isArray(category.findings) && category.findings.length > 0).map((category, index) => (
                         <div key={index} className="col-span-4 bg-white rounded-3xl p-6 shadow-sm">
                             <div className="mb-4">
                                 <h3 className="text-lg font-semibold mb-2" style={{ color: '#141414' }}>

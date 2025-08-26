@@ -127,7 +127,7 @@ const PatientReport: React.FC = () => {
     }, [reportList, startDate, endDate]);
 
     const viewAnalysis = () => {
-        navigate('/analysis', { state: { startDate, endDate } })
+        navigate('/analysis', { state: { startDate, endDate, patientId: state?.patientId ? state?.patientId : localStorage.getItem('patientId') } })
     };
 
     useEffect(() => {

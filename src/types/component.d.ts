@@ -8,6 +8,7 @@ interface InputProps {
   icon: React.ReactNode;
   showPasswordToggle?: boolean;
   onTogglePassword?: () => void;
+  readOnly?: boolean;
 }
 
 interface ButtonProps {
@@ -96,6 +97,7 @@ interface CommonInputProps {
   className?: string;
   max?: string;
   disabled?: boolean;
+  readOnly?: boolean;
 }
 
 interface SidebarItemConfig {

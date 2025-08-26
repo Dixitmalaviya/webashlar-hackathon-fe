@@ -13,6 +13,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
     onTogglePassword,
     className = '',
     max,
+    readOnly = false,
 }) => (
     <div className={`mb-4 ${className}`}>
         {label && (
@@ -32,6 +33,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
                     }`}
                 placeholder={placeholder}
                 {...(max ? { max } : {})}
+                readOnly={readOnly}
             />
             {showPasswordToggle && (
                 <button
