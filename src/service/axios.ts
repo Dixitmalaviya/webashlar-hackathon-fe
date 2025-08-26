@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios";
 const instance = axios.create();
-const baseUrl = "https://webashlar-hackathon-be.vercel.app/api";
+const baseUrl = " https://ip4jg4qa7mzbcxexxycpmokbau.srv.us/api";
 
 instance.interceptors.request.use(
     async (config) => {
