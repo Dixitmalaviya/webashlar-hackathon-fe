@@ -9,5 +9,7 @@ export default {
     registerDoctorService: async (userData: any) =>
         doFetch(AUTH_API_ENDPOINTS.REGISTER_DOCTOR, REQUEST_METHODS.POST, userData),
     registerHospitalService: async (hospitalData: any) =>
-        doFetch(AUTH_API_ENDPOINTS.REGISTER_HOSPITAL, REQUEST_METHODS.POST, hospitalData)
+        doFetch(AUTH_API_ENDPOINTS.REGISTER_HOSPITAL, REQUEST_METHODS.POST, hospitalData),
+    getUserById: async (Id: string) =>
+        doFetch(`${AUTH_API_ENDPOINTS.GET_USER_BY_ID}/${Id}`, REQUEST_METHODS.GET),
 }

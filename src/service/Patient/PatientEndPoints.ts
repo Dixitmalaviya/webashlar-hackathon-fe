@@ -1,6 +1,6 @@
 const PATIENT_API_ENDPOINTS = {
     GET_PATIENT: "/identity/patient",
-    CREATE_PATIENT: "/identity/patient/register",
+    CREATE_PATIENT: "/auth/register",
     UPDATE_PATIENT: "/patients/",
     DELETE_PATIENT: "/patients/",
     FETCH_REPORTS: "/reports/patient",
