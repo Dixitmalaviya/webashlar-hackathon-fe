@@ -23,7 +23,7 @@ const CommonDropdown: React.FC<CommonDropdownProps> = ({
 }) => (
   <div className={`mb-4 ${className}`}>
     {label && (
-      <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+      <label className="block text-sm font-medium text-gray-700 mb-2 flex justify-start">{label}</label>
     )}
     <div className="relative">
       <select
