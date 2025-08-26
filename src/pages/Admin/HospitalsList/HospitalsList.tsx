@@ -6,7 +6,6 @@ import CommonButton from '../../../component/CommonButton';
 import CommonTable from '../../../component/CommonTable';
 import CommonModal from '../../../component/CommonModal';
 import CommonInput from '../../../component/CommonInput';
-import CommonDropdown from '../../../component/CommonDropdown';
 import AdminService from '../../../service/Admin/AdminService';
 
 interface Hospital {
@@ -20,19 +19,19 @@ interface Hospital {
 
 const HospitalsList: React.FC = () => {
     const [hospitals, setHospitals] = useState<Hospital[]>([]);
-    const [totalRecords, setTotalRecords] = useState(0);
+    const [totalRecords, _setTotalRecords] = useState(0);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [rows, setRows] = useState(10);
 
-        const countries = ["United States", "Canada", "India", "United Kingdom", "Germany"];
-    const states = ["California", "Texas", "New York", "Ontario", "Gujarat"]
-        const countriesOptions = countries.map(c => ({ label: c, value: c }));
-        const stateOptions = states.map(s => ({ label: s, value: s }));
+    //     const countries = ["United States", "Canada", "India", "United Kingdom", "Germany"];
+    // const states = ["California", "Texas", "New York", "Ontario", "Gujarat"]
+        // const countriesOptions = countries.map(c => ({ label: c, value: c }));
+        // const stateOptions = states.map(s => ({ label: s, value: s }));
 
 
     // Simulate server-side fetch with fallback mock data
-    const fetchHospitals = useCallback(async (page: number, rows: number) => {
+    const fetchHospitals = useCallback(async (_page: number, _rows: number) => {
         setLoading(true);
         try {
             toast.promise(
