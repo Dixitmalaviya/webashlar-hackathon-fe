@@ -53,7 +53,7 @@ const PatientList: React.FC = () => {
         setRows(event.rows);
     };
 
-    const editPatient = (Id: string) => {
+    const editPatient = (_Id: string) => {
         toast.success("Coming soon...")
         // toast
         //     .promise(PatientService.getPatientService(Id), {
@@ -83,7 +83,7 @@ const PatientList: React.FC = () => {
         //     });
     };
 
-    const deletePatient = (Id: string) => {
+    const deletePatient = (_Id: string) => {
         toast.success("Coming soon...")
         // toast
         //     .promise(PatientService.deletePatientService(Id), {
