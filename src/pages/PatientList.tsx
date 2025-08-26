@@ -54,45 +54,47 @@ const PatientList: React.FC = () => {
     };
 
     const editPatient = (Id: string) => {
-        toast
-            .promise(PatientService.getPatientService(Id), {
-                loading: "Loading",
-                error: "Error when fetching patient details",
-            })
-            .then((response: any) => {
-                console.log("response", response);
-                const patientData = response?.data?.patient;
-                setIsEditMode(true);
-                setEditPatientId(Id);
-                setForm({
-                    email: patientData.email,
-                    password: "",
-                    fullName: patientData.fullName,
-                    dob: patientData.dob,
-                    phone: patientData.emergencyContact.phone,
-                    address: patientData.address,
-                    emergencyContact: {
-                        name: patientData.emergencyContact.name,
-                        phone: patientData.emergencyContact.phone,
-                        relationship: patientData.emergencyContact.relationship,
-                    },
-                    role: "patient"
-                });
-                setModalOpen(true);
-            });
+        toast.success("Coming soon...")
+        // toast
+        //     .promise(PatientService.getPatientService(Id), {
+        //         loading: "Loading",
+        //         error: "Error when fetching patient details",
+        //     })
+        //     .then((response: any) => {
+        //         console.log("response", response);
+        //         const patientData = response?.data?.patient;
+        //         setIsEditMode(true);
+        //         setEditPatientId(Id);
+        //         setForm({
+        //             email: patientData.email,
+        //             password: "",
+        //             fullName: patientData.fullName,
+        //             dob: patientData.dob,
+        //             phone: patientData.emergencyContact.phone,
+        //             address: patientData.address,
+        //             emergencyContact: {
+        //                 name: patientData.emergencyContact.name,
+        //                 phone: patientData.emergencyContact.phone,
+        //                 relationship: patientData.emergencyContact.relationship,
+        //             },
+        //             role: "patient"
+        //         });
+        //         setModalOpen(true);
+        //     });
     };
 
     const deletePatient = (Id: string) => {
-        toast
-            .promise(PatientService.deletePatientService(Id), {
-                loading: "Loading",
-                success: "Patient Deleted successfully",
-                error: "Error when deleting Patient",
-            })
-            .then((response: any) => {
-                console.log("response", response);
-                fetchPatients(page * rows, rows);
-            });
+        toast.success("Coming soon...")
+        // toast
+        //     .promise(PatientService.deletePatientService(Id), {
+        //         loading: "Loading",
+        //         success: "Patient Deleted successfully",
+        //         error: "Error when deleting Patient",
+        //     })
+        //     .then((response: any) => {
+        //         console.log("response", response);
+        //         fetchPatients(page * rows, rows);
+        //     });
     };
 
     const formatDate = (dateString: string) => {

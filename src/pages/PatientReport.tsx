@@ -77,7 +77,7 @@ const PatientReport: React.FC = () => {
                     <FaEye
                         className="text-xl text-blue-400 cursor-pointer hover:text-blue-400"
                         onClick={() => {
-                            setPdfUrl('https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf');
+                            setPdfUrl("https://webashalarforml-health-dac-assist.hf.space" + "/" + _row?.patient + "/" + _row?.reportFileName);
                             setPdfModalOpen(true);
                         }}
                     />
