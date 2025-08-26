@@ -76,6 +76,7 @@ const PatientList: React.FC = () => {
                         phone: patientData.emergencyContact.phone,
                         relationship: patientData.emergencyContact.relationship,
                     },
+                    role: "patient"
                 });
                 setModalOpen(true);
             });
@@ -229,6 +230,7 @@ const PatientList: React.FC = () => {
                 setForm({
                     email: '', password: '', fullName: '', dob: '', phone: '', address: '',
                     emergencyContact: { name: '', phone: '', relationship: '' },
+                    role: 'patient',
                 });
                 setFormErrors({});
             } else {
@@ -246,6 +248,7 @@ const PatientList: React.FC = () => {
                     setForm({
                         email: '', password: '', fullName: '', dob: '', phone: '', address: '',
                         emergencyContact: { name: '', phone: '', relationship: '' },
+                        role: 'patient',
                     });
                     setFormErrors({});
                 });
