@@ -72,7 +72,7 @@ const Sidebar = () => {
             key: 'analysis',
             icon: <span role="img" aria-label="Analysis">🧑‍⚕️</span>,
             label: 'Analysis',
-            roles: ['doctor', 'admin', 'patient'],
+            roles: ['doctor', 'admin'],
         },
         {
             key: 'doctors',

@@ -4,6 +4,13 @@ import DOCTOR_API_ENDPOINTS from "./DoctorEndPoints";
 export default {
     getPatientsService: async () =>
         doFetch(DOCTOR_API_ENDPOINTS.GET_PATIENTS, REQUEST_METHODS.GET),
-    getPatientsListService: async () =>
-        doFetch(DOCTOR_API_ENDPOINTS.GET_PATINTS_LIST, REQUEST_METHODS.GET)
+    getPatientsListService: async (paginationDetails: any) => {
+        // paginationDetails: { page, limit, search }
+        const params = [];
+        if (paginationDetails?.page) params.push(`page=${paginationDetails.page}`);
+        if (paginationDetails?.limit) params.push(`limit=${paginationDetails.limit}`);
+        if (paginationDetails?.search) params.push(`search=${encodeURIComponent(paginationDetails.search)}`);
+        const queryString = params.length ? `?${params.join('&')}` : '';
+        return doFetch(`${DOCTOR_API_ENDPOINTS.GET_PATINTS_LIST}${queryString}`, REQUEST_METHODS.GET);
+    }
 }

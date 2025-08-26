@@ -32,36 +32,16 @@ const PatientList: React.FC = () => {
     const [editPatientId, setEditPatientId] = useState('');
 
     // Simulate server-side fetch with fallback mock data
-    const fetchPatients = useCallback(async (_page: number, _rows: number) => {
+    // Server-side pagination: pass page and rows to API
+    const fetchPatients = useCallback(async (page: number, rows: number) => {
         setLoading(true);
         try {
-            const response = await DoctorService.getPatientsListService();
-            console.log("response", response);
-            debugger
-            const mockData = response?.data?.patients || [];
-            // Replace this with your real API endpoint
-            // const mockData: Patient[] = Array.from({ length: 52 }, (_, i) => ({
-            //     id: '68abf55e9df6b967378b2ef8',
-            //     name: `Patient ${i + 1}`,
-            //     age: 20 + ((i + 1) % 30),
-            //     gender: (i % 2 === 0 ? 'Male' : 'Female'),
-            //     email: `patient${i + 1}@example.com`,
-            //     bloodType: (i % 4 === 0 ? 'A+' : i % 4 === 1 ? 'B+' : i % 4 === 2 ? 'AB+' : 'O+'),
-            // }));
-            setPatients(mockData);
-            setTotalRecords(mockData.length);
+            const response = await DoctorService.getPatientsListService({ page: Math.floor(page / rows) + 1, limit: rows });
+            const data = response?.data?.data || [];
+            setPatients(data);
+            setTotalRecords(response?.data?.total || data.length);
         } catch (error) {
-            // Fallback mock data for demo
-            // const mockData: Patient[] = Array.from({ length: 52 }, (_, i) => ({
-            //     id: '68abf55e9df6b967378b2ef8',
-            //     name: `Patient ${i + 1}`,
-            //     age: 20 + ((i + 1) % 30),
-            //     gender: (i % 2 === 0 ? 'Male' : 'Female'),
-            //     email: `patient${i + 1}@example.com`,
-            //     bloodType: (i % 4 === 0 ? 'A+' : i % 4 === 1 ? 'B+' : i % 4 === 2 ? 'AB+' : 'O+'),
-            // }));
             setPatients([]);
-            // setTotalRecords(mockData.length);
         }
         setLoading(false);
     }, []);
@@ -85,6 +65,7 @@ const PatientList: React.FC = () => {
         fetchPatients(page * rows, rows);
     }, [page, rows, fetchPatients]);
 
+    // PrimeReact paginator sends zero-based page index, but we use page * rows for offset
     const onPage = (event: any) => {
         setPage(event.page);
         setRows(event.rows);

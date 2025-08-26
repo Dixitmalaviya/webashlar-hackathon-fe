@@ -93,8 +93,10 @@ const PatientReport: React.FC = () => {
 
     const fetchUserRole = async () => {
         localStorage.getItem('role') && setRole(localStorage.getItem('role'));
-        const patientId = state?.patientId ? state?.patientId : localStorage.getItem('patientId');
-
+        let patientId = state?.patientId ? state?.patientId : localStorage.getItem('patientId');
+        if (!patientId) {
+            patientId = localStorage.getItem('userId')
+        };
         const response = await PatientService.fetchPatientReportsService(patientId);
         if (response?.status === 200) {
             setReportList(response?.data?.data);
