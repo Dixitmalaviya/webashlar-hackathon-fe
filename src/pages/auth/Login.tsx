@@ -125,6 +125,7 @@ const LoginForm: React.FC = () => {
           }
         })
         .catch((error) => {
+          toast.error("Invalid email or password");
           actions.setSubmitting(false);
           console.error("Error logging in", error);
         });
